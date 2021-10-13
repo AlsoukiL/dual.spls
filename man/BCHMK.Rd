@@ -7,11 +7,11 @@
 \code{BCHMK(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)}
 }
 \arguments{
-\item{n}{a positive integer. \code{n} is the number of observations.}
+\item{n}{a positive integer. \code{n} is the number of observations. Default value is 200.}
 
-\item{p}{a positive integer. \code{p} is the number of variables.}
+\item{p}{a positive integer. \code{p} is the number of variables.Default value is 100.}
 
-\item{nondes}{a positive integer. \code{p} is the number of Guassians in the mixture.}
+\item{nondes}{a positive integer. \code{p} is the number of Guassians in the mixture. Default value is 50.}
 
 \item{sigmaondes}{the standard deviation of the Gaussians.}
 
@@ -23,6 +23,9 @@
 
 \item{y0}{the reponse vector without noise \code{sigmay}.}
 }
+\value{
+A \code{list} of the following attributes
+}
 \description{
 The function \code{BCHMK} simulates a mixture of \code{nondes} Gaussians representing a predictors matrix \code{X}
 of \code{n} observations and \code{p} variables and a response vector \code{y}.
@@ -32,7 +35,6 @@ The predictors matrix \code{X} represents a mixture of \code{nondes} Gaussians c
 amplitudes chosen randomly and a standard deviation set to \code{sigmaondes}.
 
 The response vector \code{y} is the sum of 4 intervals of \code{X} to which we add noise of \code{sigmay}.
-#' @return A \code{list} of the following attributes
 }
 \examples{
 ### load dual.spls library

@@ -9,15 +9,17 @@ type(y, ncells)
 \arguments{
 \item{y}{a vector.}
 
-\item{ncells}{a positive integer. \code{ncells} is the number of subsamples desired.
-#' @return A vecor of index specifying each observation belonging to wich group index.}
+\item{ncells}{a positive integer. \code{ncells} is the number of subsamples desired.}
+}
+\value{
+A vecor of index specifying each observation belonging to wich group index.
 }
 \description{
 The internal function \code{type} divides the response vector \code{y} in \code{cells}
 of equal range and attributes a index type to the observations according to the corresponding cell
 }
 \seealso{
-\code{browseVignettes("dual.spls")}
+\code{\link[=calval]{calval()}},\code{\link[=modified.KS]{modified.KS()}},\code{browseVignettes("dual.spls")}
 }
 \author{
 François Wahl Louna Alsouki

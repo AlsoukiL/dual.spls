@@ -6,8 +6,8 @@
 #' from each group
 #' @param X a numeric matrix.
 #' @param Xtype a vector of index specifying to wich group belongs each observation.
-#' @param Listecal a vector specifying how many observation from each group should be selected as calibration.
-#' #' @return A vecotr of index specifying which observations are selected as calibration
+#' @param Listecal a vector specifying how many observations from each group should be selected as calibration.
+#' @return a numeric vector giving the row indices of the input data selected for calibration
 #' @seealso [dual.spls::type()],[dual.spls::calval()],`browseVignettes("dual.spls")`
 #' @importFrom pdist pdist
 #'

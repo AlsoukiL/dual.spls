@@ -11,7 +11,6 @@ ncells <- 5
 Datatype <- type(y,ncells=ncells)
 
 pcal <- 70
-pval <- 100-70
 
 # nb elts in calibration for each cell
 ycounts <- sapply(1:ncells,function(u) sum(Datatype==u) )

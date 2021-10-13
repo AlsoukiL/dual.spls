@@ -4,17 +4,17 @@
 #' of \code{n} observations and \code{p} variables and a response vector \code{y}.
 #' @usage
 #' \code{BCHMK(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)}
-#' @param n a positive integer. \code{n} is the number of observations.
-#' @param p a positive integer. \code{p} is the number of variables.
-#' @param nondes a positive integer. \code{p} is the number of Guassians in the mixture.
-#' @param sigmaondes a positive real value. \code{sigmaondes} is the standard deviation of the Gaussians.
-#' @param sigmay a real value. \code{sigmay} is the uncertainty on \code{y}.
+#' @param n a positive integer. \code{n} is the number of observations. Default value is 200.
+#' @param p a positive integer. \code{p} is the number of variables.Default value is 100.
+#' @param nondes a positive integer. \code{p} is the number of Guassians in the mixture. Default value is 50.
+#' @param sigmaondes a positive real value. \code{sigmaondes} is the standard deviation of the Gaussians. Default value is 0.05.
+#' @param sigmay a real value. \code{sigmay} is the uncertainty on \code{y}. Default value is 0.5.
 #' @details
 #' The predictors matrix \code{X} represents a mixture of \code{nondes} Gaussians characterized by means and
 #' amplitudes chosen randomly and a standard deviation set to \code{sigmaondes}.
 #'
 #' The response vector \code{y} is the sum of 4 intervals of \code{X} to which we add noise of \code{sigmay}.
-#' #' @return A \code{list} of the following attributes
+#' @return A \code{list} of the following attributes
 #' @param X the preditors matrix.
 #' @param y the response vector.
 #' @param y0 the reponse vector without noise \code{sigmay}.

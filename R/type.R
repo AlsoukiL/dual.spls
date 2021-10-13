@@ -5,9 +5,9 @@
 #' of equal range and attributes a index type to the observations according to the corresponding cell
 #' @param y a vector.
 #' @param ncells a positive integer. \code{ncells} is the number of subsamples desired.
-#' #' @return A vecor of index specifying each observation belonging to wich group index.
+#' @return A vecor of index specifying each observation belonging to wich group index.
 #' @author François Wahl Louna Alsouki
-#' @seealso `browseVignettes("dual.spls")`
+#' @seealso [dual.spls::calval()],[dual.spls::modified.KS()],`browseVignettes("dual.spls")`
 
 
 type<- function(y,ncells)

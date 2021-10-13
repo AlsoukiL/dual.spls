@@ -1,30 +1,44 @@
 #' Splits data into calibration and validation sets using the modified Kennard and Stone method
 #' @description
-#' The function \code{modified.KS} divides the data \code{X} into a calibration and a validation set using
+#' The function \code{calval} divides the data \code{X} into a calibration and a validation set using
 #' the modified Kennard and Stone startegy.
 #' @usage
 #' \code{calval(X,pcal,Datatype=NULL,y=NULL,ncells=10) }
 #' @param X a numeric matrix of predictors values.
-#' @param pcal a positive integer. \code{p} is the number of calibration samples to be selected.
+#' @param pcal a positive integer between 0 and 100. \code{pcal} is the percentage
+#' of calibration samples to be selected. Default value is NULL, meaning as long as \code{Listecal} is
+#' specified, \code{pcal} is not necessary.
 #' @param Datatype A vecor of index specifying each observation belonging to wich group index.
 #' Default value is NULL, meaning the function will use the function \code{type} to compute the vector for \code{ncells}.
 #' If NULL, parameter \code{y} should be specified.
 #' @param y a numeric vector of responses. Default value is NULL, meaning as long as \code{Datatype} is specified,
 #' \code{y} is not necessary.
-#' @param ncells a positive integer. \code{ncells} is the number of groups dividing the observations.
+#' @param ncells a positive integer. \code{ncells} is the number of groups dividing the observations. If
+#' \code{Datatype} is not specified, the function devides the observations into \code{ncells} groups. Default value
+#' is 10.
+#' @param Listecal a vector specifying how many observations from each group should be selected as calibration.
+#' Default value is NULL, meaning the function will consider a percentage of \code{pcal} from each group
+#' to be in the calibration set. If NULL, parameter \code{pcal} should be specified.
 #' @details
 #' The modified Kennard and Stone algorithm allows to select samples using the classical Kennard and stone on
 #' each group of observations one by one. It starts by selecting the point that is the furthest away from the centroid.
-#' This point is assigned as the calibration set and is removed from the list of candidates. Then, it adentify to which
-#' group belongs this first observation and consider the group that comes after.
-#' #' @return A \code{list} of the following attributes
-#' @param X the preditors matrix. It represent the data to split into calibration and validation
-#' @param y the response vector.
-#' @param y0 the reponse vector without noise \code{sigmay}.
-#' @param sigmay the uncertainty on \code{y}.
-#' @param sigmaondes the standard deviation of the Gaussians.
+#' This point is assigned as the calibration set and is removed from the list of candidates. Then, it identify to which
+#' group belongs this first observation and consider the group \eqn{g} that comes after.
+#' It computes the distance \eqn{\delta_{P_{i,g}}} between the remaining points
+#' \eqn{P_{i,g}} belonging to the group the group \eqn{g} and the calibration point assigned. The point with the
+#' largest \eqn{\delta_{P_{i,g}}} is selected, removed from the set and the procedure moves on to the group that comes
+#' after.
+#'
+#' When there is more than one calibration sample, the procedure computes the distance between each \eqn{P_{i,g}} from
+#' the concerned group and each \eqn{P_{i,cal}} from the calibration set. The selected candidate verify the following distance:
+#' \deqn{d_{selected}=max_{P_{i,g}} ( min_{P_{i,cal}} (d_{P_{i,g},P_{i,cal}}) )}
+#'
+#' Once each of the vector \code{Listecal} elements are null, the procedure is done.
+#' @return A \code{list} of the following attributes
+#' @param indcal a numeric vector giving the row indices of the input data selected for calibration.
+#' @param indval a numeric vector giving the row indices of the remaining observations.
 #' @author François Wahl Louna Alsouki
-#' @seealso `browseVignettes("dual.spls")`
+#' @seealso [dual.spls::modified.KS()],[dual.spls::type()],`browseVignettes("dual.spls")`
 #'
 #' @examples
 #' ### load dual.spls library
@@ -39,48 +53,63 @@
 #' X <- data.benchmark$X
 #' y <- data.benchmark$y
 #'
-#' ###plotting the data
-#' plot(X[1,],type='l',ylim=c(0,max(X)),main='Benchmark data', ylab='X',col=1)
-#' for (i in 2:n){
-#'  lines(X[i,],col=i)
-#'}
+#' ###calibration parameters for split1
+#' pcal <- 70
+#' ncells <- 3
+#'
+#' split1 <- calval(X=X,pcal=pcal,y=y,ncells=ncells)
+#'
+#' ###plotting split1
+#' plot(X[split1$indcal,1],X[split1$indcal,2],xlab="Variable 1",
+#' ylab="Variable 2",pch=19,col="red",main="Calibration and validation split1")
+#' points(X[split1$indval,1],X[split1$indval,2],pch=19,col="green")
+#' legend("topright", legend = c("Calibration points", "Validation points"),
+#'  cex = 0.8, col = c("red","green"), pch = c(19,19))
+#'
+#'  ###calibration parameters for split2
+#' Listecal <- c(20,20,30)
+#' ncells <- length(Listecal)
+#'
+#' split2 <- calval(X=X,y=y,ncells=ncells,Listecal=Listecal)
+#'
+#' ###plotting split2
+#' plot(X[split2$indcal,1],X[split2$indcal,2],xlab="Variable 1",
+#' ylab="Variable 2",pch=19,col="red",main="Calibration and validation split2")
+#' points(X[split2$indval,1],X[split2$indval,2],pch=19,col="green")
+#' legend("topright", legend = c("Calibration points", "Validation points"),
+#'  cex = 0.8, col = c("red","green"), pch = c(19,19))
+#'
 #' @export
 
 
-#############################
-# This function divides the y in cells of equal range
-# and attributes a type to the observations according to the corresponding cell
-# then divides the data into calibration validation using the function FW_LAS_f1
-
-# Arguments:
-# X : dataset to split in calibration and validation
-# pcal : proportion to put in calibration
-# Datatype : number of the cell to which each observation belongs
-# y : values of the responses
-# ncells : number of cells to build if necessary
-
-# Values:
-# indcal : index of the observations to put in the calibration dataset
-# indval : index of the observations to put in the validation dataset
-#############################
-
-FW_LAS_calval<- function(X,pcal,Datatype=NULL,y=NULL,ncells=10)
+calval<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
 {
   if (is.null(Datatype) & is.null(y)){
-    stop('Error in FW_LAS_calval: if Datatype=NULL, y should not be NULL' )
+    stop('Error in calval: if Datatype=NULL, y should not be NULL' )
   }
 
   # type of the observed values
   if (is.null(Datatype)){
-    Datatype=FW_LAS_type(y,ncells)
+    Datatype=type(y,ncells)
   }
 
-  # nb elts in calibration for each cell
-  ycounts=sapply(1:ncells,function(u) sum(Datatype==u) )
-  Listecal=ceiling(ycounts*pcal/100)
+  if (is.null(Listecal) & is.null(pcal)){
+    stop('Error in calval: if Listecal=NULL, pcal should not be NULL' )
+  }
+
+  #percentage of calibration
+  if(is.null(Listecal)){
+    # nb elts in calibration for each cell
+    ycounts=sapply(1:ncells,function(u) sum(Datatype==u) )
+    Listecal=ceiling(ycounts*pcal/100)
+  }
+
+  if(max(Datatype) != length(Listecal)){
+    stop('Error in calval: length of Listecal does not match with values of Datatype' )
+  }
 
   # index of calibration/validation
-  indcal=FW_LAS_f1(X,Datatype,Listecal)
+  indcal=modified.KS(X,Datatype,Listecal)
   indval=1:dim(X)[1]
   indval=indval[-indcal]
 
