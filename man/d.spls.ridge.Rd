@@ -4,7 +4,7 @@
 \alias{d.spls.ridge}
 \title{Dual Sparse Partial Least Squares (Dual-SPLS) regression for the norm \eqn{\Omega(w)=\lambda \|w\|_1 +lambda2 \|Xw\|_2 + \|w\|_2}}
 \usage{
-\code{d.spls.ridge(X,y,ncp,pctnu,nu2,verbose=FALSE) }
+d.spls.ridge(X,y,ncp,pctnu,nu2,verbose=FALSE)
 }
 \arguments{
 \item{X}{a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.}
@@ -19,29 +19,22 @@ proportion of variables to shrink to zero for each component.}
 \item{nu2}{a positive real value. \code{nu2} is a sparsity parameter.}
 
 \item{verbose}{a boolean value indicating whether or not to diplay the iterations steps.}
-
-\item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-
-\item{scores}{a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
-as \code{X} representing the observations in the new component basis computed by the compression step
-of the Dual-SPLS.}
-
-\item{loadings}{the loadings matrix.}
-
-\item{Bhat}{the regression coefficients matrix for each component.}
-
-\item{intercept}{the intercept value for each component.}
-
-\item{fitted.values}{the matrix of predicted values of \code{y}}
-
-\item{residuals}{the matrix of residuals corresponding to the difference between the response and the fitted values.}
-
-\item{lambda1}{the vector of the sparse hyper-parameter used to fit the model at each iteration.}
-
-\item{zerovar}{the vector of the number of variables shrinked to zero per component.}
 }
 \value{
 A \code{list} of the following attributes
+\itemize{
+\item  Xmean the mean vector of the predictors matrix \code{X}.
+\item  scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
+as \code{X} representing the observations in the new component basis computed by the compression step
+of the Dual-SPLS.
+\item  loadings the loadings matrix.
+\item  Bhat the regression coefficients matrix for each component.
+\item  intercept the intercept value for each component.
+\item  fitted.values the matrix of predicted values of \code{y}
+\item  residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
+\item  lambda1 the vector of the sparse hyper-parameter used to fit the model at each iteration.
+\item  zerovar the vector of the number of variables shrinked to zero per component.
+}
 }
 \description{
 The function \code{d.spls.ridge} performs dimentional reduction combined to variable selection using the
@@ -85,13 +78,14 @@ mod.dspls <- d.spls.ridge(X=X,y=y,ncp=10,pctnu=0.9,nu2=0.05,verbose=TRUE)
 str(mod.dspls)
 
 ### plotting the observed values VS predicted values
-plot(y,model.dspls$fitted.values, xlab="Observed values", ylab="Predicted values", main="Observed VS Predicted")
+plot(y,mod.dspls$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
+ main="Observed VS Predicted for 6 components")
 points(-1000:1000,-1000:1000,type='l')
 
 ### plotting the regression coefficients
 par(mfrow=c(3,1))
-
-nz=Mod.dspls$zerovar[i]
+i=6
+nz=mod.dspls$zerovar[i]
 plot(1:dim(X)[2],mod.dspls$Bhat[,i],type='l',
     main=paste(" Dual-SPLS (ridge), ncp =", i, " #0coef =", nz, "/", dim(X)[2]),
     ylab='',xlab='' )

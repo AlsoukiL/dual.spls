@@ -1,4 +1,4 @@
-library(pdist)
+
 n <- 100
 p <- 50
 nondes <- 20
@@ -8,11 +8,11 @@ X <- data.benchmark$X
 y <- data.benchmark$y
 
 #fitting the model
-ncp=10
-pctnu=0.9
+ncp <- 10
+pctnu<- 0.9
 mod.dspls <- d.spls.lasso(X=X,y=y,ncp=ncp,pctnu=pctnu,verbose=TRUE)
-dim(X)[1]=n
-dim(X)[2]=p
+n <- dim(X)[1]
+p <- dim(X)[2]
 
 #Dimension testing
 test_that("scores", { expect_equal(dim(mod.dspls$scores), c(n,ncp)) })

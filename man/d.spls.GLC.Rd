@@ -6,7 +6,7 @@
 \eqn{\Omega(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} for
 \eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1; \sum_{g} \alpha_g=1}}
 \usage{
-d.spls.GLC(X, y, ncp, pctnu, G, verbose = FALSE)
+d.spls.GLC(X, y, ncp, pctnu, indG, verbose = FALSE)
 }
 \arguments{
 \item{X}{a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.}
@@ -18,34 +18,26 @@ d.spls.GLC(X, y, ncp, pctnu, G, verbose = FALSE)
 \item{pctnu}{a positive real value or a vector of length the number of groups, in \code{[0,1]}.
 \code{pctnu} is the desired proportion of variables to shrink to zero for each component and for each group.}
 
-\item{G}{a numeric vector of group index for each variable.}
+\item{indG}{a numeric vector of group index for each observation.}
 
 \item{verbose}{a boolean value indicating whether or not to diplay the iterations steps.}
-
-\item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-
-\item{scores}{a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
-as \code{X} representing the observations in the new component basis computed by the compression step
-of the Dual-SPLS.}
-
-\item{loadings}{the loadings matrix.}
-
-\item{Bhat}{the regression coefficients matrix for each component.}
-
-\item{intercept}{the intercept value for each component.}
-
-\item{fitted.values}{the matrix of predicted values of \code{y}}
-
-\item{residuals}{the matrix of residuals corresponding to the difference between the response and the fitted values.}
-
-\item{lambda}{the matrix of the first sparse hyper-parameter used to fit the model at each iteration and for each group.}
-
-\item{alpha}{the matrix of the second sparse hyper-parameter used to fit the model at each iteration and for each group.}
-
-\item{zerovar}{the matrix of the number of variables shrinked to zero per component and per group.}
 }
 \value{
 A \code{list} of the following attributes
+\itemize{
+\item  Xmean the mean vector of the predictors matrix \code{X}.
+\item  scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
+as \code{X} representing the observations in the new component basis computed by the compression step
+of the Dual-SPLS.
+\item  loadings the loadings matrix.
+\item  Bhat the regression coefficients matrix for each component.
+\item  intercept the intercept value for each component.
+\item  fitted.values the matrix of predicted values of \code{y}
+\item  residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
+\item  lambda the matrix of the first sparse hyper-parameter used to fit the model at each iteration and for each group.
+\item  alpha the matrix of the second sparse hyper-parameter used to fit the model at each iteration and for each group.
+\item  zerovar the matrix of the number of variables shrinked to zero per component and per group.
+}
 }
 \description{
 The function \code{d.spls.GLC} performs dimentional reduction combined to variable selection using the

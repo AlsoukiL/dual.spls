@@ -4,7 +4,7 @@
 \alias{d.spls.GL}
 \title{Dual Sparse Partial Least Squares (Dual-SPLS) regression for the group lasso norms}
 \usage{
-\code{d.spls.GL(X,y,ncp,pctnu,G,gamma=NULL,norm="A",verbose=FALSE) }
+d.spls.GL(X,y,ncp,pctnu,indG,gamma=NULL,norm="A",verbose=FALSE)
 }
 \arguments{
 \item{X}{a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.}
@@ -16,39 +16,31 @@
 \item{pctnu}{a positive real value or a vector of length the number of groups, in \code{[0,1]}.
 \code{pctnu} is the desired proportion of variables to shrink to zero for each component and for each group.}
 
-\item{G}{a numeric vector of group index for each variable.}
+\item{indG}{a numeric vector of group index for each observation.}
 
 \item{gamma}{a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{norm="A"}. Default value is NULL.}
 
 \item{norm}{a character specifying the norm chosen between A, B and C. Default value is A.}
 
 \item{verbose}{a boolean value indicating whether or not to diplay the iterations steps.}
-
-\item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-
-\item{scores}{a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
-as \code{X} representing the observations in the new component basis computed by the compression step
-of the Dual-SPLS.}
-
-\item{loadings}{the loadings matrix.}
-
-\item{Bhat}{the regression coefficients matrix for each component.}
-
-\item{intercept}{the intercept value for each component.}
-
-\item{fitted.values}{the matrix of predicted values of \code{y}}
-
-\item{residuals}{the matrix of residuals corresponding to the difference between the response and the fitted values.}
-
-\item{lambda}{the matrix of the first sparse hyper-parameter used to fit the model at each iteration and for each group.}
-
-\item{alpha}{the matrix of the second sparse hyper-parameter used to fit the model at each iteration and for each group
-when the norm chosen is B or C.}
-
-\item{zerovar}{the matrix of the number of variables shrinked to zero per component and per group.}
 }
 \value{
 A \code{list} of the following attributes
+\itemize{
+\item Xmean the mean vector of the predictors matrix \code{X}.
+\item scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
+as \code{X} representing the observations in the new component basis computed by the compression step
+of the Dual-SPLS.
+\item loadings the loadings matrix.
+\item Bhat the regression coefficients matrix for each component.
+\item intercept the intercept value for each component.
+\item fitted.values the matrix of predicted values of \code{y}
+\item residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
+\item lambda the matrix of the first sparse hyper-parameter used to fit the model at each iteration and for each group.
+\item alpha the matrix of the second sparse hyper-parameter used to fit the model at each iteration and for each group
+when the norm chosen is B or C.
+\item zerovar the matrix of the number of variables shrinked to zero per component and per group.
+}
 }
 \description{
 The function \code{d.spls.GL} performs dimentional reduction combined to variable selection using the
@@ -89,6 +81,99 @@ The parameters \eqn{\nu_g} are computed adaptively according to the proportion o
 \examples{
 ### load dual.spls library
 library(dual.spls)
+####two predictors matrix
+### parameters
+n <- 100
+p <- c(50,100)
+nondes <- c(20,30)
+sigmaondes <- c(0.05,0.02)
+data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+
+X <- data.benchmark$X
+X1 <- X[,(1:p[1])]
+X2 <- X[,(p[1]+1):p[2]]
+y <- data.benchmark$y
+
+indG <-c(rep(1,p[1]),rep(2,p[2]))
+
+#fitting the model
+ncp <- 10
+pctnu <- c(0.99,0.9)
+
+# norm A
+mod.dsplsA <- d.spls.GL(X=X,y=y,ncp=ncp,pctnu=pctnu,indG=indG,norm="A",verbose=TRUE)
+n <- dim(X)[1]
+p <- dim(X)[2]
+
+str(mod.dsplsA)
+
+### plotting the observed values VS predicted values
+plot(y,mod.dsplsA$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
+ main="Observed VS Predicted for 6 components")
+points(-1000:1000,-1000:1000,type='l')
+
+### plotting the regression coefficients
+par(mfrow=c(3,1))
+
+i=6
+nz=mod.dsplsA$zerovar[,i]
+plot(1:dim(X)[2],mod.dsplsA$Bhat[,i],type='l',
+    main=paste(" Dual-SPLS (GLA), ncp =", i, " #0coef =", nz[1], "/", dim(X1)[2]
+    , " #0coef =", nz[2], "/", dim(X2)[2]),
+    ylab='',xlab='' )
+inonz=which(mod.dsplsA$Bhat[,i]!=0)
+points(inonz,mod.dsplsA$Bhat[inonz,i],col='red',pch=19,cex=0.5)
+legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
+
+# norm B
+mod.dsplsB <- d.spls.GL(X=X,y=y,ncp=ncp,pctnu=pctnu,indG=indG,
+gamma=c(0.5,0.5),norm="B",verbose=TRUE)
+
+str(mod.dsplsB)
+
+### plotting the observed values VS predicted values
+plot(y,mod.dsplsB$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
+ main="Observed VS Predicted for 6 components")
+points(-1000:1000,-1000:1000,type='l')
+
+### plotting the regression coefficients
+par(mfrow=c(3,1))
+
+i=6
+nz=mod.dsplsB$zerovar[,i]
+plot(1:dim(X)[2],mod.dsplsB$Bhat[,i],type='l',
+    main=paste(" Dual-SPLS (GLB), ncp =", i, " #0coef =", nz[1], "/", dim(X1)[2]
+    , " #0coef =", nz[2], "/", dim(X2)[2]),
+    ylab='',xlab='' )
+inonz=which(mod.dsplsB$Bhat[,i]!=0)
+points(inonz,mod.dsplsB$Bhat[inonz,i],col='red',pch=19,cex=0.5)
+legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
+
+# norm C
+mod.dsplsC <- d.spls.GL(X=X,y=y,ncp=ncp,pctnu=pctnu,indG=indG,norm="C",verbose=TRUE)
+n <- dim(X)[1]
+p <- dim(X)[2]
+
+str(mod.dsplsC)
+
+### plotting the observed values VS predicted values
+plot(y,mod.dsplsC$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
+ main="Observed VS Predicted for 6 components")
+points(-1000:1000,-1000:1000,type='l')
+
+### plotting the regression coefficients
+par(mfrow=c(3,1))
+
+i=6
+nz=mod.dsplsC$zerovar[,i]
+plot(1:dim(X)[2],mod.dsplsC$Bhat[,i],type='l',
+    main=paste(" Dual-SPLS (GLC), ncp =", i, " #0coef =", nz[1], "/", dim(X1)[2]
+    , " #0coef =", nz[2], "/", dim(X2)[2]),
+    ylab='',xlab='' )
+inonz=which(mod.dsplsC$Bhat[,i]!=0)
+points(inonz,mod.dsplsC$Bhat[inonz,i],col='red',pch=19,cex=0.5)
+legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
+
 
 }
 \seealso{

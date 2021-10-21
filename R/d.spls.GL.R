@@ -9,14 +9,13 @@
 #' \item Norm C: \eqn{\Omega(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} for
 #' \eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1; \sum_{g} \alpha_g=1}
 #' }
-#' @usage
-#' \code{d.spls.GL(X,y,ncp,pctnu,G,gamma=NULL,norm="A",verbose=FALSE) }
+#' @usage d.spls.GL(X,y,ncp,pctnu,indG,gamma=NULL,norm="A",verbose=FALSE)
 #' @param X a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each converstation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
 #' @param pctnu a positive real value or a vector of length the number of groups, in \code{[0,1]}.
 #' \code{pctnu} is the desired proportion of variables to shrink to zero for each component and for each group.
-#' @param G a numeric vector of group index for each variable.
+#' @param indG a numeric vector of group index for each observation.
 #' @param gamma a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{norm="A"}. Default value is NULL.
 #' @param norm a character specifying the norm chosen between A, B and C. Default value is A.
 #' @param verbose a boolean value indicating whether or not to diplay the iterations steps.
@@ -46,43 +45,138 @@
 #'
 #' The parameters \eqn{\nu_g} are computed adaptively according to the proportion of zero variables desired \code{pctnu} for each group.
 #' @return A \code{list} of the following attributes
-#' @param Xmean the mean vector of the predictors matrix \code{X}.
-#' @param scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
+#' \itemize{
+#' \item Xmean the mean vector of the predictors matrix \code{X}.
+#' \item scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
 #' as \code{X} representing the observations in the new component basis computed by the compression step
 #' of the Dual-SPLS.
-#' @param loadings the loadings matrix.
-#' @param Bhat the regression coefficients matrix for each component.
-#' @param intercept the intercept value for each component.
-#' @param fitted.values the matrix of predicted values of \code{y}
-#' @param residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
-#' @param lambda the matrix of the first sparse hyper-parameter used to fit the model at each iteration and for each group.
-#' @param alpha the matrix of the second sparse hyper-parameter used to fit the model at each iteration and for each group
+#' \item loadings the loadings matrix.
+#' \item Bhat the regression coefficients matrix for each component.
+#' \item intercept the intercept value for each component.
+#' \item fitted.values the matrix of predicted values of \code{y}
+#' \item residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
+#' \item lambda the matrix of the first sparse hyper-parameter used to fit the model at each iteration and for each group.
+#' \item alpha the matrix of the second sparse hyper-parameter used to fit the model at each iteration and for each group
 #' when the norm chosen is B or C.
-#' @param zerovar the matrix of the number of variables shrinked to zero per component and per group.
+#' \item zerovar the matrix of the number of variables shrinked to zero per component and per group.
+#' }
 #' @seealso [dual.spls::d.spls.GLA()],[dual.spls::d.spls.GLB()],[dual.spls::d.spls.GLC()],`browseVignettes("dual.spls")`
 #'
 #'
 #' @examples
 #' ### load dual.spls library
 #' library(dual.spls)
+#' ####two predictors matrix
+#' ### parameters
+#' n <- 100
+#' p <- c(50,100)
+#' nondes <- c(20,30)
+#' sigmaondes <- c(0.05,0.02)
+#' data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+#'
+#' X <- data.benchmark$X
+#' X1 <- X[,(1:p[1])]
+#' X2 <- X[,(p[1]+1):p[2]]
+#' y <- data.benchmark$y
+#'
+#' indG <-c(rep(1,p[1]),rep(2,p[2]))
+#'
+#' #fitting the model
+#' ncp <- 10
+#' pctnu <- c(0.99,0.9)
+#'
+#' # norm A
+#' mod.dsplsA <- d.spls.GL(X=X,y=y,ncp=ncp,pctnu=pctnu,indG=indG,norm="A",verbose=TRUE)
+#' n <- dim(X)[1]
+#' p <- dim(X)[2]
+#'
+#' str(mod.dsplsA)
+#'
+#' ### plotting the observed values VS predicted values
+#' plot(y,mod.dsplsA$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
+#'  main="Observed VS Predicted for 6 components")
+#' points(-1000:1000,-1000:1000,type='l')
+#'
+#' ### plotting the regression coefficients
+#' par(mfrow=c(3,1))
+#'
+#' i=6
+#' nz=mod.dsplsA$zerovar[,i]
+#' plot(1:dim(X)[2],mod.dsplsA$Bhat[,i],type='l',
+#'     main=paste(" Dual-SPLS (GLA), ncp =", i, " #0coef =", nz[1], "/", dim(X1)[2]
+#'     , " #0coef =", nz[2], "/", dim(X2)[2]),
+#'     ylab='',xlab='' )
+#' inonz=which(mod.dsplsA$Bhat[,i]!=0)
+#' points(inonz,mod.dsplsA$Bhat[inonz,i],col='red',pch=19,cex=0.5)
+#' legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
+#'
+#' # norm B
+#' mod.dsplsB <- d.spls.GL(X=X,y=y,ncp=ncp,pctnu=pctnu,indG=indG,
+#' gamma=c(0.5,0.5),norm="B",verbose=TRUE)
+#'
+#' str(mod.dsplsB)
+#'
+#' ### plotting the observed values VS predicted values
+#' plot(y,mod.dsplsB$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
+#'  main="Observed VS Predicted for 6 components")
+#' points(-1000:1000,-1000:1000,type='l')
+#'
+#' ### plotting the regression coefficients
+#' par(mfrow=c(3,1))
+#'
+#' i=6
+#' nz=mod.dsplsB$zerovar[,i]
+#' plot(1:dim(X)[2],mod.dsplsB$Bhat[,i],type='l',
+#'     main=paste(" Dual-SPLS (GLB), ncp =", i, " #0coef =", nz[1], "/", dim(X1)[2]
+#'     , " #0coef =", nz[2], "/", dim(X2)[2]),
+#'     ylab='',xlab='' )
+#' inonz=which(mod.dsplsB$Bhat[,i]!=0)
+#' points(inonz,mod.dsplsB$Bhat[inonz,i],col='red',pch=19,cex=0.5)
+#' legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
+#'
+#' # norm C
+#' mod.dsplsC <- d.spls.GL(X=X,y=y,ncp=ncp,pctnu=pctnu,indG=indG,norm="C",verbose=TRUE)
+#' n <- dim(X)[1]
+#' p <- dim(X)[2]
+#'
+#' str(mod.dsplsC)
+#'
+#' ### plotting the observed values VS predicted values
+#' plot(y,mod.dsplsC$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
+#'  main="Observed VS Predicted for 6 components")
+#' points(-1000:1000,-1000:1000,type='l')
+#'
+#' ### plotting the regression coefficients
+#' par(mfrow=c(3,1))
+#'
+#' i=6
+#' nz=mod.dsplsC$zerovar[,i]
+#' plot(1:dim(X)[2],mod.dsplsC$Bhat[,i],type='l',
+#'     main=paste(" Dual-SPLS (GLC), ncp =", i, " #0coef =", nz[1], "/", dim(X1)[2]
+#'     , " #0coef =", nz[2], "/", dim(X2)[2]),
+#'     ylab='',xlab='' )
+#' inonz=which(mod.dsplsC$Bhat[,i]!=0)
+#' points(inonz,mod.dsplsC$Bhat[inonz,i],col='red',pch=19,cex=0.5)
+#' legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
+#'
 #'
 #' @export
 
 
-d.spls.GL<- function(X,y,ncp,pctnu,G,gamma=NULL,norm="A",verbose=FALSE)
+d.spls.GL<- function(X,y,ncp,pctnu,indG,gamma=NULL,norm="A",verbose=FALSE)
 {
   if (norm=="A")
   {
-    mod.dspls=DUALSPLSgrouplassoA(X=X,y=y,ncp=ncp,pctnu=pctnu,G=G,verbose=verbose)
+    mod.dspls=d.spls.GLA(X=X,y=y,ncp=ncp,pctnu=pctnu,indG=indG,verbose=verbose)
   }
   if (norm=="B")
   {
-    mod.dspls=DUALSPLSgrouplassoB(X=X,y=y,ncp=ncp,pctnu=pctnu,G=G,gamma=gamma,verbose=verbose)
+    mod.dspls=d.spls.GLB(X=X,y=y,ncp=ncp,pctnu=pctnu,indG=indG,gamma=gamma,verbose=verbose)
   }
 
   if (norm=="C")
   {
-    mod.dspls=DUALSPLSgrouplassoC(X=X,y=y,ncp=ncp,pctnu=pctnu,G=G,verbose=verbose)
+    mod.dspls=d.spls.GLC(X=X,y=y,ncp=ncp,pctnu=pctnu,indG=indG,verbose=verbose)
   }
   return(mod.dspls)
 }

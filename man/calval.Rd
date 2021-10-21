@@ -4,7 +4,7 @@
 \alias{calval}
 \title{Splits data into calibration and validation sets using the modified Kennard and Stone method}
 \usage{
-\code{calval(X,pcal,Datatype=NULL,y=NULL,ncells=10) }
+calval(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
 }
 \arguments{
 \item{X}{a numeric matrix of predictors values.}
@@ -27,13 +27,13 @@ is 10.}
 \item{Listecal}{a vector specifying how many observations from each group should be selected as calibration.
 Default value is NULL, meaning the function will consider a percentage of \code{pcal} from each group
 to be in the calibration set. If NULL, parameter \code{pcal} should be specified.}
-
-\item{indcal}{a numeric vector giving the row indices of the input data selected for calibration.}
-
-\item{indval}{a numeric vector giving the row indices of the remaining observations.}
 }
 \value{
 A \code{list} of the following attributes
+\itemize{
+\item indcal a numeric vector giving the row indices of the input data selected for calibration.
+\item indval a numeric vector giving the row indices of the remaining observations.
+}
 }
 \description{
 The function \code{calval} divides the data \code{X} into a calibration and a validation set using
@@ -79,13 +79,19 @@ plot(X[split1$indcal,1],X[split1$indcal,2],xlab="Variable 1",
 ylab="Variable 2",pch=19,col="red",main="Calibration and validation split1")
 points(X[split1$indval,1],X[split1$indval,2],pch=19,col="green")
 legend("topright", legend = c("Calibration points", "Validation points"),
- cex = 0.8, col = c("red","green"), pch = c(19,19))
+cex = 0.8, col = c("red","green"), pch = c(19,19))
 
- ###calibration parameters for split2
-Listecal <- c(20,20,30)
-ncells <- length(Listecal)
+###calibration parameters for split2
+ncells <- 3
+dimtype=floor(p/3)
+Datatype <- c(rep(1,dimtype),rep(2,dimtype),rep(3,(p-dimtype*2)))
 
-split2 <- calval(X=X,y=y,ncells=ncells,Listecal=Listecal)
+L1=floor(0.7*length(which(Datatype==1)))
+L2=floor(0.8*length(which(Datatype==2)))
+L3=floor(0.6*length(which(Datatype==3)))
+Listecal <- c(L1,L2,L3)
+
+split2 <- calval(X=X,y=y,Datatype=Datatype,Listecal=Listecal)
 
 ###plotting split2
 plot(X[split2$indcal,1],X[split2$indcal,2],xlab="Variable 1",

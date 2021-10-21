@@ -1,5 +1,4 @@
-library(dual.spls)
-library(pdist)
+
 n <- 100
 p <- 50
 nondes <- 20

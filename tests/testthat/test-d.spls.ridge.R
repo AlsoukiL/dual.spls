@@ -1,4 +1,4 @@
-library(pdist)
+
 n <- 200
 p <- 100
 nondes <- 150
@@ -12,8 +12,8 @@ y <- data.benchmark$y
 ncp=10
 pctnu=0.9
 mod.dspls <- d.spls.ridge(X=X,y=y,ncp=ncp,pctnu=pctnu,nu2=0.05,verbose=TRUE)
-dim(X)[1]=n
-dim(X)[2]=p
+n <- dim(X)[1]
+p <- dim(X)[2]
 
 #Dimension testing
 test_that("scores", { expect_equal(dim(mod.dspls$scores), c(n,ncp)) })

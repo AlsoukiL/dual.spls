@@ -2,8 +2,7 @@
 #' @description
 #' The function \code{calval} divides the data \code{X} into a calibration and a validation set using
 #' the modified Kennard and Stone startegy.
-#' @usage
-#' \code{calval(X,pcal,Datatype=NULL,y=NULL,ncells=10) }
+#' @usage calval(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
 #' @param X a numeric matrix of predictors values.
 #' @param pcal a positive integer between 0 and 100. \code{pcal} is the percentage
 #' of calibration samples to be selected. Default value is NULL, meaning as long as \code{Listecal} is
@@ -35,8 +34,10 @@
 #'
 #' Once each of the vector \code{Listecal} elements are null, the procedure is done.
 #' @return A \code{list} of the following attributes
-#' @param indcal a numeric vector giving the row indices of the input data selected for calibration.
-#' @param indval a numeric vector giving the row indices of the remaining observations.
+#' \itemize{
+#' \item indcal a numeric vector giving the row indices of the input data selected for calibration.
+#' \item indval a numeric vector giving the row indices of the remaining observations.
+#' }
 #' @author François Wahl Louna Alsouki
 #' @seealso [dual.spls::modified.KS()],[dual.spls::type()],`browseVignettes("dual.spls")`
 #'
@@ -64,13 +65,19 @@
 #' ylab="Variable 2",pch=19,col="red",main="Calibration and validation split1")
 #' points(X[split1$indval,1],X[split1$indval,2],pch=19,col="green")
 #' legend("topright", legend = c("Calibration points", "Validation points"),
-#'  cex = 0.8, col = c("red","green"), pch = c(19,19))
+#' cex = 0.8, col = c("red","green"), pch = c(19,19))
 #'
-#'  ###calibration parameters for split2
-#' Listecal <- c(20,20,30)
-#' ncells <- length(Listecal)
+#' ###calibration parameters for split2
+#' ncells <- 3
+#' dimtype=floor(p/3)
+#' Datatype <- c(rep(1,dimtype),rep(2,dimtype),rep(3,(p-dimtype*2)))
 #'
-#' split2 <- calval(X=X,y=y,ncells=ncells,Listecal=Listecal)
+#' L1=floor(0.7*length(which(Datatype==1)))
+#' L2=floor(0.8*length(which(Datatype==2)))
+#' L3=floor(0.6*length(which(Datatype==3)))
+#' Listecal <- c(L1,L2,L3)
+#'
+#' split2 <- calval(X=X,y=y,Datatype=Datatype,Listecal=Listecal)
 #'
 #' ###plotting split2
 #' plot(X[split2$indcal,1],X[split2$indcal,2],xlab="Variable 1",
@@ -109,7 +116,7 @@ calval<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
   }
 
   # index of calibration/validation
-  indcal=modified.KS(X,Datatype,Listecal)
+  indcal=modified.KS(X=X,Xtype=Datatype,Listecal=Listecal)
   indval=1:dim(X)[1]
   indval=indval[-indcal]
 

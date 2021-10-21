@@ -4,41 +4,44 @@
 \alias{BCHMK}
 \title{Simulation of a Benchmark data}
 \usage{
-\code{BCHMK(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)}
+BCHMK(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)
 }
 \arguments{
 \item{n}{a positive integer. \code{n} is the number of observations. Default value is 200.}
 
-\item{p}{a positive integer. \code{p} is the number of variables.Default value is 100.}
+\item{p}{a positive real value or a vector of length 2 representing the number of variables. Default value is 100.}
 
-\item{nondes}{a positive integer. \code{p} is the number of Guassians in the mixture. Default value is 50.}
+\item{nondes}{a positive integer or a vector of length 2. \code{nondes} is the number of Guassians in each mixture. Default value is 50.}
 
-\item{sigmaondes}{the standard deviation of the Gaussians.}
+\item{sigmaondes}{a positive real value or a vector of length 2. \code{sigmaondes} is the standard deviation of the Gaussians. Default value is 0.05.}
 
-\item{sigmay}{the uncertainty on \code{y}.}
-
-\item{X}{the preditors matrix.}
-
-\item{y}{the response vector.}
-
-\item{y0}{the reponse vector without noise \code{sigmay}.}
+\item{sigmay}{a real value. \code{sigmay} is the uncertainty on \code{y}. Default value is 0.5.}
 }
 \value{
 A \code{list} of the following attributes
+\itemize{
+\item X the preditors matrix. If length(p)=2, It is the concatunated predictor matrix.
+\item y the response vector.
+\item y0 the reponse vector without noise \code{sigmay}.
+\item sigmay the uncertainty on \code{y}.
+\item sigmaondes the standard deviation of the Gaussians.
+}
 }
 \description{
-The function \code{BCHMK} simulates a mixture of \code{nondes} Gaussians representing a predictors matrix \code{X}
-of \code{n} observations and \code{p} variables and a response vector \code{y}.
+The function \code{BCHMK} simulates one or two mixtures of \code{nondes} Gaussians representing one or two
+predictors matrices \code{X} or \code{X1} and \code{X2}
+of \code{n} observations and \code{p} or \code{p1} and \code{p2} variables and a response vector \code{y}.
 }
 \details{
-The predictors matrix \code{X} represents a mixture of \code{nondes} Gaussians characterized by means and
+The predictors matrices \code{X} or \code{X1} and \code{X2} represent each a mixture of \code{nondes} Gaussians characterized by means and
 amplitudes chosen randomly and a standard deviation set to \code{sigmaondes}.
 
-The response vector \code{y} is the sum of 4 intervals of \code{X} to which we add noise of \code{sigmay}.
+The response vector \code{y} is the sum of 4 intervals of each predictor matrix to which we add noise of \code{sigmay}.
 }
 \examples{
 ### load dual.spls library
 library(dual.spls)
+####one predictors matrix
 ### parameters
 n <- 100
 p <- 50
@@ -53,6 +56,37 @@ y <- data.benchmark$y
 plot(X[1,],type='l',ylim=c(0,max(X)),main='Benchmark data', ylab='X',col=1)
 for (i in 2:n){
  lines(X[i,],col=i)
+}
+
+####two predictors matrix
+### parameters
+n <- 100
+p <- c(50,100)
+nondes <- c(20,30)
+sigmaondes <- c(0.05,0.02)
+data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+
+X <- data.benchmark$X
+X1 <- X[,(1:p[1])]
+X2 <- X[,(p[1]+1):p[2]]
+y <- data.benchmark$y
+
+###plotting the data
+plot(X[1,],type='l',ylim=c(0,max(X)),main='Benchmark data', ylab='X',col=1)
+for (i in 2:n){
+ lines(X[i,],col=i)
+}
+
+###plotting the data
+plot(X1[1,],type='l',ylim=c(0,max(X1)),main='Benchmark data X1', ylab='X1',col=1)
+for (i in 2:n){
+ lines(X1[i,],col=i)
+}
+
+###plotting the data
+plot(X2[1,],type='l',ylim=c(0,max(X2)),main='Benchmark data X2', ylab='X2',col=1)
+for (i in 2:n){
+ lines(X2[i,],col=i)
 }
 }
 \seealso{

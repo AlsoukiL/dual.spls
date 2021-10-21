@@ -8,25 +8,27 @@
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
 #' @param pctnu a positive real value or a vector of length the number of groups, in \code{[0,1]}.
 #' \code{pctnu} is the desired proportion of variables to shrink to zero for each component and for each group.
-#' @param G a numeric vector of group index for each variable.
+#' @param indG a numeric vector of group index for each observation.
 #' @param verbose a boolean value indicating whether or not to diplay the iterations steps.
 #' @return A \code{list} of the following attributes
-#' @param Xmean the mean vector of the predictors matrix \code{X}.
-#' @param scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
+#' \itemize{
+#' \item Xmean the mean vector of the predictors matrix \code{X}.
+#' \item scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
 #' as \code{X} representing the observations in the new component basis computed by the compression step
 #' of the Dual-SPLS.
-#' @param loadings the loadings matrix.
-#' @param Bhat the regression coefficients matrix for each component.
-#' @param intercept the intercept value for each component.
-#' @param fitted.values the matrix of predicted values of \code{y}
-#' @param residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
-#' @param lambda the matrix of the sparse hyper-parameter used to fit the model at each iteration and for each group.
-#' @param zerovar the matrix of the number of variables shrinked to zero per component and per group.
+#' \item loadings the loadings matrix.
+#' \item Bhat the regression coefficients matrix for each component.
+#' \item intercept the intercept value for each component.
+#' \item fitted.values the matrix of predicted values of \code{y}
+#' \item residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
+#' \item lambda the matrix of the sparse hyper-parameter used to fit the model at each iteration and for each group.
+#' \item zerovar the matrix of the number of variables shrinked to zero per component and per group.
+#' }
 #' @seealso [dual.spls::d.spls.GLB()],[dual.spls::d.spls.GLC()],[dual.spls::d.spls.GL()],`browseVignettes("dual.spls")`
 #'
 #'
 #'
-d.spls.GLA<- function(X,y,ncp,pctnu,G,verbose=FALSE)
+d.spls.GLA<- function(X,y,ncp,pctnu,indG,verbose=FALSE)
 {
 
   ###################################
@@ -47,13 +49,13 @@ d.spls.GLA<- function(X,y,ncp,pctnu,G,verbose=FALSE)
   ###################################
   # Initialisation
   ###################################
-  GG=max(G) #Number of groups
+  GG=max(indG) #Number of groups
   PP=array(0,GG) #Initialising the vector of dimension of each group
 
 
   for (ig in 1:GG)
   {
-    PP[ig]=sum(G==ig)
+    PP[ig]=sum(indG==ig)
   }
 
 
@@ -89,7 +91,7 @@ d.spls.GLA<- function(X,y,ncp,pctnu,G,verbose=FALSE)
     for( ig in 1:GG)
     {
       #Index of the group
-      ind=which(G==ig)
+      ind=which(indG==ig)
 
       #Optimizing nu(g)
       Zs=sort(abs(Z[ind]))
@@ -123,7 +125,7 @@ d.spls.GLA<- function(X,y,ncp,pctnu,G,verbose=FALSE)
       lambda[igg]=nu[igg]/mu #
       ######################
       #Index of the group
-      ind=which(G==igg)
+      ind=which(indG==igg)
 
       # calculating w,t at the optimum
       w[ind]=(mu/(mu2+ t(nu)%*%norm1Znu))%*%Znu[ind]

@@ -2,8 +2,7 @@
 #' @description
 #' The function \code{d.spls.lasso} performs dimentional reduction combined to variable selection using the
 #' Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2}.
-#' @usage
-#' \code{d.spls.lasso(X,y,ncp,pctnu,verbose=FALSE) }
+#' @usage d.spls.lasso(X,y,ncp,pctnu,verbose=FALSE)
 #' @param X a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each converstation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
@@ -27,17 +26,19 @@
 #'
 #' The parameter \eqn{\nu} is computed adaptively according to the proportion of zero variables desired \code{pctnu}.
 #' @return A \code{list} of the following attributes
-#' @param Xmean the mean vector of the predictors matrix \code{X}.
-#' @param scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
+#' \itemize{
+#' \item  Xmean the mean vector of the predictors matrix \code{X}.
+#' \item  scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
 #' as \code{X} representing the observations in the new component basis computed by the compression step
 #' of the Dual-SPLS.
-#' @param loadings the loadings matrix.
-#' @param Bhat the regression coefficients matrix for each component.
-#' @param intercept the intercept value for each component.
-#' @param fitted.values the matrix of predicted values of \code{y}
-#' @param residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
-#' @param lambda the vector of the sparse hyper-parameter used to fit the model at each iteration.
-#' @param zerovar the vector of the number of variables shrinked to zero per component.
+#' \item  loadings the loadings matrix.
+#' \item  Bhat the regression coefficients matrix for each component.
+#' \item  intercept the intercept value for each component.
+#' \item  fitted.values the matrix of predicted values of \code{y}
+#' \item  residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
+#' \item  lambda the vector of the sparse hyper-parameter used to fit the model at each iteration.
+#' \item  zerovar the vector of the number of variables shrinked to zero per component.
+#' }
 #' @author François Wahl Louna Alsouki
 #' @seealso `browseVignettes("dual.spls")`
 #'
@@ -60,13 +61,15 @@
 #' str(mod.dspls)
 #'
 #' ### plotting the observed values VS predicted values
-#' plot(y,model.dspls$fitted.values, xlab="Observed values", ylab="Predicted values", main="Observed VS Predicted")
+#' plot(y,mod.dspls$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
+#'  main="Observed VS Predicted for 6 components")
 #' points(-1000:1000,-1000:1000,type='l')
 #'
 #' ### plotting the regression coefficients
 #' par(mfrow=c(3,1))
 #'
-#' nz=Mod.dspls$zerovar[i]
+#'i=6
+#' nz=mod.dspls$zerovar[i]
 #' plot(1:dim(X)[2],mod.dspls$Bhat[,i],type='l',
 #'     main=paste(" Dual-SPLS (lasso), ncp =", i, " #0coef =", nz, "/", dim(X)[2]),
 #'     ylab='',xlab='' )

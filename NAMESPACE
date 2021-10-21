@@ -2,8 +2,11 @@
 
 export(BCHMK)
 export(calval)
+export(d.spls)
 export(d.spls.GL)
 export(d.spls.LS)
 export(d.spls.lasso)
 export(d.spls.ridge)
 importFrom(pdist,pdist)
+importFrom(stats,rnorm)
+importFrom(stats,runif)

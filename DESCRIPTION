@@ -1,13 +1,16 @@
 Package: dual.spls
-Title: What the Package Does (One Line, Title Case)
-Version: 1.0
+Title: Dual Sparse Partial Least Squares Regression
+Version: 0.1
 Authors@R: 
-    person(given = "",
-           family = "Last",
+    c(person(given = "Louna",
+           family = "Alsouki",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "lounasouki@gmail.com"),person(given = "Francois",
+           family = "Wahl",
+           role = c("aut"),
+           email = "whal@math.univ-lyon1.fr")
+           )
+Description: Provides a series of functions depending on the choice of norm for fitting a dual sparse partial least squares (Dual-SPLS) regression. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -16,3 +19,6 @@ RoxygenNote: 7.1.2
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Imports: 
+    stats,
+    pdist

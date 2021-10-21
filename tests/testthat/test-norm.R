@@ -1,4 +1,4 @@
-library(pdist)
+
 
 #Data1
 vec=1:100

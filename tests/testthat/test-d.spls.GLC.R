@@ -1,16 +1,22 @@
-
+####two predictors matrix
+### parameters
 n <- 100
-p <- 50
-nondes <- 20
-sigmaondes <- 0.5
+p <- c(50,100)
+nondes <- c(20,30)
+sigmaondes <- c(0.05,0.02)
 data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+
 X <- data.benchmark$X
+X1 <- X[,(1:p[1])]
+X2 <- X[,(p[1]+1):p[2]]
 y <- data.benchmark$y
 
-#fitting the model
+indG <-c(rep(1,p[1]),rep(2,p[2]))
+
+#fitting the model1
 ncp <- 10
-pctnu <- 0.9
-mod.dspls <- d.spls.LS(X=X,y=y,ncp=ncp,pctnu=pctnu,verbose=TRUE)
+pctnu <- c(0.99,0.9)
+mod.dspls <- d.spls.GLC(X=X,y=y,ncp=ncp,pctnu=pctnu,indG=indG,verbose=TRUE)
 n <- dim(X)[1]
 p <- dim(X)[2]
 
@@ -30,7 +36,17 @@ test_that("Xmean", { expect_setequal(apply(X, 2, mean), mod.dspls$Xmean) })
 #zerovar
 for (i in 2:ncp)
 {
-  test_that("zerovar", { expect_gt(mod.dspls$zerovar[i-1],mod.dspls$zerovar[i]-1)})
+  test_that("zerovar1", { expect_gt(mod.dspls$zerovar[1,i-1],mod.dspls$zerovar[1,i]-1)})
 }
-test_that("zerovar1", { expect_lt(mod.dspls$zerovar[1], pctnu*p+1)})
+test_that("zerovar1_comp1", { expect_lt(mod.dspls$zerovar[1,1], pctnu[1]*p+1)})
+
+#zerovar
+for (i in 2:ncp)
+{
+  test_that("zerovar2", { expect_gt(mod.dspls$zerovar[2,i-1],mod.dspls$zerovar[2,i]-1)})
+}
+test_that("zerovar2_comp1", { expect_lt(mod.dspls$zerovar[2,1], pctnu[2]*p+1)})
+
+#number of variables
+test_that("indG", { expect_equal(length(unique(indG)), dim(mod.dspls$zerovar)[1]) })
 

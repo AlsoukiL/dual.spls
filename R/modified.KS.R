@@ -39,7 +39,7 @@ modified.KS<- function(X,Xtype,Listecal)
   G=apply(X,2,mean)
 
   # Distance matrix between each observation of X and the centroid
-  D_XG=as.matrix(pdist(X,G))
+  D_XG=as.matrix(pdist::pdist(X,Y=G))
   # the furthest observation from the centroid
   N=which.max(D_XG)
 
@@ -69,7 +69,7 @@ modified.KS<- function(X,Xtype,Listecal)
     indreste=1:n_exp
     indreste=indreste[-indcal]
     indreste=indreste[Xtype[indreste]==igr]
-    D_calreste=as.matrix(pdist(X[indcal,],X[indreste,]))
+    D_calreste=as.matrix(pdist::pdist(X[indcal,],X[indreste,]))
     D_calrestemin=apply(D_calreste,2,min)
     indnew=indreste[which.max(D_calrestemin)]
 
