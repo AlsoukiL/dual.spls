@@ -2,7 +2,7 @@ Package: dual.spls
 Title: Dual Sparse Partial Least Squares Regression
 Version: 0.1
 Authors@R: 
-    c(person(given = "Louna",
+    c(person(given = "Ghislain",
            family = "Alsouki",
            role = c("aut", "cre"),
            email = "lounasouki@gmail.com"),
