@@ -7,24 +7,23 @@
 d.spls.simulate(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)
 }
 \arguments{
-\item{n}{a positive integer. \code{n} is the number of observations. Default value is 200.}
+\item{n}{a positive integer. \code{n} is the number of observations. Default value is \code{200}.}
 
-\item{p}{a positive real value or a vector of length 2 representing the number of variables. Default value is 100.}
+\item{p}{a positive real value or a vector of length 2 representing the number of variables. Default value is \code{100}.}
 
-\item{nondes}{a positive integer or a vector of length 2. \code{nondes} is the number of Guassians in each mixture. Default value is 50.}
+\item{nondes}{a positive integer or a vector of length 2. \code{nondes} is the number of Guassians in each mixture. Default value is \code{50}.}
 
-\item{sigmaondes}{a positive real value or a vector of length 2. \code{sigmaondes} is the standard deviation of the Gaussians. Default value is 0.05.}
+\item{sigmaondes}{a positive real value or a vector of length 2. \code{sigmaondes} is the standard deviation of the Gaussians. Default value is \code{0.05}.}
 
-\item{sigmay}{a real value. \code{sigmay} is the uncertainty on \code{y}. Default value is 0.5.}
+\item{sigmay}{a real value. \code{sigmay} is the uncertainty on \code{y}. Default value is \code{0.5}.}
 }
 \value{
 A \code{list} of the following attributes
-\item{X}{the preditors matrix. If length(p)=2, it is the concatunated predictor matrix.}
+\item{X}{the preditors matrix. If \code{length(p)=2}, it is the concatunated predictor matrix.}
 \item{y}{the response vector.}
 \item{y0}{the reponse vector without noise \code{sigmay}.}
 \item{sigmay}{the uncertainty on \code{y}.}
 \item{sigmaondes}{the standard deviation of the Gaussians.}
-}
 }
 \description{
 The function \code{d.spls.simulate} simulates one or two mixtures of \code{nondes} Gaussians representing one or two

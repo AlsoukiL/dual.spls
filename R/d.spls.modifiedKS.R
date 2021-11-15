@@ -8,16 +8,16 @@
 #' of calibration samples to be selected. Default value is NULL, meaning as long as \code{Listecal} is
 #' specified, \code{pcal} is not necessary.
 #' @param Datatype A vecor of index specifying each observation belonging to wich group index.
-#' Default value is NULL, meaning the function will use the function \code{type} to compute the vector for \code{ncells}.
-#' If NULL, parameter \code{y} should be specified.
-#' @param y a numeric vector of responses. Default value is NULL, meaning as long as \code{Datatype} is specified,
+#' Default value is \code{NULL}, meaning the function will use the function \code{type} to compute the vector for \code{ncells}.
+#' If \code{NULL}, parameter \code{y} should be specified.
+#' @param y a numeric vector of responses. Default value is \code{NULL}, meaning as long as \code{Datatype} is specified,
 #' \code{y} is not necessary.
 #' @param ncells a positive integer. \code{ncells} is the number of groups dividing the observations. If
 #' \code{Datatype} is not specified, the function devides the observations into \code{ncells} groups. Default value
-#' is 10.
+#' is \code{10}.
 #' @param Listecal a vector specifying how many observations from each group should be selected as calibration.
-#' Default value is NULL, meaning the function will consider a percentage of \code{pcal} from each group
-#' to be in the calibration set. If NULL, parameter \code{pcal} should be specified.
+#' Default value is \code{NULL}, meaning the function will consider a percentage of \code{pcal} from each group
+#' to be in the calibration set. If \code{NULL}, parameter \code{pcal} should be specified.
 #' @details
 #' The modified Kennard and Stone algorithm allows to select samples using the classical Kennard and stone on
 #' each group of observations one by one. It starts by selecting the point that is the furthest away from the centroid.
@@ -30,7 +30,7 @@
 #'
 #' When there is more than one calibration sample, the procedure computes the distance between each \eqn{P_{i,g}} from
 #' the concerned group and each \eqn{P_{i,cal}} from the calibration set. The selected candidate verify the following distance:
-#' \deqn{d_{selected}=max_{P_{i,g}} ( min_{P_{i,cal}} (d_{P_{i,g},P_{i,cal}}) )}
+#' \deqn{d_{selected}=\max\limits_{P_{i,g}} ( \min\limits_{P_{i,cal}} (d_{P_{i,g},P_{i,cal}}) )}
 #'
 #' Once each of the vector \code{Listecal} elements are null, the procedure is done.
 #' @return A \code{list} of the following attributes

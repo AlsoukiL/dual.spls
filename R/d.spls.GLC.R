@@ -1,33 +1,31 @@
-#' Dual Sparse Partial Least Squares (Dual-SPLS) regression for the norm
-#' \eqn{\Omega(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} for
-#' \eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1; \sum_{g} \alpha_g=1}
+#' Dual Sparse Partial Least Squares (Dual-SPLS) regression for the group lasso norm C
 #' @keywords internal
 #' @description
 #' The function \code{d.spls.GLC} performs dimentional reduction as in PLS methodology combined to variable selection using the
 #' Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} for combined data where
-#' \eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1; \sum_{g} \alpha_g=1}.
+#' \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \Omega_g(w)=1; \sum\limits_{g=1}^G \alpha_g=1}. Where \code{G} is the number of groups.
 #' @param X a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each converstation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
-#' @param ppnu a positive real value or a vector of length the number of groups, in \code{[0,1]}.
+#' @param ppnu a positive real value or a vector of length the number of groups, in \eqn{[0,1]}.
 #' \code{ppnu} is the desired proportion of variables to shrink to zero for each component and for each group.
 #' @param indG a numeric vector of group index for each observation.
 #' @param verbose a boolean value indicating whether or not to diplay the iterations steps.
 #' @return A \code{list} of the following attributes
 #' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-#' \item{scores}{the matrix of dimension \eqn{n x ncp} where \code{n} is the number of observations.The \code{scores} represents
+#' \item{scores}{the matrix of dimension \code{n x ncp} where \code{n} is the number of observations.The \code{scores} represents
 #' the observations in the new component basis computed by the compression step
 #' of the Dual-SPLS.}
-#' \item{loadings}{the matrix of dimension \eqn{p x ncp} that represents the Dual-SPLS components.}
-#' \item{Bhat}{the matrix of dimension \eqn{p x ncp} that regroups the regression coefficients for each component.}
-#' \item{intercept}{the vector of length \eqn{ncp} representing the intercept values for each component.}
-#' \item{fitted.values}{the matrix of dimension \eqn{n x ncp} that represents the predicted values of \code{y}}
-#' \item{residuals}{the matrix of dimension \eqn{n x ncp} that represents the residuals corresponding
+#' \item{loadings}{the matrix of dimension \code{p x ncp} that represents the Dual-SPLS components.}
+#' \item{Bhat}{the matrix of dimension \code{p x ncp} that regroups the regression coefficients for each component.}
+#' \item{intercept}{the vector of length \code{ncp} representing the intercept values for each component.}
+#' \item{fitted.values}{the matrix of dimension \code{n x ncp} that represents the predicted values of \code{y}}
+#' \item{residuals}{the matrix of dimension \code{n x ncp} that represents the residuals corresponding
 #'  to the difference between the responses and the fitted values.}
-#' \item{lambda}{the matrix of dimension \eqn{G x ncp} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group, where
+#' \item{lambda}{the matrix of dimension \code{G x ncp} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group, where
 #' \eqn{G} is the number of groups.}
-#' \item{alpha}{the matrix of dimension \eqn{G x ncp} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group.}
-#' \item{zerovar}{the matrix of dimension \eqn{G x ncp} representing the number of variables shrinked to zero per component and per group.}
+#' \item{alpha}{the matrix of dimension \code{G x ncp} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group.}
+#' \item{zerovar}{the matrix of dimension \code{G x ncp} representing the number of variables shrinked to zero per component and per group.}
 #' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.GLA()],[dual.spls::d.spls.GLB()],[dual.spls::d.spls.GL()],`browseVignettes("dual.spls")`
 #'

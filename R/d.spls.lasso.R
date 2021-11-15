@@ -1,4 +1,4 @@
-#' Dual Sparse Partial Least Squares (Dual-SPLS) regression for the norm \eqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2}
+#' Dual Sparse Partial Least Squares (Dual-SPLS) regression for the lasso norm
 #' @description
 #' The function \code{d.spls.lasso} performs dimensional reduction as in PLS methodology combined to variable selection via the
 #' Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2}.
@@ -6,41 +6,42 @@
 #' @param X a numeric matrix of predictors values. Each row represents one observation and each column a predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
-#' @param ppnu a positive real value, in \code{[0,1]}. \code{ppnu} is the desired
+#' @param ppnu a positive real value, in \eqn{[0,1]}. \code{ppnu} is the desired
 #' proportion of variables to shrink to zero for each component (see Dual-SPLS methodology).
-#' @param verbose a boolean value indicating whether or not to diplay the iterations steps.
+#' @param verbose a boolean value indicating whether or not to diplay the iterations steps. Default value is \code{TRUE}.
 #' @details
 #' This procedure computes latent sparse components that are used in a regression model.
 #' The optimization problem of the Dual-SPLS regression for the norm \eqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2}
 #' comes from the Dual norm defintion of \eqn{\Omega(w)}. Indeed, we are searching for \code{w} that goes
 #' with
-#' \deqn{\Omega^*(z)=max_w(z^Tw) \text{ s.t. } \Omega(w)=1}
+#' \deqn{\Omega^*(z)=\max\limits_w(z^Tw) \textrm{ s.t. } \Omega(w)=1}
 #' Noting that \eqn{\lambda} is the initial shrinkage parameter that imposes sparsity, the Dual-SPLS does not rely
 #' on the value of \eqn{\lambda} but instead proceeds adaptively by choosing the propotion of zeros that the user
 #' would like to impose in the coefficients. Which leads to the compuation of a secondary shrinkage parameter \eqn{\nu}.
 #'
 #' The solution of the optimization problem is
-#' \deqn{\dfrac{w_j}{\|w\|_2}=\dfrac{1}{\mu} \delta_j (|z_j|-\nu)_+}
+#' \deqn{\frac{w_j}{\|w\|_2}=\frac{1}{\mu} \delta_j (|z_j|-\nu)_+}
 #' Where
 #' \itemize{
-#' \item \eqn{\delta_j} is the vector of signs of \code{z} and \code{w}
+#' \item \eqn{\delta_j} is the vector of signs of \eqn{z} and \eqn{w}
 #' \item \eqn{\mu} is a parameter that guarentees the constraint of \eqn{\Omega(w)=1}
 #' \item \eqn{\nu} is the shrinkage parameter.
 #' }
 #' @return A \code{list} of the following attributes
 #' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-#' \item{scores}{the matrix of dimension \eqn{n x ncp} where \code{n} is the number of observations.The \code{scores} represents
+#' \item{scores}{the matrix of dimension \code{n x ncp} where \code{n} is the number of observations.The \code{scores} represents
 #' the observations in the new component basis computed by the compression step
 #' of the Dual-SPLS.}
-#' \item{loadings}{the matrix of dimension \eqn{p x ncp} that represents the Dual-SPLS components.}
-#' \item{Bhat}{the matrix of dimension \eqn{p x ncp} that regroups the regression coefficients for each component.}
+#' \item{loadings}{the matrix of dimension \code{p x ncp} that represents the Dual-SPLS components.}
+#' \item{Bhat}{the matrix of dimension \code{p x ncp} that regroups the regression coefficients for each component.}
 #' \item{intercept}{the vector of intercept values for each component.}
-#' \item{fitted.values}{the matrix of dimension \eqn{n x ncp} that represents the predicted values of \code{y}}
-#' \item{residuals}{the matrix of dimension \eqn{n x ncp} that represents the residuals corresponding
+#' \item{fitted.values}{the matrix of dimension \code{n x ncp} that represents the predicted values of \code{y}}
+#' \item{residuals}{the matrix of dimension \code{n x ncp} that represents the residuals corresponding
 #'  to the difference between the responses and the fitted values.}
-#' \item{lambda}{the vector of length \eqn{ncp} collecting the parameters of sparsity  used to fit the model at each iteration.}
-#' \item{zerovar}{the vector of length \eqn{ncp} representing the number of variables shrinked to zero per component.}
+#' \item{lambda}{the vector of length \code{ncp} collecting the parameters of sparsity  used to fit the model at each iteration.}
+#' \item{zerovar}{the vector of length \code{ncp} representing the number of variables shrinked to zero per component.}
 #' @author Louna Alsouki François Wahl
+#' @import mathjaxr
 #' @seealso `browseVignettes("dual.spls")`
 #'
 #' @examples
