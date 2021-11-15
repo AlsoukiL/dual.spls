@@ -1,9 +1,9 @@
-#' Simulation of a Benchmark data
+#' Simulation of a data
 #' @description
-#' The function \code{BCHMK} simulates one or two mixtures of \code{nondes} Gaussians representing one or two
+#' The function \code{d.spls.simulate} simulates one or two mixtures of \code{nondes} Gaussians representing one or two
 #' predictors matrices \code{X} or \code{X1} and \code{X2}
 #' of \code{n} observations and \code{p} or \code{p1} and \code{p2} variables and a response vector \code{y}.
-#' @usage BCHMK(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)
+#' @usage d.spls.simulate(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)
 #' @param n a positive integer. \code{n} is the number of observations. Default value is 200.
 #' @param p a positive real value or a vector of length 2 representing the number of variables. Default value is 100.
 #' @param nondes a positive integer or a vector of length 2. \code{nondes} is the number of Guassians in each mixture. Default value is 50.
@@ -15,14 +15,13 @@
 #'
 #' The response vector \code{y} is the sum of 4 intervals of each predictor matrix to which we add noise of \code{sigmay}.
 #' @return A \code{list} of the following attributes
-#' \itemize{
-#' \item X the preditors matrix. If length(p)=2, It is the concatunated predictor matrix.
-#' \item y the response vector.
-#' \item y0 the reponse vector without noise \code{sigmay}.
-#' \item sigmay the uncertainty on \code{y}.
-#' \item sigmaondes the standard deviation of the Gaussians.
+#' \item{X}{the preditors matrix. If length(p)=2, it is the concatunated predictor matrix.}
+#' \item{y}{the response vector.}
+#' \item{y0}{the reponse vector without noise \code{sigmay}.}
+#' \item{sigmay}{the uncertainty on \code{y}.}
+#' \item{sigmaondes}{the standard deviation of the Gaussians.}
 #' }
-#' @author François Wahl Louna Alsouki
+#' @author Louna Alsouki François Wahl
 #' @seealso `browseVignettes("dual.spls")`
 #'
 #' @examples
@@ -34,15 +33,15 @@
 #' p <- 50
 #' nondes <- 20
 #' sigmaondes <- 0.5
-#' data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+#' data1=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
 #'
-#' X <- data.benchmark$X
-#' y <- data.benchmark$y
+#' Xa <- data1$X
+#' ya <- data1$y
 #'
 #' ###plotting the data
-#' plot(X[1,],type='l',ylim=c(0,max(X)),main='Benchmark data', ylab='X',col=1)
+#' plot(Xa[1,],type='l',ylim=c(0,max(Xa)),main='Data', ylab='Xa',col=1)
 #' for (i in 2:n){
-#'  lines(X[i,],col=i)
+#'  lines(Xa[i,],col=i)
 #'}
 #'
 #'####two predictors matrix
@@ -51,34 +50,34 @@
 #' p <- c(50,100)
 #' nondes <- c(20,30)
 #' sigmaondes <- c(0.05,0.02)
-#' data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+#' data2=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
 #'
-#' X <- data.benchmark$X
-#' X1 <- X[,(1:p[1])]
-#' X2 <- X[,(p[1]+1):p[2]]
-#' y <- data.benchmark$y
+#' Xb <- data2$X
+#' X1 <- Xb[,(1:p[1])]
+#' X2 <- Xb[,(p[1]+1):p[2]]
+#' yb <- data2$y
 #'
 #' ###plotting the data
-#' plot(X[1,],type='l',ylim=c(0,max(X)),main='Benchmark data', ylab='X',col=1)
+#' plot(Xb[1,],type='l',ylim=c(0,max(Xb)),main='Data', ylab='Xb',col=1)
 #' for (i in 2:n){
-#'  lines(X[i,],col=i)
+#'  lines(Xb[i,],col=i)
 #'}
 #'
 #' ###plotting the data
-#' plot(X1[1,],type='l',ylim=c(0,max(X1)),main='Benchmark data X1', ylab='X1',col=1)
+#' plot(X1[1,],type='l',ylim=c(0,max(X1)),main='Data X1', ylab='X1',col=1)
 #' for (i in 2:n){
 #'  lines(X1[i,],col=i)
 #'}
 #'
 #' ###plotting the data
-#' plot(X2[1,],type='l',ylim=c(0,max(X2)),main='Benchmark data X2', ylab='X2',col=1)
+#' plot(X2[1,],type='l',ylim=c(0,max(X2)),main='Data X2', ylab='X2',col=1)
 #' for (i in 2:n){
 #'  lines(X2[i,],col=i)
 #'}
 #' @export
 
 
-BCHMK<- function(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)
+d.spls.simulate<- function(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)
 {
 
   if (length(p)==1)

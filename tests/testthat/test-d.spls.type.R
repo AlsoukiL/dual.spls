@@ -1,7 +1,7 @@
 y=seq(-50,100,length.out = 30)
 ncells=3
 
-type=type(y=y,ncells=ncells)
+type=d.spls.type(y=y,ncells=ncells)
 Datatype=type
 
 test_that("right length", {

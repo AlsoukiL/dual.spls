@@ -4,7 +4,7 @@
 \alias{d.spls.GLA}
 \title{Dual Sparse Partial Least Squares (Dual-SPLS) regression for the norm \eqn{\Omega(w)=\|w\|_2+\sum_{g} \lambda_g\|w_g\|_1}}
 \usage{
-d.spls.GLA(X, y, ncp, pctnu, indG, verbose = FALSE)
+d.spls.GLA(X, y, ncp, ppnu, indG, verbose = FALSE)
 }
 \arguments{
 \item{X}{a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.}
@@ -13,8 +13,8 @@ d.spls.GLA(X, y, ncp, pctnu, indG, verbose = FALSE)
 
 \item{ncp}{a positive integer. \code{ncp} is the number of Dual-SPLS components.}
 
-\item{pctnu}{a positive real value or a vector of length the number of groups, in \code{[0,1]}.
-\code{pctnu} is the desired proportion of variables to shrink to zero for each component and for each group.}
+\item{ppnu}{a positive real value or a vector of length the number of groups, in \code{[0,1]}.
+\code{ppnu} is the desired proportion of variables to shrink to zero for each component and for each group.}
 
 \item{indG}{a numeric vector of group index for each observation.}
 
@@ -22,25 +22,28 @@ d.spls.GLA(X, y, ncp, pctnu, indG, verbose = FALSE)
 }
 \value{
 A \code{list} of the following attributes
-\itemize{
-\item Xmean the mean vector of the predictors matrix \code{X}.
-\item scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
-as \code{X} representing the observations in the new component basis computed by the compression step
-of the Dual-SPLS.
-\item loadings the loadings matrix.
-\item Bhat the regression coefficients matrix for each component.
-\item intercept the intercept value for each component.
-\item fitted.values the matrix of predicted values of \code{y}
-\item residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
-\item lambda the matrix of the sparse hyper-parameter used to fit the model at each iteration and for each group.
-\item zerovar the matrix of the number of variables shrinked to zero per component and per group.
-}
+\item{Xmean}{the mean vector of the predictors matrix \code{X}.}
+\item{scores}{the matrix of dimension \eqn{n x ncp} where \code{n} is the number of observations.The \code{scores} represents
+the observations in the new component basis computed by the compression step
+of the Dual-SPLS.}
+\item{loadings}{the matrix of dimension \eqn{p x ncp} that represents the Dual-SPLS components.}
+\item{Bhat}{the matrix of dimension \eqn{p x ncp} that regroups the regression coefficients for each component.}
+\item{intercept}{the vector of intercept values for each component.}
+\item{fitted.values}{the matrix of dimension \eqn{n x ncp} that represents the predicted values of \code{y}}
+\item{residuals}{the matrix of dimension \eqn{n x ncp} that represents the residuals corresponding
+to the difference between the responses and the fitted values.}
+\item{lambda}{the matrix of dimension \eqn{G x ncp} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group, where
+\eqn{G} is the number of groups.}
+\item{zerovar}{the matrix of dimension \eqn{G x ncp} representing the number of variables shrinked to zero per component and per group.}
 }
 \description{
-The function \code{d.spls.GLA} performs dimentional reduction combined to variable selection using the
+The function \code{d.spls.GLA} performs dimentional reduction as in PLS methodology combined to variable selection using the
 Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\|w\|_2+\sum_{G} \lambda_g\|w_g\|_1} for combined data.
 }
 \seealso{
-\code{\link[=d.spls.GLB]{d.spls.GLB()}},\code{\link[=d.spls.GLC]{d.spls.GLC()}},\code{\link[=d.spls.GL]{d.spls.GL()}},\code{browseVignettes("dual.spls")}
+\code{\link[=d.spls.GLB]{d.spls.GLB()}}, \code{\link[=d.spls.GLC]{d.spls.GLC()}}, \code{\link[=d.spls.GL]{d.spls.GL()}}, \code{browseVignettes("dual.spls")}
+}
+\author{
+Louna Alsouki François Wahl
 }
 \keyword{internal}

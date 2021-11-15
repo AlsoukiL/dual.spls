@@ -1,17 +1,18 @@
 #' Splits data into calibration and validation sets according to wich group belongs each observation
 #' @keywords internal
 #' @description
-#' The function \code{modified.KS} divides the data \code{X} into a calibration and a validation set using
+#' The function \code{d.spls.calval} divides the data \code{X} into a calibration and a validation set using
 #' the Kennard and Stone startegy for each group at a time and according to the number of calibration desired
-#' from each group
+#' from each group.
 #' @param X a numeric matrix.
 #' @param Xtype a vector of index specifying to wich group belongs each observation.
 #' @param Listecal a vector specifying how many observations from each group should be selected as calibration.
 #' @return a numeric vector giving the row indices of the input data selected for calibration
-#' @seealso [dual.spls::type()],[dual.spls::calval()],`browseVignettes("dual.spls")`
+#' @author Louna Alsouki François Wahl
+#' @seealso [dual.spls::d.spls.type()],[dual.spls::d.spls.modifiedKS()],`browseVignettes("dual.spls")`
 #' @importFrom pdist pdist
 #'
-modified.KS<- function(X,Xtype,Listecal)
+d.spls.calval<- function(X,Xtype,Listecal)
 {
 
   nref=sum(Listecal)

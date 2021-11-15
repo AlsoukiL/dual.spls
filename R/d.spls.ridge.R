@@ -1,21 +1,25 @@
-#' Dual Sparse Partial Least Squares (Dual-SPLS) regression for the norm \eqn{\Omega(w)=\lambda \|w\|_1 +lambda2 \|Xw\|_2 + \|w\|_2}
+#' Dual Sparse Partial Least Squares (Dual-SPLS) regression for the norm \eqn{\Omega(w)=\lambda_1 \|w\|_1 +\lambda_2 \|Xw\|_2 + \|w\|_2}
 #' @description
-#' The function \code{d.spls.ridge} performs dimentional reduction combined to variable selection using the
-#' Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\lambda \|w\|_1 +lambda2 \|Xw\|_2 + \|w\|_2}.
-#' @usage d.spls.ridge(X,y,ncp,pctnu,nu2,verbose=FALSE)
+#' The function \code{d.spls.lasso} performs dimensional reduction as in PLS methodology combined to variable selection via the
+#' Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\lambda_1 \|w\|_1 +\lambda_2 \|Xw\|_2 + \|w\|_2}.
+#' @usage d.spls.ridge(X,y,ncp,ppnu,nu2,verbose=FALSE)
 #' @param X a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.
-#' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each converstation.
+#' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
-#' @param pctnu a positive real value, in \code{[0,1]}. \code{pctnu} is the desired
-#' proportion of variables to shrink to zero for each component.
-#' @param nu2 a positive real value. \code{nu2} is a sparsity parameter.
+#' @param ppnu a positive real value, in \code{[0,1]}. \code{ppnu} is the desired
+#' proportion of variables to shrink to zero for each component (see Dual-SPLS methodology).
+#' @param nu2 a positive real value. \code{nu2} is a constraint parameter.
 #' @param verbose a boolean value indicating whether or not to diplay the iterations steps.
 #' @details
 #' This procedure computes latent sparse components that are used in a regression model.
-#' The optimization problem of the Dual-SPLS regression for the norm \eqn{\Omega(w)=\lambda \|w\|_1 +lambda2 \|Xw\|_2 + \|w\|_2} is
-#' similar to the Dual norm defintion of the norm \eqn{\Omega(w)}. Indeed, we are searching for \code{w} that goes
+#' The optimization problem of the Dual-SPLS regression for the norm \eqn{\Omega(w)=\lambda_1 \|w\|_1 +\lambda_2 \|Xw\|_2 + \|w\|_2}
+#' comes from the Dual norm defintion of \eqn{\Omega(w)}. Indeed, we are searching for \code{w} that goes
 #' with
 #' \deqn{\Omega^*(z)=max_w(z^Tw) \text{ s.t. } \Omega(w)=1}
+#' Noting that \eqn{\lambda_1} is an initial shrinkage parameter that imposes sparsity, the Dual-SPLS does not rely
+#' on the value of \eqn{\lambda_1} but instead proceeds adaptively by choosing the propotion of zeros that the user
+#' would like to impose in the coefficients. Which leads to the compuation of a secondary shrinkage parameter \eqn{\nu_1}.
+#'
 #' The solution of this problem is
 #' \deqn{\dfrac{w_j}{\|w\|_2}=\dfrac{1}{\mu} \delta_{N_{2,j}} (|z_{N_{2},\nu_2}|-\nu_1)_+}
 #' Where
@@ -26,23 +30,20 @@
 #' \item \eqn{z_{N_{2},\nu_2}} is the product between \eqn{(\nu_2 N_2^TN_2+I_p)^{-1}} and z.
 #'
 #' }
-#'
-#' The parameter \eqn{\nu_2} is computed adaptively according to the proportion of zero variables desired \code{pctnu}.
 #' @return A \code{list} of the following attributes
-#' \itemize{
-#' \item  Xmean the mean vector of the predictors matrix \code{X}.
-#' \item  scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
-#' as \code{X} representing the observations in the new component basis computed by the compression step
-#' of the Dual-SPLS.
-#' \item  loadings the loadings matrix.
-#' \item  Bhat the regression coefficients matrix for each component.
-#' \item  intercept the intercept value for each component.
-#' \item  fitted.values the matrix of predicted values of \code{y}
-#' \item  residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
-#' \item  lambda1 the vector of the sparse hyper-parameter used to fit the model at each iteration.
-#' \item  zerovar the vector of the number of variables shrinked to zero per component.
-#' }
-#' @author François Wahl Louna Alsouki
+#' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
+#' \item{scores}{the matrix of dimension \eqn{n x ncp} where \code{n} is the number of observations.The \code{scores} represents
+#' the observations in the new component basis computed by the compression step
+#' of the Dual-SPLS.}
+#' \item{loadings}{the matrix of dimension \eqn{p x ncp} that represents the Dual-SPLS components.}
+#' \item{Bhat}{the matrix of dimension \eqn{p x ncp} that regroups the regression coefficients for each component.}
+#' \item{intercept}{the vector of intercept values for each component.}
+#' \item{fitted.values}{the matrix of dimension \eqn{n x ncp} that represents the predicted values of \code{y}}
+#' \item{residuals}{the matrix of dimension \eqn{n x ncp} that represents the residuals corresponding
+#'  to the difference between the responses and the fitted values.}`
+#' \item{lambda1}{the vector of length \eqn{ncp} collecting the parameters of sparsity used to fit the model at each iteration.}
+#' \item{zerovar}{the vector of length \eqn{ncp} representing the number of variables shrinked to zero per component.}
+#' @author Louna Alsouki François Wahl
 #' @seealso `browseVignettes("dual.spls")`
 #'
 #' @examples
@@ -53,13 +54,14 @@
 #' p <- 100
 #' nondes <- 150
 #' sigmaondes <- 0.01
-#' data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+#' data=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
 #'
-#' X <- data.benchmark$X
-#' y <- data.benchmark$y
+#' X <- data$X
+#' y <- data$y
+#'
 #'
 #' #fitting the model
-#' mod.dspls <- d.spls.ridge(X=X,y=y,ncp=10,pctnu=0.9,nu2=0.05,verbose=TRUE)
+#' mod.dspls <- d.spls.ridge(X=X,y=y,ncp=10,ppnu=0.9,nu2=0.05,verbose=TRUE)
 #'
 #' str(mod.dspls)
 #'
@@ -81,7 +83,7 @@
 #' @export
 
 
-d.spls.ridge<- function(X,y,ncp,pctnu,nu2,verbose=FALSE)
+d.spls.ridge<- function(X,y,ncp,ppnu,nu2,verbose=FALSE)
 {
 
   ###################################
@@ -140,7 +142,7 @@ d.spls.ridge<- function(X,y,ncp,pctnu,nu2,verbose=FALSE)
     #Optimizing nu
     zs=sort(abs(ZN))
     zsp=(1:p)/p
-    iz=which.min(abs(zsp-pctnu))
+    iz=which.min(abs(zsp-ppnu))
     ###########
     nu1=zs[iz] #
     # ###########
@@ -151,17 +153,17 @@ d.spls.ridge<- function(X,y,ncp,pctnu,nu2,verbose=FALSE)
     # Computing mu
 
     #########
-    mu=norm2(z12) #
+    mu=d.spls.norm2(z12) #
     ##############
     lambda1=nu1/mu #
     ##############
 
     # calculating w,t at the optimum
-    w=(mu/(nu2*norm2(N2%*%z12)^2+nu1*norm1(z12) + mu^2))*z12
+    w=(mu/(nu2*d.spls.norm2(N2%*%z12)^2+nu1*d.spls.norm1(z12) + mu^2))*z12
 
     #Finding T
     t=Xdef%*%w
-    t=t/norm2(t)
+    t=t/d.spls.norm2(t)
 
     WW[,ic]=w
     TT[,ic]=t

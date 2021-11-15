@@ -1,8 +1,8 @@
 #' Splits data into calibration and validation sets using the modified Kennard and Stone method
 #' @description
-#' The function \code{calval} divides the data \code{X} into a calibration and a validation set using
+#' The function \code{d.spls.modifiedKS} divides the data \code{X} into a calibration and a validation set using
 #' the modified Kennard and Stone startegy.
-#' @usage calval(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
+#' @usage d.spls.modifiedKS(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
 #' @param X a numeric matrix of predictors values.
 #' @param pcal a positive integer between 0 and 100. \code{pcal} is the percentage
 #' of calibration samples to be selected. Default value is NULL, meaning as long as \code{Listecal} is
@@ -21,7 +21,7 @@
 #' @details
 #' The modified Kennard and Stone algorithm allows to select samples using the classical Kennard and stone on
 #' each group of observations one by one. It starts by selecting the point that is the furthest away from the centroid.
-#' This point is assigned as the calibration set and is removed from the list of candidates. Then, it identify to which
+#' This point is assigned as the calibration set and is removed from the list of candidates. Then, it identifies to which
 #' group belongs this first observation and consider the group \eqn{g} that comes after.
 #' It computes the distance \eqn{\delta_{P_{i,g}}} between the remaining points
 #' \eqn{P_{i,g}} belonging to the group the group \eqn{g} and the calibration point assigned. The point with the
@@ -34,12 +34,10 @@
 #'
 #' Once each of the vector \code{Listecal} elements are null, the procedure is done.
 #' @return A \code{list} of the following attributes
-#' \itemize{
-#' \item indcal a numeric vector giving the row indices of the input data selected for calibration.
-#' \item indval a numeric vector giving the row indices of the remaining observations.
-#' }
-#' @author François Wahl Louna Alsouki
-#' @seealso [dual.spls::modified.KS()],[dual.spls::type()],`browseVignettes("dual.spls")`
+#' \item{indcal}{a numeric vector giving the row indices of the input data selected for calibration.}
+#' \item{indval}{a numeric vector giving the row indices of the remaining observations.}
+#' @author Louna Alsouki François Wahl
+#' @seealso [dual.spls::d.spls.calval()],[dual.spls::d.spls.type()],`browseVignettes("dual.spls")`
 #'
 #' @examples
 #' ### load dual.spls library
@@ -49,16 +47,16 @@
 #' p <- 50
 #' nondes <- 20
 #' sigmaondes <- 0.5
-#' data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+#' data=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
 #'
-#' X <- data.benchmark$X
-#' y <- data.benchmark$y
+#' X <- data$X
+#' y <- data$y
 #'
 #' ###calibration parameters for split1
 #' pcal <- 70
 #' ncells <- 3
 #'
-#' split1 <- calval(X=X,pcal=pcal,y=y,ncells=ncells)
+#' split1 <- d.spls.modifiedKS(X=X,pcal=pcal,y=y,ncells=ncells)
 #'
 #' ###plotting split1
 #' plot(X[split1$indcal,1],X[split1$indcal,2],xlab="Variable 1",
@@ -77,7 +75,7 @@
 #' L3=floor(0.6*length(which(Datatype==3)))
 #' Listecal <- c(L1,L2,L3)
 #'
-#' split2 <- calval(X=X,y=y,Datatype=Datatype,Listecal=Listecal)
+#' split2 <- d.spls.modifiedKS(X=X,y=y,Datatype=Datatype,Listecal=Listecal)
 #'
 #' ###plotting split2
 #' plot(X[split2$indcal,1],X[split2$indcal,2],xlab="Variable 1",
@@ -89,7 +87,7 @@
 #' @export
 
 
-calval<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
+d.spls.modifiedKS<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
 {
   if (is.null(Datatype) & is.null(y)){
     stop('Error in calval: if Datatype=NULL, y should not be NULL' )
@@ -97,7 +95,7 @@ calval<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
 
   # type of the observed values
   if (is.null(Datatype)){
-    Datatype=type(y,ncells)
+    Datatype=d.spls.type(y,ncells)
   }
 
   if (is.null(Listecal) & is.null(pcal)){
@@ -116,7 +114,7 @@ calval<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
   }
 
   # index of calibration/validation
-  indcal=modified.KS(X=X,Xtype=Datatype,Listecal=Listecal)
+  indcal=d.spls.calval(X=X,Xtype=Datatype,Listecal=Listecal)
   indval=1:dim(X)[1]
   indval=indval[-indcal]
 

@@ -3,14 +3,14 @@ n <- 100
 p <- 50
 nondes <- 20
 sigmaondes <- 0.5
-data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
-X <- data.benchmark$X
-y <- data.benchmark$y
+data=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+X <- data$X
+y <- data$y
 
 #fitting the model
 ncp <- 10
-pctnu <- 0.9
-mod.dspls <- d.spls.LS(X=X,y=y,ncp=ncp,pctnu=pctnu,verbose=TRUE)
+ppnu <- 0.9
+mod.dspls <- d.spls.LS(X=X,y=y,ncp=ncp,ppnu=ppnu,verbose=TRUE)
 n <- dim(X)[1]
 p <- dim(X)[2]
 
@@ -32,5 +32,5 @@ for (i in 2:ncp)
 {
   test_that("zerovar", { expect_gt(mod.dspls$zerovar[i-1],mod.dspls$zerovar[i]-1)})
 }
-test_that("zerovar1", { expect_lt(mod.dspls$zerovar[1], pctnu*p+1)})
+test_that("zerovar1", { expect_lt(mod.dspls$zerovar[1], ppnu*p+1)})
 

@@ -5,15 +5,15 @@ n <- 100
 p <- 50
 nondes <- 20
 sigmaondes <- 0.5
-data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+data=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
 
-X <- data.benchmark$X
-y <- data.benchmark$y
+X <- data$X
+y <- data$y
 
 pcal <- 70
 ncells <- 3
 
-split <- calval(X=X,pcal=pcal,y=y,ncells=ncells)
+split <- d.spls.modifiedKS(X=X,pcal=pcal,y=y,ncells=ncells)
 
 indcal= split$indcal
 indval= split$indval
@@ -25,14 +25,14 @@ yval=y[indval]
 
 #fitting the model
 ncp=10
-mod.dspls <- d.spls.lasso(X=Xcal,y=ycal,ncp=ncp,pctnu=0.9,verbose=TRUE)
+mod.dspls <- d.spls.lasso(X=Xcal,y=ycal,ncp=ncp,ppnu=0.9,verbose=TRUE)
 
 ycalhat=mod.dspls$fitted.values
 rescal=mod.dspls$residuals
 # predictions on validation
 liste_cp=1:ncp
 
-yvalhat=d.spls(mod.dspls,Xval, liste_cp=liste_cp)
+yvalhat=d.spls.predict(mod.dspls,Xval, liste_cp=liste_cp)
 
 #Dimension testing
 test_that("yhat", {
@@ -41,6 +41,6 @@ test_that("yhat", {
 
 #Prediction testing testing
 test_that("ycal prediction", {
-  expect_setequal(ycalhat, d.spls(mod.dspls,Xcal, liste_cp=1:ncp))
+  expect_setequal(ycalhat, d.spls.predict(mod.dspls,Xcal, liste_cp=1:ncp))
   })
 

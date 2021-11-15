@@ -4,7 +4,7 @@
 \alias{d.spls.GL}
 \title{Dual Sparse Partial Least Squares (Dual-SPLS) regression for the group lasso norms}
 \usage{
-d.spls.GL(X,y,ncp,pctnu,indG,gamma=NULL,norm="A",verbose=FALSE)
+d.spls.GL(X,y,ncp,ppnu,indG,gamma=NULL,norm="A",verbose=FALSE)
 }
 \arguments{
 \item{X}{a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.}
@@ -13,12 +13,12 @@ d.spls.GL(X,y,ncp,pctnu,indG,gamma=NULL,norm="A",verbose=FALSE)
 
 \item{ncp}{a positive integer. \code{ncp} is the number of Dual-SPLS components.}
 
-\item{pctnu}{a positive real value or a vector of length the number of groups, in \code{[0,1]}.
-\code{pctnu} is the desired proportion of variables to shrink to zero for each component and for each group.}
+\item{ppnu}{a positive real value or a vector of length the number of groups, in \code{[0,1]}.
+\code{ppnu} is the desired proportion of variables to shrink to zero for each component and for each group.}
 
 \item{indG}{a numeric vector of group index for each observation.}
 
-\item{gamma}{a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{norm="A"}. Default value is NULL.}
+\item{gamma}{a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{norm="B"}. Default value is NULL.}
 
 \item{norm}{a character specifying the norm chosen between A, B and C. Default value is A.}
 
@@ -26,24 +26,23 @@ d.spls.GL(X,y,ncp,pctnu,indG,gamma=NULL,norm="A",verbose=FALSE)
 }
 \value{
 A \code{list} of the following attributes
-\itemize{
-\item Xmean the mean vector of the predictors matrix \code{X}.
-\item scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
-as \code{X} representing the observations in the new component basis computed by the compression step
-of the Dual-SPLS.
-\item loadings the loadings matrix.
-\item Bhat the regression coefficients matrix for each component.
-\item intercept the intercept value for each component.
-\item fitted.values the matrix of predicted values of \code{y}
-\item residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
-\item lambda the matrix of the first sparse hyper-parameter used to fit the model at each iteration and for each group.
-\item alpha the matrix of the second sparse hyper-parameter used to fit the model at each iteration and for each group
-when the norm chosen is B or C.
-\item zerovar the matrix of the number of variables shrinked to zero per component and per group.
-}
+\item{Xmean}{the mean vector of the predictors matrix \code{X}.}
+\item{scores}{the matrix of dimension \eqn{n x ncp} where \code{n} is the number of observations.The \code{scores} represents
+the observations in the new component basis computed by the compression step
+of the Dual-SPLS.}
+\item{loadings}{the matrix of dimension \eqn{p x ncp} that represents the Dual-SPLS components.}
+\item{Bhat}{the matrix of dimension \eqn{p x ncp} that regroups the regression coefficients for each component.}
+\item{intercept}{the vector of length \eqn{ncp} representing the intercept values for each component.}
+\item{fitted.values}{the matrix of dimension \eqn{n x ncp} that represents the predicted values of \code{y}}
+\item{residuals}{the matrix of dimension \eqn{n x ncp} that represents the residuals corresponding
+to the difference between the responses and the fitted values.}
+\item{lambda}{the matrix of dimension \eqn{G x ncp} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group, where
+\eqn{G} is the number of groups.}
+\item{alpha}{the matrix of dimension \eqn{G x ncp} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group when the norm chosen is B or C.}
+\item{zerovar}{the matrix of dimension \eqn{G x ncp} representing the number of variables shrinked to zero per component and per group.}
 }
 \description{
-The function \code{d.spls.GL} performs dimentional reduction combined to variable selection using the
+The function \code{d.spls.GL} performs dimentional reduction as in PLS methodology combined to variable selection using the
 Dual-SPLS algorithm with the group lasso norms
 \itemize{
 \item Norm A: \eqn{\Omega(w)=\|w\|_2+\sum_{g} \lambda_g\|w_g\|_1}
@@ -54,11 +53,14 @@ Dual-SPLS algorithm with the group lasso norms
 }
 }
 \details{
-This procdure computes latent sparse components that are used in a regression model.
-The optimization problem of the Dual-SPLS regression for the group lasso norms is
-similar to the Dual norm defintion of the norm \eqn{\Omega(w)}. Indeed, we are searching for \code{w} that goes
-with
+This procedure computes latent sparse components that are used in a regression model.
+The optimization problem of the Dual-SPLS regression for the group lasso norms comes from
+to the Dual norm defintion of the norm \eqn{\Omega(w)}. Indeed, we are searching for \code{w} that goes with
 \deqn{\Omega^*(z)=max_w(z^Tw) \text{ s.t. } \Omega(w)=1}
+Noting that \eqn{\lambda_g} are the initial shrinkage parameters that imposes sparsity, the Dual-SPLS does not rely
+on the values of \eqn{\lambda_g} but instead proceeds adaptively by choosing the propotion of zeros that the user
+would like to impose in the coefficients for each group. Which leads to the compuation of a secondary shrinkage parameter \eqn{\nu_g}.
+
 The solution of this problem for the norm A is
 \deqn{\dfrac{w_g}{\|w\|_2}=\dfrac{1}{\mu} \delta_g (|z_g|-\nu_g)_+ \text{ for each group} g}
 
@@ -71,37 +73,36 @@ The solution of this problem for the norm C is
 Where
 \itemize{
 \item \eqn{\delta_g} is the vector of signs of \code{z_g} and \code{w_g}
-\item \eqn{\alpha_g} is the hyper-parameter of the procedure.
+\item \eqn{\alpha_g} is a constraint parameter imposed for norms B and C.
 \item \eqn{\mu} is a parameter that guarentees the constraint of \eqn{\Omega(w)=1}
 \item \eqn{\nu_g} is the shrinkage parameter for each group \code{g}.
 }
-
-The parameters \eqn{\nu_g} are computed adaptively according to the proportion of zero variables desired \code{pctnu} for each group.
 }
 \examples{
 ### load dual.spls library
 library(dual.spls)
+
 ####two predictors matrix
 ### parameters
 n <- 100
 p <- c(50,100)
 nondes <- c(20,30)
 sigmaondes <- c(0.05,0.02)
-data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+data=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
 
-X <- data.benchmark$X
+X <- data$X
 X1 <- X[,(1:p[1])]
 X2 <- X[,(p[1]+1):p[2]]
-y <- data.benchmark$y
+y <- data$y
 
 indG <-c(rep(1,p[1]),rep(2,p[2]))
 
 #fitting the model
 ncp <- 10
-pctnu <- c(0.99,0.9)
+ppnu <- c(0.99,0.9)
 
 # norm A
-mod.dsplsA <- d.spls.GL(X=X,y=y,ncp=ncp,pctnu=pctnu,indG=indG,norm="A",verbose=TRUE)
+mod.dsplsA <- d.spls.GL(X=X,y=y,ncp=ncp,ppnu=ppnu,indG=indG,norm="A",verbose=TRUE)
 n <- dim(X)[1]
 p <- dim(X)[2]
 
@@ -126,7 +127,7 @@ points(inonz,mod.dsplsA$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 
 # norm B
-mod.dsplsB <- d.spls.GL(X=X,y=y,ncp=ncp,pctnu=pctnu,indG=indG,
+mod.dsplsB <- d.spls.GL(X=X,y=y,ncp=ncp,ppnu=ppnu,indG=indG,
 gamma=c(0.5,0.5),norm="B",verbose=TRUE)
 
 str(mod.dsplsB)
@@ -150,7 +151,7 @@ points(inonz,mod.dsplsB$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 
 # norm C
-mod.dsplsC <- d.spls.GL(X=X,y=y,ncp=ncp,pctnu=pctnu,indG=indG,norm="C",verbose=TRUE)
+mod.dsplsC <- d.spls.GL(X=X,y=y,ncp=ncp,ppnu=ppnu,indG=indG,norm="C",verbose=TRUE)
 n <- dim(X)[1]
 p <- dim(X)[2]
 
@@ -177,5 +178,8 @@ legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",
 
 }
 \seealso{
-\code{\link[=d.spls.GLA]{d.spls.GLA()}},\code{\link[=d.spls.GLB]{d.spls.GLB()}},\code{\link[=d.spls.GLC]{d.spls.GLC()}},\code{browseVignettes("dual.spls")}
+\code{\link[=d.spls.GLA]{d.spls.GLA()}}, \code{\link[=d.spls.GLB]{d.spls.GLB()}}, \code{\link[=d.spls.GLC]{d.spls.GLC()}}, \code{browseVignettes("dual.spls")}
+}
+\author{
+Louna Alsouki François Wahl
 }

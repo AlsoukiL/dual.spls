@@ -1,14 +1,14 @@
 #' Makes predictions from a fitted Dual-SPLS model
 #' @description
 #' The function \code{d.spls} makes predictions from a fitted Dual-SPLS model.
-#' @usage d.spls(mod.spls,X,liste_cp)
+#' @usage d.spls.predict(mod.spls,X,liste_cp)
 #' @param mod.spls is a fitted Dual-SPLS object.
 #' @param X a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.
-#' @param liste_cp a vector of the components for which prediction is required
+#' @param liste_cp a vector of the components for which prediction is required.
 #' @details
 #' The coefficients computed in the Dual-SPLS object are used to predict fitted values using a new matrix \code{X}.
 #' Users can choose how many components should be used.
-#' @return Vector or matrix of estimated responses
+#' @return Vector or matrix of estimated responses.
 #' @author François Wahl Louna Alsouki
 #' @seealso `browseVignettes("dual.spls")`
 #'
@@ -20,15 +20,15 @@
 #' p <- 50
 #' nondes <- 20
 #' sigmaondes <- 0.5
-#' data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+#' data=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
 #'
-#' X <- data.benchmark$X
-#' y <- data.benchmark$y
+#' X <- data$X
+#' y <- data$y
 #'
 #' pcal <- 70
 #' ncells <- 3
 #'
-#' split <- calval(X=X,pcal=pcal,y=y,ncells=ncells)
+#' split <- dual.spls.modifiedKS(X=X,pcal=pcal,y=y,ncells=ncells)
 #'
 #' indcal= split$indcal
 #' indval= split$indval
@@ -40,12 +40,12 @@
 #'
 #' #fitting the model
 #' ncp=10
-#' mod.dspls <- d.spls.lasso(X=Xcal,y=ycal,ncp=ncp,pctnu=0.9,verbose=TRUE)
+#' mod.dspls <- d.spls.lasso(X=Xcal,y=ycal,ncp=ncp,ppnu=0.9,verbose=TRUE)
 #'
 #' ycalhat=mod.dspls$fitted.values
 #' rescal=mod.dspls$residuals
 #' # predictions on validation
-#' yvalhat=d.spls(mod.dspls,Xval, liste_cp=1:ncp)
+#' yvalhat=d.spls.predict(mod.dspls,Xval, liste_cp=1:ncp)
 #'
 #' #Computing RMSE error
 #' RMSEcal.dspls=apply(rescal,2,function(u) sqrt(mean(u^2)) )
@@ -55,7 +55,7 @@
 #'
 #' @export
 
-d.spls<- function(mod.spls,X,liste_cp)
+d.spls.predict<- function(mod.spls,X,liste_cp)
 {
   # dimensions
   n=dim(X)[1]

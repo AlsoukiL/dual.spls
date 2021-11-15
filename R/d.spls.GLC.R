@@ -3,34 +3,35 @@
 #' \eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1; \sum_{g} \alpha_g=1}
 #' @keywords internal
 #' @description
-#' The function \code{d.spls.GLC} performs dimentional reduction combined to variable selection using the
+#' The function \code{d.spls.GLC} performs dimentional reduction as in PLS methodology combined to variable selection using the
 #' Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} for combined data where
 #' \eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1; \sum_{g} \alpha_g=1}.
 #' @param X a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each converstation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
-#' @param pctnu a positive real value or a vector of length the number of groups, in \code{[0,1]}.
-#' \code{pctnu} is the desired proportion of variables to shrink to zero for each component and for each group.
+#' @param ppnu a positive real value or a vector of length the number of groups, in \code{[0,1]}.
+#' \code{ppnu} is the desired proportion of variables to shrink to zero for each component and for each group.
 #' @param indG a numeric vector of group index for each observation.
 #' @param verbose a boolean value indicating whether or not to diplay the iterations steps.
 #' @return A \code{list} of the following attributes
-#' \itemize{
-#' \item  Xmean the mean vector of the predictors matrix \code{X}.
-#' \item  scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
-#' as \code{X} representing the observations in the new component basis computed by the compression step
-#' of the Dual-SPLS.
-#' \item  loadings the loadings matrix.
-#' \item  Bhat the regression coefficients matrix for each component.
-#' \item  intercept the intercept value for each component.
-#' \item  fitted.values the matrix of predicted values of \code{y}
-#' \item  residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
-#' \item  lambda the matrix of the first sparse hyper-parameter used to fit the model at each iteration and for each group.
-#' \item  alpha the matrix of the second sparse hyper-parameter used to fit the model at each iteration and for each group.
-#'\item  zerovar the matrix of the number of variables shrinked to zero per component and per group.
-#' }
+#' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
+#' \item{scores}{the matrix of dimension \eqn{n x ncp} where \code{n} is the number of observations.The \code{scores} represents
+#' the observations in the new component basis computed by the compression step
+#' of the Dual-SPLS.}
+#' \item{loadings}{the matrix of dimension \eqn{p x ncp} that represents the Dual-SPLS components.}
+#' \item{Bhat}{the matrix of dimension \eqn{p x ncp} that regroups the regression coefficients for each component.}
+#' \item{intercept}{the vector of length \eqn{ncp} representing the intercept values for each component.}
+#' \item{fitted.values}{the matrix of dimension \eqn{n x ncp} that represents the predicted values of \code{y}}
+#' \item{residuals}{the matrix of dimension \eqn{n x ncp} that represents the residuals corresponding
+#'  to the difference between the responses and the fitted values.}
+#' \item{lambda}{the matrix of dimension \eqn{G x ncp} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group, where
+#' \eqn{G} is the number of groups.}
+#' \item{alpha}{the matrix of dimension \eqn{G x ncp} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group.}
+#' \item{zerovar}{the matrix of dimension \eqn{G x ncp} representing the number of variables shrinked to zero per component and per group.}
+#' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.GLA()],[dual.spls::d.spls.GLB()],[dual.spls::d.spls.GL()],`browseVignettes("dual.spls")`
 #'
-d.spls.GLC<- function(X,y,ncp,pctnu,indG,verbose=FALSE)
+d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 {
 
   ###################################
@@ -101,20 +102,20 @@ d.spls.GLC<- function(X,y,ncp,pctnu,indG,verbose=FALSE)
       Zs=sort(abs(Z[ind]))
       d=length(Zs)
       Zsp=(1:d)/d
-      iz=which.min(abs(Zsp-pctnu[ig]))
+      iz=which.min(abs(Zsp-ppnu[ig]))
       ###########
       nu[ig]=Zs[iz] #
       ###########
 
       # finding lambda, mu, given nu
       Znu[ind]=sapply(Z[ind],function(u) sign(u)*max(abs(u)-nu[ig],0))
-      #Znu2=norm2(Znu)
-      #Znu1=norm1(Znu)
+      #Znu2=d.spls.norm2(Znu)
+      #Znu1=d.spls.norm1(Znu)
 
-      ##########Norme 1 de Znu(g)#############
-      norm1Znu[ig]=norm1(Znu[ind])
-      ##########Norme 2 de Znu(g)#############
-      norm2Znu[ig]=norm2(Znu[ind])
+      ##########Norm 1 of Znu(g)#############
+      norm1Znu[ig]=d.spls.norm1(Znu[ind])
+      ##########Norm 2 of Znu(g)#############
+      norm2Znu[ig]=d.spls.norm2(Znu[ind])
 
     }
     #######################
@@ -139,7 +140,7 @@ d.spls.GLC<- function(X,y,ncp,pctnu,indG,verbose=FALSE)
 
     #Finding T
     t=Xdef%*%w
-    t=t/norm2(t)
+    t=t/d.spls.norm2(t)
 
     WW[,ic]=w
     TT[,ic]=t

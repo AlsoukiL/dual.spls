@@ -3,11 +3,11 @@ n <- 100
 p <- 50
 nondes <- 20
 sigmaondes <- 0.5
-data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
-X <- data.benchmark$X
-y <- data.benchmark$y
+data=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+X <- data$X
+y <- data$y
 ncells <- 5
-Datatype <- type(y,ncells=ncells)
+Datatype <- d.spls.type(y,ncells=ncells)
 
 pcal <- 70
 
@@ -15,7 +15,7 @@ pcal <- 70
 ycounts <- sapply(1:ncells,function(u) sum(Datatype==u) )
 Listecal <- ceiling(ycounts*pcal/100)
 
-index.cal <- modified.KS(X,Datatype,Listecal)
+index.cal <- d.spls.calval(X,Datatype,Listecal)
 
 test0=which(index.cal==0)
 test_that("number of calibration points", {

@@ -1,21 +1,25 @@
 #' Dual Sparse Partial Least Squares (Dual-SPLS) regression for the norm \eqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2}
 #' @description
-#' The function \code{d.spls.lasso} performs dimentional reduction combined to variable selection using the
+#' The function \code{d.spls.lasso} performs dimensional reduction as in PLS methodology combined to variable selection via the
 #' Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2}.
-#' @usage d.spls.lasso(X,y,ncp,pctnu,verbose=FALSE)
-#' @param X a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.
-#' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each converstation.
+#' @usage d.spls.lasso(X,y,ncp,ppnu,verbose=FALSE)
+#' @param X a numeric matrix of predictors values. Each row represents one observation and each column a predictor variable.
+#' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
-#' @param pctnu a positive real value, in \code{[0,1]}. \code{pctnu} is the desired
-#' proportion of variables to shrink to zero for each component.
+#' @param ppnu a positive real value, in \code{[0,1]}. \code{ppnu} is the desired
+#' proportion of variables to shrink to zero for each component (see Dual-SPLS methodology).
 #' @param verbose a boolean value indicating whether or not to diplay the iterations steps.
 #' @details
-#' This procdure computes latent sparse components that are used in a regression model.
-#' The optimization problem of the Dual-SPLS regression for the norm \eqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2} is
-#' similar to the Dual norm defintion of the norm \eqn{\Omega(w)}. Indeed, we are searching for \code{w} that goes
+#' This procedure computes latent sparse components that are used in a regression model.
+#' The optimization problem of the Dual-SPLS regression for the norm \eqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2}
+#' comes from the Dual norm defintion of \eqn{\Omega(w)}. Indeed, we are searching for \code{w} that goes
 #' with
 #' \deqn{\Omega^*(z)=max_w(z^Tw) \text{ s.t. } \Omega(w)=1}
-#' The solution of this problem is
+#' Noting that \eqn{\lambda} is the initial shrinkage parameter that imposes sparsity, the Dual-SPLS does not rely
+#' on the value of \eqn{\lambda} but instead proceeds adaptively by choosing the propotion of zeros that the user
+#' would like to impose in the coefficients. Which leads to the compuation of a secondary shrinkage parameter \eqn{\nu}.
+#'
+#' The solution of the optimization problem is
 #' \deqn{\dfrac{w_j}{\|w\|_2}=\dfrac{1}{\mu} \delta_j (|z_j|-\nu)_+}
 #' Where
 #' \itemize{
@@ -23,44 +27,41 @@
 #' \item \eqn{\mu} is a parameter that guarentees the constraint of \eqn{\Omega(w)=1}
 #' \item \eqn{\nu} is the shrinkage parameter.
 #' }
-#'
-#' The parameter \eqn{\nu} is computed adaptively according to the proportion of zero variables desired \code{pctnu}.
 #' @return A \code{list} of the following attributes
-#' \itemize{
-#' \item  Xmean the mean vector of the predictors matrix \code{X}.
-#' \item  scores a matrix of \code{ncp} columns representing the Dual-SPLS components and the same number of rows
-#' as \code{X} representing the observations in the new component basis computed by the compression step
-#' of the Dual-SPLS.
-#' \item  loadings the loadings matrix.
-#' \item  Bhat the regression coefficients matrix for each component.
-#' \item  intercept the intercept value for each component.
-#' \item  fitted.values the matrix of predicted values of \code{y}
-#' \item  residuals the matrix of residuals corresponding to the difference between the response and the fitted values.
-#' \item  lambda the vector of the sparse hyper-parameter used to fit the model at each iteration.
-#' \item  zerovar the vector of the number of variables shrinked to zero per component.
-#' }
-#' @author François Wahl Louna Alsouki
+#' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
+#' \item{scores}{the matrix of dimension \eqn{n x ncp} where \code{n} is the number of observations.The \code{scores} represents
+#' the observations in the new component basis computed by the compression step
+#' of the Dual-SPLS.}
+#' \item{loadings}{the matrix of dimension \eqn{p x ncp} that represents the Dual-SPLS components.}
+#' \item{Bhat}{the matrix of dimension \eqn{p x ncp} that regroups the regression coefficients for each component.}
+#' \item{intercept}{the vector of intercept values for each component.}
+#' \item{fitted.values}{the matrix of dimension \eqn{n x ncp} that represents the predicted values of \code{y}}
+#' \item{residuals}{the matrix of dimension \eqn{n x ncp} that represents the residuals corresponding
+#'  to the difference between the responses and the fitted values.}
+#' \item{lambda}{the vector of length \eqn{ncp} collecting the parameters of sparsity  used to fit the model at each iteration.}
+#' \item{zerovar}{the vector of length \eqn{ncp} representing the number of variables shrinked to zero per component.}
+#' @author Louna Alsouki François Wahl
 #' @seealso `browseVignettes("dual.spls")`
 #'
 #' @examples
 #' ### load dual.spls library
 #' library(dual.spls)
-#' ### parameters
+#' ### constructing the simulated example
 #' n <- 100
 #' p <- 50
 #' nondes <- 20
 #' sigmaondes <- 0.5
-#' data.benchmark=BCHMK(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+#' data=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
 #'
-#' X <- data.benchmark$X
-#' y <- data.benchmark$y
+#' X <- data$X
+#' y <- data$y
 #'
 #' #fitting the model
-#' mod.dspls <- d.spls.lasso(X=X,y=y,ncp=10,pctnu=0.9,verbose=TRUE)
+#' mod.dspls <- d.spls.lasso(X=X,y=y,ncp=10,ppnu=0.9,verbose=TRUE)
 #'
 #' str(mod.dspls)
 #'
-#' ### plotting the observed values VS predicted values
+#' ### plotting the observed values VS predicted values for 6 components
 #' plot(y,mod.dspls$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
 #'  main="Observed VS Predicted for 6 components")
 #' points(-1000:1000,-1000:1000,type='l')
@@ -68,7 +69,7 @@
 #' ### plotting the regression coefficients
 #' par(mfrow=c(3,1))
 #'
-#'i=6
+#' i=6
 #' nz=mod.dspls$zerovar[i]
 #' plot(1:dim(X)[2],mod.dspls$Bhat[,i],type='l',
 #'     main=paste(" Dual-SPLS (lasso), ncp =", i, " #0coef =", nz, "/", dim(X)[2]),
@@ -79,7 +80,7 @@
 #' @export
 
 
-d.spls.lasso<- function(X,y,ncp,pctnu,verbose=FALSE)
+d.spls.lasso<- function(X,y,ncp,ppnu,verbose=FALSE)
 {
 
   ###################################
@@ -123,15 +124,15 @@ d.spls.lasso<- function(X,y,ncp,pctnu,verbose=FALSE)
     #Optimizing nu
     Zs=sort(abs(Z))
     Zsp=(1:p)/p
-    iz=which.min(abs(Zsp-pctnu))
+    iz=which.min(abs(Zsp-ppnu))
     ###########
     nu=Zs[iz] #
     ###########
 
     # finding lambda, mu, given nu
     Znu=sapply(Z,function(u) sign(u)*max(abs(u)-nu,0))
-    Znu2=norm2(Znu)
-    Znu1=norm1(Znu)
+    Znu2=d.spls.norm2(Znu)
+    Znu1=d.spls.norm1(Znu)
     #########
     mu=Znu2 #
     ##############
@@ -143,7 +144,7 @@ d.spls.lasso<- function(X,y,ncp,pctnu,verbose=FALSE)
 
     #Finding T
     t=Xdef%*%w
-    t=t/norm2(t)
+    t=t/d.spls.norm2(t)
 
     WW[,ic]=w
     TT[,ic]=t
