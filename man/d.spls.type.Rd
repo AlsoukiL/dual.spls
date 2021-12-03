@@ -7,7 +7,7 @@
 d.spls.type(y, ncells)
 }
 \arguments{
-\item{y}{a vector.}
+\item{y}{a numeric vector.}
 
 \item{ncells}{a positive integer. \code{ncells} is the number of subsamples desired.}
 }
@@ -19,7 +19,7 @@ The internal function \code{type} divides the response vector \code{y} in \code{
 of equal range and attributes a index type to the observations according to the corresponding cell
 }
 \seealso{
-\code{\link[=d.spls.calval]{d.spls.calval()}}, \code{\link[=d.spls.modifiedKS]{d.spls.modifiedKS()}}, \code{browseVignettes("dual.spls")}
+\code{\link[=d.spls.calval]{d.spls.calval()}}, \code{\link[=d.spls.FWLAS.calval]{d.spls.FWLAS.calval()}}, \code{browseVignettes("dual.spls")}
 }
 \author{
 Louna Alsouki François Wahl

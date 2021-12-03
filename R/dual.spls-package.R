@@ -3,13 +3,38 @@
 #' @title dual.spls package
 #'
 #' @description
-#' Provides a series of functions that compute latent sparse components that are used in a regression model.
-#' The optimization problem of the Dual-SPLS regression depends on the norm \eqn{\Omega(w)} chosen.
-#' This procedure computes latent sparse components that are used in a regression model.
-#' Indeed, we are searching for \code{w} that goes with
-#' \deqn{\Omega^*(z)=\max\limits_{w} (z^Tw)  \textrm{ s.t. } \Omega(w)=1}
-#' It also suggest a calibration and validation method based on a modified version of the Kennard
-#'  and Stone Algorithm and a function that simulates data composed of Guassians mixtures.
+#' This package provides a series of functions that compute latent sparse components used in a regression model.
+#' These components are based on a generalization of the classical PLS1 algorithm i.e. for a one dimensionnal response.
+#' Denoting \eqn{\Omega(w)=\|w\|_2} the euclidian norm, the PLS1 algorithm amounts to finding the vector \eqn{w} involved in the evaluation of the dual norm
+#' \deqn{\Omega^*(z)=\max\limits_w(z^Tw) \textrm{ s.t. } \Omega(w)=1,} where \eqn{z=X^Ty},
+#' \eqn{X} is the matrix of predictors and \eqn{y} is the response vector.
+#' This problem is reformulated as follows
+#'  \deqn{\Omega^*(z)=\min\limits_{w,\mu}(-z^Tw)+\mu(\Omega(w)-1),}
+#' where \eqn{\mu} is the lagragian multiplier. The resulting solution \eqn{w} is colinear to the coefficients vector.
+#'
+#' The PLS1 algorithm is then extended by varying the underlying norm \eqn{\Omega(w)} and notably including some
+#'  penalization that leads to sparse regression coefficients for variable selection. For more details refer to (ref). The available norms considered are:
+#' \itemize{
+#' \item PLS1: \eqn{\Omega(w)= \|w\|_2},
+#' \item Lasso: \eqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2} where \eqn{\lambda} is a positive scalar,
+#' \item Group Lasso with 3 possible norms
+#' \itemize{
+#' \item Norm A: \eqn{\Omega(w)=\|w\|_2+\sum\limits_{g=1}^G \lambda_g\|w_g\|_1},
+#' \item Norm B: \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1}
+#'  where
+#' \eqn{\sum\limits_{g=1}^G \alpha_g=\sum\limits_{g=1}^G \gamma_g=1} \cr and \eqn{\Omega(w_g)=\gamma_g},
+#' \item Norm C: \eqn{\Omega(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} where
+#' \eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1; \sum\limits_{g=1}^G \alpha_g=1},
+#' }
+#' where \eqn{G} is the number of groups and \eqn{\alpha_g}, \eqn{\lambda_g} and \eqn{\gamma_g} are all positive scalars.
+#' \item Least Squares: \eqn{\Omega(w)=\lambda \|N_1w\|_1 + \|Xw\|_2} where \eqn{N_1} is a matrix and \eqn{\lambda} is a positive scalar,
+#' \item Ridge: \eqn{\Omega(w)=\lambda_1 \|w\|_1 +\lambda_2 \|Xw\|_2 + \|w\|_2} where \eqn{\lambda_1} and \eqn{\lambda_2} are both positive scalars.
+#' }
+#' This package also suggests \itemize{
+#' \item a calibration and validation method based on a modified version of the Kennard
+#'  and Stone Algorithm,
+#'\item a function that simulates data composed of Gaussian mixtures.
+#'}
 #' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.lasso()], [dual.spls::d.spls.LS()], [dual.spls::d.spls.ridge()],
 #' [dual.spls::d.spls.GL()], `browseVignettes("dual.spls")`
@@ -17,5 +42,4 @@
 #' @importFrom pdist pdist
 #' @importFrom stats rnorm
 #' @importFrom stats runif
-#' @import mathjaxr
 "_PACKAGE"

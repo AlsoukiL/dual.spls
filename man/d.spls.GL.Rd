@@ -7,7 +7,7 @@
 d.spls.GL(X,y,ncp,ppnu,indG,gamma=NULL,norm="A",verbose=FALSE)
 }
 \arguments{
-\item{X}{a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.}
+\item{X}{a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.}
 
 \item{y}{a numeric vector or a one column matrix of responses. It represents the response variable for each converstation.}
 
@@ -27,53 +27,52 @@ d.spls.GL(X,y,ncp,ppnu,indG,gamma=NULL,norm="A",verbose=FALSE)
 \value{
 A \code{list} of the following attributes
 \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-\item{scores}{the matrix of dimension \code{n x ncp} where \code{n} is the number of observations.The \code{scores} represents
+\item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations.The \code{scores} represents
 the observations in the new component basis computed by the compression step
 of the Dual-SPLS.}
-\item{loadings}{the matrix of dimension \code{p x ncp} that represents the Dual-SPLS components.}
-\item{Bhat}{the matrix of dimension \code{p x ncp} that regroups the regression coefficients for each component.}
+\item{loadings}{the matrix of dimension \code{(p,ncp)} that represents the Dual-SPLS components.}
+\item{Bhat}{the matrix of dimension \code{(p,ncp)} that regroups the regression coefficients for each component.}
 \item{intercept}{the vector of length \code{ncp} representing the intercept values for each component.}
-\item{fitted.values}{the matrix of dimension \code{n x ncp} that represents the predicted values of \code{y}}
-\item{residuals}{the matrix of dimension \code{n x ncp} that represents the residuals corresponding
+\item{fitted.values}{the matrix of dimension \code{(n,ncp)} that represents the predicted values of \code{y}}
+\item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
 to the difference between the responses and the fitted values.}
-\item{lambda}{the matrix of dimension \code{G x ncp} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group.}
-\item{alpha}{the matrix of dimension \code{G x ncp} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group when the norm chosen is \code{B} or \code{C}.}
-\item{zerovar}{the matrix of dimension \code{G x ncp} representing the number of variables shrinked to zero per component and per group.}
+\item{lambda}{the matrix of dimension \code{(G,ncp)} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group.}
+\item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group when the norm chosen is \code{B} or \code{C}.}
+\item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrinked to zero per component and per group.}
 }
 \description{
-The function \code{d.spls.GL} performs dimentional reduction as in PLS methodology combined to variable selection using the
-Dual-SPLS algorithm with the group lasso norms
+The function performs dimensional reduction with the group lasso norms. Three norms are available
+where \code{G} is the number of groups, the vectors \eqn{w_g} hold the coordinates of \eqn{w}
+for the observations belonging to the group \eqn{g} and \eqn{\alpha_g}, \eqn{\lambda_g} and \eqn{\gamma_g} are all positive scalars.
 \itemize{
-\item Norm A: \eqn{\Omega(w)=\|w\|_2+\sum\limits_{g=1}^G \lambda_g\|w_g\|_1}
+\item Norm A: \eqn{\Omega(w)=\|w\|_2+\sum\limits_{g=1}^G \lambda_g\|w_g\|_1.}
 \item Norm B: \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1} for
-\eqn{\sum\limits_{g=1}^G \alpha_g=1; \Omega(w_g)=\gamma_g ;\sum\limits_{g=1}^G \gamma_g=1}
+\eqn{\sum\limits_{g=1}^G \alpha_g=1 \textrm{; } \Omega(w_g)=\gamma_g \textrm{ and  } \sum\limits_{g=1}^G \gamma_g=1.}
 \item Norm C: \eqn{\Omega(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} for
-\eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1; \sum\limits_{g=1}^G \alpha_g=1}
+\eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1\textrm{;  } \sum\limits_{g=1}^G \alpha_g=1
+\textrm{ and  } \forall g_1 \textrm{,  } g_2 \in \{1,\dots,G\}, \|w_{g_1} \|_2=\|w_{g_2} \|_2.}
 }
-Where \code{G} is the number of groups.
+Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
+variables can be divided in distinct meaningful groups. Each group is constrained by an independent
+threshold as in the dual sparse lasso methodology,
+that is each \eqn{w_g} will be colinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
+and constrained by the threshold \eqn{\nu_g}.
+
+Three variants are defined here depending on the groups combination in the global norm and the weights
+assigned to each group.
+\itemize{
+\item Norm A is the genuine alternative, it gives the same result as the lasso norm for \eqn{G=1},
+\item Norm B assigns user to define weights for each group,
+\item Norm C applies the lasso norm for each group individually while constraining the overall norm.
+}
 }
 \details{
-This procedure computes latent sparse components that are used in a regression model.
-The optimization problem of the Dual-SPLS regression for the group lasso norms comes from
-to the Dual norm defintion of the norm \eqn{\Omega(w)}. Indeed, we are searching for \code{w} that goes with
-\deqn{\Omega^*(z)=\max\limits_w(z^Tw) \textrm{ s.t. } \Omega(w)=1}
-Noting that \eqn{\lambda_g} are the initial shrinkage parameters that imposes sparsity, the Dual-SPLS does not rely
-on the values of \eqn{\lambda_g} but instead proceeds adaptively by choosing the propotion of zeros that the user
-would like to impose in the coefficients for each group. Which leads to the compuation of a secondary shrinkage parameter \eqn{\nu_g}.
-
-The solution of this problem for the norm \code{A} is
-\deqn{\frac{w_g}{\|w\|_2}=\frac{1}{\mu} \delta_g (|z_g|-\nu_g)_+ \textrm{ for each group } g}
-The solution of this problem for the norm \code{B} is
-\deqn{\frac{w_g}{\|w\|_2}=\frac{1}{\mu \alpha_g} \delta_g (|z_g|-\nu_g)_+ \textrm{ for each group } g}
-The solution of this problem for the norm \code{C} is
-\deqn{\frac{w_g}{\|w_g\|_2}=\frac{1}{\mu \alpha_g} \delta_g (|z_g|-\nu_g)_+ \textrm{ for each group } g}
-Where
-\itemize{
-\item \eqn{\delta_g} is the vector of signs of \eqn{z_g} and \eqn{w_g}
-\item \eqn{\alpha_g} is a constraint parameter imposed for norms \code{B} and \code{C}.
-\item \eqn{\mu} is a parameter that guarentees the constraint of \eqn{\Omega(w)=1}
-\item \eqn{\nu_g} is the shrinkage parameter for each group \code{g}.
-}
+The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.GL}, has
+a simple closed form expression (ref) deriving from the fact that for each group \eqn{g}, \eqn{w_g}
+is colinear to a vector
+\deqn{z_{\nu,g}=\textrm{sign}({z_g})(|z_g|-\nu_g)_+.}
+Here, for each group \eqn{g}, \eqn{\nu_g} is the threshold for which \code{ppnu} of the group \eqn{g} of
+the absolute values of the coordinates of \eqn{z_j} are greater than \eqn{\nu_g}.
 }
 \examples{
 ### load dual.spls library

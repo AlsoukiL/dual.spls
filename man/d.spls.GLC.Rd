@@ -7,7 +7,7 @@
 d.spls.GLC(X, y, ncp, ppnu, indG, verbose = FALSE)
 }
 \arguments{
-\item{X}{a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.}
+\item{X}{a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.}
 
 \item{y}{a numeric vector or a one column matrix of responses. It represents the response variable for each converstation.}
 
@@ -23,24 +23,28 @@ d.spls.GLC(X, y, ncp, ppnu, indG, verbose = FALSE)
 \value{
 A \code{list} of the following attributes
 \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-\item{scores}{the matrix of dimension \code{n x ncp} where \code{n} is the number of observations.The \code{scores} represents
+\item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations.The \code{scores} represents
 the observations in the new component basis computed by the compression step
 of the Dual-SPLS.}
-\item{loadings}{the matrix of dimension \code{p x ncp} that represents the Dual-SPLS components.}
-\item{Bhat}{the matrix of dimension \code{p x ncp} that regroups the regression coefficients for each component.}
+\item{loadings}{the matrix of dimension \code{(p,ncp)} that represents the Dual-SPLS components.}
+\item{Bhat}{the matrix of dimension \code{(p,ncp)} that regroups the regression coefficients for each component.}
 \item{intercept}{the vector of length \code{ncp} representing the intercept values for each component.}
-\item{fitted.values}{the matrix of dimension \code{n x ncp} that represents the predicted values of \code{y}}
-\item{residuals}{the matrix of dimension \code{n x ncp} that represents the residuals corresponding
+\item{fitted.values}{the matrix of dimension \code{(n,ncp)} that represents the predicted values of \code{y}}
+\item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
 to the difference between the responses and the fitted values.}
-\item{lambda}{the matrix of dimension \code{G x ncp} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group, where
-\eqn{G} is the number of groups.}
-\item{alpha}{the matrix of dimension \code{G x ncp} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group.}
-\item{zerovar}{the matrix of dimension \code{G x ncp} representing the number of variables shrinked to zero per component and per group.}
+\item{lambda}{the matrix of dimension \code{(G,ncp)} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group.}
+\item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group.}
+\item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrinked to zero per component and per group.}
 }
 \description{
 The function \code{d.spls.GLC} performs dimentional reduction as in PLS methodology combined to variable selection using the
 Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} for combined data where
-\eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \Omega_g(w)=1; \sum\limits_{g=1}^G \alpha_g=1}. Where \code{G} is the number of groups.
+\eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \Omega_g(w)=1; \sum\limits_{g=1}^G \alpha_g=1 \textrm{ and  } \forall g_1 \textrm{,  } g_2 \in \{1,\dots,G\}, \|w_{g_1} \|_2=\|w_{g_2} \|_2.}. Where \code{G} is the number of groups.
+Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
+variables can be divided in distinct meaningful groups. Each group is constrained by an independent
+threshold as in the dual sparse lasso methodology,
+that is each \eqn{w_g} will be colinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
+and constrained by the threshold \eqn{\nu_g}. Norm C applies the lasso norm for each group individually while constraining the overall norm.
 }
 \seealso{
 \code{\link[=d.spls.GLA]{d.spls.GLA()}},\code{\link[=d.spls.GLB]{d.spls.GLB()}},\code{\link[=d.spls.GL]{d.spls.GL()}},\code{browseVignettes("dual.spls")}

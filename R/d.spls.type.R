@@ -3,11 +3,11 @@
 #' @description
 #' The internal function \code{type} divides the response vector \code{y} in \code{cells}
 #' of equal range and attributes a index type to the observations according to the corresponding cell
-#' @param y a vector.
+#' @param y a numeric vector.
 #' @param ncells a positive integer. \code{ncells} is the number of subsamples desired.
 #' @return A vecor of index specifying each observation belonging to wich group index.
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.calval()], [dual.spls::d.spls.modifiedKS()], `browseVignettes("dual.spls")`
+#' @seealso [dual.spls::d.spls.calval()], [dual.spls::d.spls.FWLAS.calval()], `browseVignettes("dual.spls")`
 
 
 d.spls.type<- function(y,ncells)

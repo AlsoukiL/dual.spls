@@ -22,7 +22,7 @@ the Kennard and Stone startegy for each group at a time and according to the num
 from each group.
 }
 \seealso{
-\code{\link[=d.spls.type]{d.spls.type()}},\code{\link[=d.spls.modifiedKS]{d.spls.modifiedKS()}},\code{browseVignettes("dual.spls")}
+\code{\link[=d.spls.type]{d.spls.type()}},\code{\link[=d.spls.FWLAS.calval]{d.spls.FWLAS.calval()}},\code{browseVignettes("dual.spls")}
 }
 \author{
 Louna Alsouki François Wahl

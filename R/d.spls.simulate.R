@@ -1,21 +1,31 @@
 #' Simulation of a data
 #' @description
-#' The function \code{d.spls.simulate} simulates one or two mixtures of \code{nondes} Gaussians representing one or two
-#' predictors matrices \code{X} or \code{X1} and \code{X2}
-#' of \code{n} observations and \code{p} or \code{p1} and \code{p2} variables and a response vector \code{y}.
+#' The function \code{d.spls.simulate} simulates \code{G} mixtures of \code{nondes} Gaussians from which it builds
+#' a data set of predictors \code{X} and response \code{y} in a way that \code{X} can be divided into \code{G} groups and
+#' the values of \code{y} depend on the values of \code{X}.
 #' @usage d.spls.simulate(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)
 #' @param n a positive integer. \code{n} is the number of observations. Default value is \code{200}.
-#' @param p a positive real value or a vector of length 2 representing the number of variables. Default value is \code{100}.
-#' @param nondes a positive integer or a vector of length 2. \code{nondes} is the number of Guassians in each mixture. Default value is \code{50}.
-#' @param sigmaondes a positive real value or a vector of length 2. \code{sigmaondes} is the standard deviation of the Gaussians. Default value is \code{0.05}.
+#' @param p a numeric vector of length \code{G} representing the number of variables. Default value is \code{100}.
+#' @param nondes a numeric vector of length \code{G}. \code{nondes} is the number of Guassians in each mixture. Default value is \code{50}.
+#' @param sigmaondes a numeric vector of length \code{G}. \code{sigmaondes} is the standard deviation of the
+#' Gaussians for each group \eqn{g \in [1,G]}. Default value is \code{0.05}.
 #' @param sigmay a real value. \code{sigmay} is the uncertainty on \code{y}. Default value is \code{0.5}.
 #' @details
-#' The predictors matrices \code{X} or \code{X1} and \code{X2} represent each a mixture of \code{nondes} Gaussians characterized by means and
-#' amplitudes chosen randomly and a standard deviation set to \code{sigmaondes}.
-#'
-#' The response vector \code{y} is the sum of 4 intervals of each predictor matrix to which we add noise of \code{sigmay}.
+#' The predictors matrix \code{X} is a concatunations of \code{G} predictors sub matrices. Each is computed using
+#' a mixture of Gaussian i.e. summing the following Gaussians:
+#' \deqn{A \exp{(-\frac{(\textrm{xech}-\mu)^2}{2 \sigma^2})}}.
+#' Where
+#' \itemize{
+#' \item \eqn{A} is a numeric vector of random values between 0 and 1,
+#' \item xech is a sequence of \eqn{p(g)} equally spaced values from 0 to 1. \eqn{p(g)} is the number
+#' of variables of the sub matrix \eqn{g}, for \eqn{g \in \{1, \dots, G\}},
+#' \item \eqn{\mu} is a random value in \eqn{[0,1]} representing the mean of the Gaussians,
+#' \item \eqn{\sigma} is a positive real value specified by the user and representing the standard
+#' deviation of the Gaussians.
+#' }
+#' The response vector \code{y} is a linear combination of the predictors to which we add a noise of uncertainty \code{sigmay}.
 #' @return A \code{list} of the following attributes
-#' \item{X}{the preditors matrix. If \code{length(p)=2}, it is the concatunated predictor matrix.}
+#' \item{X}{the concatunated predictors matrix.}
 #' \item{y}{the response vector.}
 #' \item{y0}{the reponse vector without noise \code{sigmay}.}
 #' \item{sigmay}{the uncertainty on \code{y}.}
@@ -53,7 +63,7 @@
 #'
 #' Xb <- data2$X
 #' X1 <- Xb[,(1:p[1])]
-#' X2 <- Xb[,(p[1]+1):p[2]]
+#' X2 <- Xb[,(p[1]+1):(p[1]+p[2])]
 #' yb <- data2$y
 #'
 #' ###plotting the data
@@ -78,125 +88,104 @@
 
 d.spls.simulate<- function(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)
 {
-
-  if (length(p)==1)
+  if (length(nondes) != length(p))
   {
-  ampl=matrix(runif(nondes*n),nrow=n, ncol=nondes) #computing random amplitudes
-  modes=runif(nondes) #computing random means
-
-  X=matrix(0,n,p) #initializing the predictors matrix X
-  y0=rep(0,n) #initializing the response vector without noise y0
-  xech=seq(0,1,length.out=p) #setting the p variables
-
-
-  #combining the Guassian mixtures into X
-  for (i in 1:n){
-
-    for (io in 1:nondes){
-      X[i,]=X[i,]+ampl[i,io]*exp(-(xech-modes[io])^2/(2*sigmaondes^2))
+    if (length(nondes)==1)
+    {
+      warning("nondes is only specified for the first mixture. Same value is considered for the rest")
+      nondes=rep(nondes,length(p))
+    }
+    else
+    {
+      stop("dimensions of nondes and p differ")
     }
   }
 
+  if (length(sigmaondes) != length(p))
+  {
+    if (length(sigmaondes)==1)
+    {
+      warning("sigmaondes is only specified for the first mixture. Same value is considered for the rest")
+      sigmaondes=rep(sigmaondes,length(p))
+    }
+    else
+    {
+      stop("dimensions of sigmaondes and p differ")
+    }
+  }
+  X=matrix(0,n,sum(p)) #initializing the predictors matrix X
+
+  ampl=matrix(runif(nondes[1]*n),nrow=n, ncol=nondes[1])
+  modes=runif(nondes[1])
+  xech=seq(0,1,length.out=p[1]) #setting the p variables
+
+  for (j in 1:n){
+
+    for (io in 1:nondes[1]){
+      X[j,1:p[1]]=X[j,1:p[1]]+ampl[j,io]*exp(-(xech-modes[io])^2/(2*sigmaondes[1]^2))
+    }
+  }
+
+  if (length(p)>1)
+  {
+    for (i in 2:length(p))
+    {
+      ampl=matrix(runif(nondes[i]*n),nrow=n, ncol=nondes[i])
+      modes=runif(nondes[i])
+      xech=seq(0,1,length.out=p[i]) #setting the p variables
+
+      for (j in 1:n){
+        for (io in 1:nondes[i]){
+          X[j,(sum(p[1:(i-1)])+1):sum(p[1:i])]=X[j,(sum(p[1:(i-1)])+1):sum(p[1:i])]+ampl[j,io]*exp(-(xech-modes[io])^2/(2*sigmaondes[i]^2))
+        }
+      }
+    }
+  }
+
+  y0=rep(0,n) #initializing the response vector without noise y0
   #Setting the interval limits for y0
-  p1i=round(20/100*p)
-  p1f=round(30/100*p)
-  p2i=round(45/100*p)
-  p2f=round(55/100*p)
-  p3i=round(55/100*p)
-  p3f=round(60/100*p)
-  p4i=round(70/100*p)
-  p4f=round(80/100*p)
+  p1i=round(20/100*p[1])
+  p1f=round(30/100*p[1])
+  p2i=round(45/100*p[1])
+  p2f=round(55/100*p[1])
+  p3i=round(55/100*p[1])
+  p3f=round(60/100*p[1])
+  p4i=round(70/100*p[1])
+  p4f=round(80/100*p[1])
 
   #Computing y0 as a sum of intervals of X
-  for (i in 1:n){
+  for (j in 1:n){
 
-    y0[i]=sum(X[i,p1i:p1f])+
-      2* sum(X[i,p2i:p2f])+
-      3* sum(X[i,p3i:p3f])+
-      4* sum(X[i,p4i:p4f])
+    y0[j]=sum(X[j,p1i:p1f])+
+      2* sum(X[j,p2i:p2f])+
+      3* sum(X[j,p3i:p3f])+
+      4* sum(X[j,p4i:p4f])
   }
 
-  }
-
-  if (length(p)==2)
+  if (length(p)>1)
   {
-    if (length(nondes)==1 || length(sigmaondes) ==1)
+    for (i in 2:length(p))
     {
-      warning("nondes or sigmaondes is not specified for X2, same value is set for both mixtures")
-      if (length(nondes) == 1) {nondes=c(nondes,nondes)}
-      if (length(sigmaondes) == 1) {sigmaondes=c(sigmaondes,sigmaondes)}
+      p1i=round(20/100*p[i])
+      p1f=round(30/100*p[i])
+      p2i=round(45/100*p[i])
+      p2f=round(55/100*p[i])
+      p3i=round(55/100*p[i])
+      p3f=round(60/100*p[i])
+      p4i=round(70/100*p[i])
+      p4f=round(80/100*p[i])
+      for (j in 1:n){
 
-    }
-    p1=p[1]
-    p2=p[2]
-    nondes1=nondes[1]
-    nondes2=nondes[2]
-    sigmaondes1=sigmaondes[1]
-    sigmaondes2=sigmaondes[2]
-
-    ampl1=matrix(runif(nondes1*n),nrow=n, ncol=nondes1)
-    modes1=runif(nondes1)
-
-    ampl2=matrix(runif(nondes2*n),nrow=n, ncol=nondes2)
-    modes2=runif(nondes2)
-
-    X1=matrix(0,n,p1)
-    X2=matrix(0,n,p2)
-    y0=rep(0,n)
-    xech1=seq(0,1,length.out=p1)
-    xech2=seq(0,1,length.out=p2)
-
-
-    for (i in 1:n){
-
-      for (io in 1:nondes1){
-        X1[i,]=X1[i,]+ampl1[i,io]*exp(-(xech1-modes1[io])^2/(2*sigmaondes1^2))
+        y0[j]=y0[j]+sum(X[j,(sum(p[1:(i-1)])+p1i):(sum(p[1:(i-1)])+p1f)])+
+          2* sum(X[j,(sum(p[1:(i-1)])+p2i):(sum(p[1:(i-1)])+p2f)])+
+          3* sum(X[j,(sum(p[1:(i-1)])+p3i):(sum(p[1:(i-1)])+p3f)])+
+          4* sum(X[j,(sum(p[1:(i-1)])+p4i):(sum(p[1:(i-1)])+p4f)])
       }
     }
-
-    for (i in 1:n){
-
-      for (io in 1:nondes2){
-        X2[i,]=X2[i,]+ampl2[i,io]*exp(-(xech2-modes2[io])^2/(2*sigmaondes2^2))
-      }
-    }
-
-    p1i1=round(20/100*p1)
-    p1f1=round(30/100*p1)
-    p2i1=round(45/100*p1)
-    p2f1=round(55/100*p1)
-    p3i1=round(55/100*p1)
-    p3f1=round(60/100*p1)
-    p4i1=round(70/100*p1)
-    p4f1=round(80/100*p1)
-
-    p1i2=round(20/100*p2)
-    p1f2=round(30/100*p2)
-    p2i2=round(45/100*p2)
-    p2f2=round(55/100*p2)
-    p3i2=round(55/100*p2)
-    p3f2=round(60/100*p2)
-    p4i2=round(70/100*p2)
-    p4f2=round(80/100*p2)
-
-    for (i in 1:n){
-
-      y0[i]=sum(X1[i,p1i1:p1f1])+
-        2* sum(X1[i,p2i1:p2f1])+
-        3* sum(X1[i,p3i1:p3f1])+
-        4* sum(X1[i,p4i1:p4f1])
-
-      y0[i]=y0[i]+sum(X2[i,p1i2:p1f2])+
-        2* sum(X2[i,p2i2:p2f2])+
-        3* sum(X2[i,p3i2:p3f2])+
-        4* sum(X2[i,p4i2:p4f2])
-    }
-
-    X=cbind(X1,X2)
   }
-
   #adding noise to y0
   y=y0+sigmay*rnorm(n)
+  G=length(p)
 
-  return(list(X=X,y=y,y0=y0,sigmay=sigmay,sigmaondes=sigmaondes))
+  return(list(X=X,y=y,y0=y0,sigmay=sigmay,sigmaondes=sigmaondes,G=G))
 }

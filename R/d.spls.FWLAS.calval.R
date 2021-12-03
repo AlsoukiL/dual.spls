@@ -1,21 +1,23 @@
-#' Splits data into calibration and validation sets using the modified Kennard and Stone method
+#' Splits data into calibration and validation sets using the FWLAS splitting method
 #' @description
-#' The function \code{d.spls.modifiedKS} divides the data \code{X} into a calibration and a validation set using
-#' the modified Kennard and Stone startegy.
-#' @usage d.spls.modifiedKS(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
+#' The function \code{d.spls.FWLAS.calval} divides the data \code{X} into a calibration and a validation. According to the values
+#' of the response vector, the observations are divided into groups. The Method uses
+#' the Kennard and Stone startegy for each group at a time and according to the number of calibration desired
+#' from each group, it selects the calibration points.
+#' @usage d.spls.FWLAS.calval(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
 #' @param X a numeric matrix of predictors values.
 #' @param pcal a positive integer between 0 and 100. \code{pcal} is the percentage
 #' of calibration samples to be selected. Default value is NULL, meaning as long as \code{Listecal} is
 #' specified, \code{pcal} is not necessary.
 #' @param Datatype A vecor of index specifying each observation belonging to wich group index.
-#' Default value is \code{NULL}, meaning the function will use the function \code{type} to compute the vector for \code{ncells}.
+#' Default value is \code{NULL}, meaning the function will use the internal function \code{type} to compute the vector for \code{ncells}.
 #' If \code{NULL}, parameter \code{y} should be specified.
 #' @param y a numeric vector of responses. Default value is \code{NULL}, meaning as long as \code{Datatype} is specified,
 #' \code{y} is not necessary.
 #' @param ncells a positive integer. \code{ncells} is the number of groups dividing the observations. If
 #' \code{Datatype} is not specified, the function devides the observations into \code{ncells} groups. Default value
 #' is \code{10}.
-#' @param Listecal a vector specifying how many observations from each group should be selected as calibration.
+#' @param Listecal a numeric vector specifying how many observations from each group should be selected as calibration.
 #' Default value is \code{NULL}, meaning the function will consider a percentage of \code{pcal} from each group
 #' to be in the calibration set. If \code{NULL}, parameter \code{pcal} should be specified.
 #' @details
@@ -56,7 +58,7 @@
 #' pcal <- 70
 #' ncells <- 3
 #'
-#' split1 <- d.spls.modifiedKS(X=X,pcal=pcal,y=y,ncells=ncells)
+#' split1 <- d.spls.FWLAS.calval(X=X,pcal=pcal,y=y,ncells=ncells)
 #'
 #' ###plotting split1
 #' plot(X[split1$indcal,1],X[split1$indcal,2],xlab="Variable 1",
@@ -67,15 +69,15 @@
 #'
 #' ###calibration parameters for split2
 #' ncells <- 3
-#' dimtype=floor(p/3)
-#' Datatype <- c(rep(1,dimtype),rep(2,dimtype),rep(3,(p-dimtype*2)))
+#' dimtype=floor(n/3)
+#' Datatype <- c(rep(1,dimtype),rep(2,dimtype),rep(3,(n-dimtype*2)))
 #'
 #' L1=floor(0.7*length(which(Datatype==1)))
 #' L2=floor(0.8*length(which(Datatype==2)))
 #' L3=floor(0.6*length(which(Datatype==3)))
 #' Listecal <- c(L1,L2,L3)
 #'
-#' split2 <- d.spls.modifiedKS(X=X,y=y,Datatype=Datatype,Listecal=Listecal)
+#' split2 <- d.spls.FWLAS.calval(X=X,y=y,Datatype=Datatype,Listecal=Listecal)
 #'
 #' ###plotting split2
 #' plot(X[split2$indcal,1],X[split2$indcal,2],xlab="Variable 1",
@@ -87,10 +89,10 @@
 #' @export
 
 
-d.spls.modifiedKS<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
+d.spls.FWLAS.calval<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
 {
   if (is.null(Datatype) & is.null(y)){
-    stop('Error in calval: if Datatype=NULL, y should not be NULL' )
+    stop('if Datatype=NULL, y should not be NULL' )
   }
 
   # type of the observed values
@@ -99,7 +101,7 @@ d.spls.modifiedKS<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal
   }
 
   if (is.null(Listecal) & is.null(pcal)){
-    stop('Error in calval: if Listecal=NULL, pcal should not be NULL' )
+    stop('if Listecal=NULL, pcal should not be NULL' )
   }
 
   #percentage of calibration
@@ -110,7 +112,7 @@ d.spls.modifiedKS<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal
   }
 
   if(max(Datatype) != length(Listecal)){
-    stop('Error in calval: length of Listecal does not match with values of Datatype' )
+    stop('length of Listecal does not match with values of Datatype' )
   }
 
   # index of calibration/validation

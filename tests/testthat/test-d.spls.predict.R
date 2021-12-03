@@ -13,7 +13,7 @@ y <- data$y
 pcal <- 70
 ncells <- 3
 
-split <- d.spls.modifiedKS(X=X,pcal=pcal,y=y,ncells=ncells)
+split <- d.spls.FWLAS.calval(X=X,pcal=pcal,y=y,ncells=ncells)
 
 indcal= split$indcal
 indval= split$indval

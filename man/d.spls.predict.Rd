@@ -11,7 +11,7 @@ d.spls.predict(mod.spls,X,liste_cp)
 
 \item{X}{a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.}
 
-\item{liste_cp}{a vector of the components for which prediction is required.}
+\item{liste_cp}{a numeric vector of the components for which prediction is required.}
 }
 \value{
 Vector or matrix of estimated responses.
@@ -20,8 +20,8 @@ Vector or matrix of estimated responses.
 The function \code{d.spls} makes predictions from a fitted Dual-SPLS model.
 }
 \details{
-The coefficients computed in the Dual-SPLS object are used to predict fitted values using a new matrix \code{X}.
-Users can choose how many components should be used.
+The coefficients computed in the Dual-SPLS object are used to predict the fitted response values of new matrix \code{X}.
+Users can choose how many Dual-SPLS components should be used.
 }
 \examples{
 ### load dual.spls library
@@ -39,7 +39,7 @@ y <- data$y
 pcal <- 70
 ncells <- 3
 
-split <- d.spls.modifiedKS(X=X,pcal=pcal,y=y,ncells=ncells)
+split <- d.spls.FWLAS.calval(X=X,pcal=pcal,y=y,ncells=ncells)
 
 indcal= split$indcal
 indval= split$indval

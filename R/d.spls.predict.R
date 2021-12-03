@@ -4,10 +4,10 @@
 #' @usage d.spls.predict(mod.spls,X,liste_cp)
 #' @param mod.spls is a fitted Dual-SPLS object.
 #' @param X a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.
-#' @param liste_cp a vector of the components for which prediction is required.
+#' @param liste_cp a numeric vector of the components for which prediction is required.
 #' @details
-#' The coefficients computed in the Dual-SPLS object are used to predict fitted values using a new matrix \code{X}.
-#' Users can choose how many components should be used.
+#' The coefficients computed in the Dual-SPLS object are used to predict the fitted response values of new matrix \code{X}.
+#' Users can choose how many Dual-SPLS components should be used.
 #' @return Vector or matrix of estimated responses.
 #' @author François Wahl Louna Alsouki
 #' @seealso `browseVignettes("dual.spls")`
@@ -28,7 +28,7 @@
 #' pcal <- 70
 #' ncells <- 3
 #'
-#' split <- d.spls.modifiedKS(X=X,pcal=pcal,y=y,ncells=ncells)
+#' split <- d.spls.FWLAS.calval(X=X,pcal=pcal,y=y,ncells=ncells)
 #'
 #' indcal= split$indcal
 #' indval= split$indval

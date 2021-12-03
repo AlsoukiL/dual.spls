@@ -2,58 +2,48 @@
 % Please edit documentation in R/d.spls.LS.R
 \name{d.spls.LS}
 \alias{d.spls.LS}
-\title{Dual Sparse Partial Least Squares (Dual-SPLS) regression for the norm \eqn{\Omega(w)=\lambda \|N_1w\|_1 + \|Xw\|_2}}
+\title{Dual Sparse Partial Least Squares (Dual-SPLS) regression for the least squares norm}
 \usage{
 d.spls.LS(X,y,ncp,ppnu,verbose=FALSE)
 }
 \arguments{
-\item{X}{a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.}
+\item{X}{a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.}
 
 \item{y}{a numeric vector or a one column matrix of responses. It represents the response variable for each observation.}
 
 \item{ncp}{a positive integer. \code{ncp} is the number of Dual-SPLS components.}
 
-\item{ppnu}{a positive real value, in \eqn{[0,1]}. \code{ppnu} is the desired.
+\item{ppnu}{a positive real value, in \eqn{[0,1]}. \code{ppnu} is the desired
 proportion of variables to shrink to zero for each component (see Dual-SPLS methodology).}
 
-\item{verbose}{a boolean value indicating whether or not to diplay the iterations steps. \code{TRUE}.}
+\item{verbose}{a boolean value indicating whether or not to diplay the iterations steps. Default value is \code{TRUE}.}
 }
 \value{
 A \code{list} of the following attributes
 \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-\item{scores}{the matrix of dimension \code{n x ncp} where \code{n} is the number of observations.The \code{scores} represents
+\item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations.The \code{scores} represents
 the observations in the new component basis computed by the compression step
 of the Dual-SPLS.}
-\item{loadings}{the matrix of dimension \code{p x ncp} that represents the Dual-SPLS components.}
-\item{Bhat}{the matrix of dimension \code{p x ncp} that regroups the regression coefficients for each component.}
+\item{loadings}{the matrix of dimension \code{(p,ncp)} that represents the Dual-SPLS components.}
+\item{Bhat}{the matrix of dimension \code{(p,ncp)} that regroups the regression coefficients for each component.}
 \item{intercept}{the vector of intercept values for each component.}
-\item{fitted.values}{the matrix of dimension \code{n x ncp} that represents the predicted values of \code{y}}
-\item{residuals}{the matrix of dimension \code{n x ncp} that represents the residuals corresponding
+\item{fitted.values}{the matrix of dimension \code{(n,ncp)} that represents the predicted values of \code{y}}
+\item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
 to the difference between the responses and the fitted values.}
-\item{zerovar}{the vector of length \code{ncp} represnting the number of variables shrinked to zero per component.}
+\item{zerovar}{the vector of length \code{ncp} representing the number of variables shrinked to zero per component.}
 }
 \description{
-The function \code{d.spls.lasso} performs dimensional reduction as in PLS methodology combined to variable selection via the
-Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\lambda \|N_1w\|_1 + \|Xw\|_2}.
+The function \code{d.spls.lasso} performs dimensional reduction as in PLS1 methodology combined to variable selection via the
+Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda \|N_1w\|_1 + \|Xw\|_2.}
 }
 \details{
-This procedure computes latent sparse components that are used in a regression model.
-The optimization problem of the Dual-SPLS regression for the Least Squares norm
-comes from the Dual norm defintion of \eqn{\Omega(w)}. Indeed, we are searching for \code{w} that goes
-with
-\deqn{\Omega^*(z)=\max\limits_w(z^Tw) \textrm{ s.t. } \Omega(w)=1}
-Noting that \eqn{\lambda} is the initial shrinkage parameter that imposes sparsity, the Dual-SPLS does not rely
-on the value of \eqn{\lambda} but instead proceeds adaptively by choosing the propotion of zeros that the user
-would like to impose in the coefficients. Which leads to the compuation of a secondary shrinkage parameter \eqn{\nu}.
-
-The solution of this problem is
-\deqn{\frac{w_j}{\|Xw\|_2}=\frac{1}{\mu} sign(\hat{\beta}_{LS_j}) (|\hat{\beta}_{LS_j}|-\nu)_+}
-Where
-\itemize{
-\item \eqn{\hat{\beta}_{LS_j}} is equal to \eqn{(X^TX)^{-1}z}, the classical Least Squares regression coefficients.
-\item \eqn{\mu} is a parameter that guarentees the constraint of \eqn{\Omega(w)=1}.
-\item \eqn{\nu} is the shrinkage parameter.
-}
+The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.LS}, has
+a simple closed form expression (ref) deriving from the fact that \eqn{w} is colinear to a vector \eqn{z_{\nu}} of coordinates
+\deqn{z_{\nu_j}=\textrm{sign}(\hat{\beta}_{LS_j})(|\hat{\beta}_{LS_j}|-\nu)_+.}
+Here \eqn{\nu} is the threshold for which \code{ppnu} of
+the absolute values of the coordinates of \eqn{\hat{\beta}_{LS}} are greater than \eqn{\nu} where \eqn{\hat{\beta}_{LS}=(X^TX)^{-1}X^Ty}.
+Therefore, the least squares norm is adapted to the situation where \eqn{X} is invertible. If the condition is not verified,
+one might choose to apply the Dual-SPLS for the ridge norm.
 }
 \examples{
 ### load dual.spls library
@@ -91,7 +81,7 @@ points(inonz,mod.dspls$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 }
 \seealso{
-\code{browseVignettes("dual.spls")}
+\code{browseVignettes("dual.spls")}, \code{\link[=d.spls.ridge]{d.spls.ridge()}}
 }
 \author{
 Louna Alsouki François Wahl

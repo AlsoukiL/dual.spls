@@ -9,32 +9,42 @@ d.spls.simulate(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)
 \arguments{
 \item{n}{a positive integer. \code{n} is the number of observations. Default value is \code{200}.}
 
-\item{p}{a positive real value or a vector of length 2 representing the number of variables. Default value is \code{100}.}
+\item{p}{a numeric vector of length \code{G} representing the number of variables. Default value is \code{100}.}
 
-\item{nondes}{a positive integer or a vector of length 2. \code{nondes} is the number of Guassians in each mixture. Default value is \code{50}.}
+\item{nondes}{a numeric vector of length \code{G}. \code{nondes} is the number of Guassians in each mixture. Default value is \code{50}.}
 
-\item{sigmaondes}{a positive real value or a vector of length 2. \code{sigmaondes} is the standard deviation of the Gaussians. Default value is \code{0.05}.}
+\item{sigmaondes}{a numeric vector of length \code{G}. \code{sigmaondes} is the standard deviation of the
+Gaussians for each group \eqn{g \in [1,G]}. Default value is \code{0.05}.}
 
 \item{sigmay}{a real value. \code{sigmay} is the uncertainty on \code{y}. Default value is \code{0.5}.}
 }
 \value{
 A \code{list} of the following attributes
-\item{X}{the preditors matrix. If \code{length(p)=2}, it is the concatunated predictor matrix.}
+\item{X}{the concatunated predictors matrix.}
 \item{y}{the response vector.}
 \item{y0}{the reponse vector without noise \code{sigmay}.}
 \item{sigmay}{the uncertainty on \code{y}.}
 \item{sigmaondes}{the standard deviation of the Gaussians.}
 }
 \description{
-The function \code{d.spls.simulate} simulates one or two mixtures of \code{nondes} Gaussians representing one or two
-predictors matrices \code{X} or \code{X1} and \code{X2}
-of \code{n} observations and \code{p} or \code{p1} and \code{p2} variables and a response vector \code{y}.
+The function \code{d.spls.simulate} simulates \code{G} mixtures of \code{nondes} Gaussians from which it builds
+a data set of predictors \code{X} and response \code{y} in a way that \code{X} can be divided into \code{G} groups and
+the values of \code{y} depend on the values of \code{X}.
 }
 \details{
-The predictors matrices \code{X} or \code{X1} and \code{X2} represent each a mixture of \code{nondes} Gaussians characterized by means and
-amplitudes chosen randomly and a standard deviation set to \code{sigmaondes}.
-
-The response vector \code{y} is the sum of 4 intervals of each predictor matrix to which we add noise of \code{sigmay}.
+The predictors matrix \code{X} is a concatunations of \code{G} predictors sub matrices. Each is computed using
+a mixture of Gaussian i.e. summing the following Gaussians:
+\deqn{A \exp{(-\frac{(\textrm{xech}-\mu)^2}{2 \sigma^2})}}.
+Where
+\itemize{
+\item \eqn{A} is a numeric vector of random values between 0 and 1,
+\item xech is a sequence of \eqn{p(g)} equally spaced values from 0 to 1. \eqn{p(g)} is the number
+of variables of the sub matrix \eqn{g}, for \eqn{g \in \{1, \dots, G\}},
+\item \eqn{\mu} is a random value in \eqn{[0,1]} representing the mean of the Gaussians,
+\item \eqn{\sigma} is a positive real value specified by the user and representing the standard
+deviation of the Gaussians.
+}
+The response vector \code{y} is a linear combination of the predictors to which we add a noise of uncertainty \code{sigmay}.
 }
 \examples{
 ### load dual.spls library
@@ -66,7 +76,7 @@ data2=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
 
 Xb <- data2$X
 X1 <- Xb[,(1:p[1])]
-X2 <- Xb[,(p[1]+1):p[2]]
+X2 <- Xb[,(p[1]+1):(p[1]+p[2])]
 yb <- data2$y
 
 ###plotting the data

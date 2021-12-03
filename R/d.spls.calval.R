@@ -9,12 +9,23 @@
 #' @param Listecal a vector specifying how many observations from each group should be selected as calibration.
 #' @return a numeric vector giving the row indices of the input data selected for calibration
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.type()],[dual.spls::d.spls.modifiedKS()],`browseVignettes("dual.spls")`
+#' @seealso [dual.spls::d.spls.type()],[dual.spls::d.spls.FWLAS.calval()],`browseVignettes("dual.spls")`
 #' @importFrom pdist pdist
 #'
 d.spls.calval<- function(X,Xtype,Listecal)
 {
 
+  if (length(which(Xtype==0)) >0 || length(Xtype)< dim(X)[1] || all.equal(sort(unique(Xtype)),c(1:max(Xtype))) != T)
+  {
+    stop("some observations are badly indexed")
+  }
+  for (i in 1:max(Xtype))
+  {
+  if (length(which(Xtype==i)) < Listecal[i] )
+  {
+    stop("number of calibration observations chosen exceeds the overall number for the group ", i)
+  }
+}
   nref=sum(Listecal)
 
   ###################################
