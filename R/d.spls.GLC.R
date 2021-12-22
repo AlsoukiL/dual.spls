@@ -76,8 +76,8 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 
 
   nu=array(0,GG) #Initialising nu for each group
-  lambda=array(0,GG) #Initialising lambda for each group
-  alpha=array(0,GG) #Initialising alpha for each group
+ # lambda=array(0,GG) #Initialising lambda for each group
+#  alpha=array(0,GG) #Initialising alpha for each group
   Znu=array(0,p) #Initialising Znu for each group
   w=array(0,p) #Initialising w for each group
   norm2Znu=array(0,GG) #Initialising norm2 of Znu for each group
@@ -125,14 +125,8 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 
     #######################
 
-    for ( igg in 1:GG)
-    {
-      ######################
-      alpha[igg]=norm2Znu[igg]/mu
-      ######################
-      lambda[igg]=nu[igg]/(mu*alpha[igg]) #
-      ######################
-    }
+    alpha=norm2Znu/mu
+    lambda=nu/(mu*alpha)
 
     #Computing max of each norm2 of wg
     max_norm2w=array(0,GG) #Initialising maximum value of norm2 of w for each group
@@ -187,6 +181,7 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
     tempw=matrix(0,p,combnum)
     tempt=matrix(0,n,combnum)
     tempBhat=matrix(0,p,combnum)
+    tempintercept=rep(0,combnum)
     for (j in 1:combnum)
     {
 
@@ -213,14 +208,18 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 
       L=backsolve(R,diag(ic))
       Bhat[,ic]=WW[,1:ic,drop=FALSE]%*%(L%*%(t(TT[,1:ic,drop=FALSE])%*%yc))
+
+      tempintercept[ic] = ycalm - Xcalm %*% Bhat[,ic]
+
       #Predictions
-      YY[,ic]=X %*% Bhat[,ic] + intercept[ic]
+      YY[,ic]=X %*% Bhat[,ic] + tempintercept[ic]
       RES[,ic]=y-YY[,ic]
 
       tempw[,j]=w
       tempt[,j]=t
       tempBhat[,j]=Bhat[,ic]
-      RMSE[j]=sqrt(mean((RES[,ic])^2))
+      RMSE[j]=sum(RES[,ic]^2)/ncal
+
     }
     indwmax=which.min(RMSE)
     w=tempw[,indwmax]
