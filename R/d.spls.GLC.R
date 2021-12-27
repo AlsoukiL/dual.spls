@@ -209,7 +209,7 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
       L=backsolve(R,diag(ic))
       Bhat[,ic]=WW[,1:ic,drop=FALSE]%*%(L%*%(t(TT[,1:ic,drop=FALSE])%*%yc))
 
-      tempintercept[ic] = ycalm - Xcalm %*% Bhat[,ic]
+      tempintercept[ic] = ym - Xm %*% Bhat[,ic]
 
       #Predictions
       YY[,ic]=X %*% Bhat[,ic] + tempintercept[ic]
@@ -218,7 +218,7 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
       tempw[,j]=w
       tempt[,j]=t
       tempBhat[,j]=Bhat[,ic]
-      RMSE[j]=sum(RES[,ic]^2)/ncal
+      RMSE[j]=sum(RES[,ic]^2)/n
 
     }
     indwmax=which.min(RMSE)
