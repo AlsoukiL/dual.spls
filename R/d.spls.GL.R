@@ -31,7 +31,7 @@
 #' @param ppnu a positive real value or a vector of length the number of groups, in \eqn{[0,1]}.
 #' \code{ppnu} is the desired proportion of variables to shrink to zero for each component and for each group.
 #' @param indG a numeric vector of group index for each observation.
-#' @param gamma a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{norm="B"}. Default value is \code{NULL}.
+#' @param gamma a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{norm="B"}.
 #' @param norm a character specifying the norm chosen between A, B and C. Default value is \code{A}.
 #' @param verbose a boolean value indicating whether or not to diplay the iterations steps. Default value is \code{FALSE}.
 #' @details
