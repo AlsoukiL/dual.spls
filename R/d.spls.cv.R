@@ -2,9 +2,9 @@
 #' @description
 #' The function \code{d.spls.cv} use the cross validation approach described in Boulesteix and Strimmer (2005) in order to
 #' choose the most adequat number of latent components for a Dual-SPLS regression.
-#' @usage d.spls.cv(X,Y,ncomp,dspls="lasso",ppnu,nu2,nrepcv=30,pctcv=70)
+#' @usage d.spls.cv(X,Y,ncomp,dspls="lasso",ppnu,nu2,nrepcv=30,pctcv=70,indG,gamma)
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
-#' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
+#' @param Y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
 #' @param ncomp a positive integer or a numeric vector of the number of latent numbers to choose from.
 #' @param dspls the norm type of the Dual-SPLS regression applied. Default value is \code{lasso}. Options are \code{pls}, \code{LS},
 #' \code{ridge}, \code{GLA}, \code{GLB} and \code{GLC}.
@@ -39,14 +39,14 @@
 #' y <- data$y
 #'
 #' #fitting the PLS model
-#' ncomp_PLS <- d.spls.cv(X=X,y=y,ncp=10,dspls="pls",nrepcv=20,pctcv=75)
-#' mod.dspls.pls <- d.spls.pls(X=X,y=y,ncp=ncomp,verbose=TRUE)
+#' ncomp_PLS <- d.spls.cv(X=X,Y=y,ncomp=10,dspls="pls",nrepcv=20,pctcv=75)
+#' mod.dspls.pls <- d.spls.pls(X=X,y=y,ncp=ncomp_PLS,verbose=TRUE)
 #'
 #' str(mod.dspls.pls)
 #'
 #' ### plotting the observed values VS predicted values for ncomp components
 #' plot(y,mod.dspls.pls$fitted.values[,ncomp_PLS], xlab="Observed values", ylab="Predicted values",
-#'  main=paste("Observed VS Predicted for ", ncomp_PLS," components")
+#'  main=paste("Observed VS Predicted for ", ncomp_PLS," components"))
 #' points(-1000:1000,-1000:1000,type='l')
 #'
 #' ### plotting the regression coefficients
@@ -55,24 +55,25 @@
 #' i=ncomp_PLS
 #' plot(1:dim(X)[2],mod.dspls.pls$Bhat[,i],type='l',
 #'     main=paste(" Dual-SPLS (PLS), ncp =", i,
-#'     ylab='',xlab='' )
+#'     ylab='',xlab='' ))
 #'
 #'
 #' #fitting the Dual-SPLS lasso model
-#' ncomp_lasso <- d.spls.cv(X=X,y=y,ncp=10,dspls="lasso",ppnu=0.9,nrepcv=20,pctcv=75)
-#' mod.dspls.lasso <- d.spls.lasso(X=X,y=y,ncp=ncomp,ppnu=0.9,verbose=TRUE)
+#'
+#' ncomplasso <- d.spls.cv(X=X,Y=y,ncomp=10,dspls="lasso",ppnu=0.9,nrepcv=20,pctcv=75)
+#' mod.dspls.lasso <- d.spls.lasso(X=X,y=y,ncp=ncomplasso,ppnu=0.9,verbose=TRUE)
 #'
 #' str(mod.dspls.lasso)
 #'
 #' ### plotting the observed values VS predicted values for ncomp components
-#' plot(y,mod.dspls.lasso$fitted.values[,ncomp_lasso], xlab="Observed values", ylab="Predicted values",
-#'  main=paste("Observed VS Predicted for ", ncomp_lasso," components")
+#' plot(y,mod.dspls.lasso$fitted.values[,ncomplasso], xlab="Observed values", ylab="Predicted values",
+#'  main=paste("Observed VS Predicted for ", ncomplasso," components"))
 #' points(-1000:1000,-1000:1000,type='l')
 #'
 #' ### plotting the regression coefficients
 #' par(mfrow=c(3,1))
 #'
-#' i=ncomp_lasso
+#' i=ncomplasso
 #' nz=mod.dspls.lasso$zerovar[i]
 #' plot(1:dim(X)[2],mod.dspls.lasso$Bhat[,i],type='l',
 #'     main=paste(" Dual-SPLS (lasso), ncp =", i, " #0coef =", nz, "/", dim(X)[2]),

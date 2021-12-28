@@ -3,6 +3,7 @@
 export(d.spls.FWLAS.calval)
 export(d.spls.GL)
 export(d.spls.LS)
+export(d.spls.cv)
 export(d.spls.lasso)
 export(d.spls.pls)
 export(d.spls.predict)

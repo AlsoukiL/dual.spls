@@ -18,7 +18,7 @@ d.spls.GL(X,y,ncp,ppnu,indG,gamma=NULL,norm="A",verbose=FALSE)
 
 \item{indG}{a numeric vector of group index for each observation.}
 
-\item{gamma}{a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{norm="B"}. Default value is \code{NULL}.}
+\item{gamma}{a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{norm="B"}.}
 
 \item{norm}{a character specifying the norm chosen between A, B and C. Default value is \code{A}.}
 
