@@ -11,7 +11,7 @@
 #' @param nu2 a positive real value. \code{nu2} is a constraint parameter.
 #' @param verbose a boolean value indicating whether or not to diplay the iterations steps. Default value is \code{TRUE}.
 #' @details
-#' The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.LS}, has
+#' The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.ridge}, has
 #' a simple closed form expression (ref) deriving from the fact that \eqn{w} is colinear to a vector \eqn{z_{X,\nu_2}} of coordinates
 #' \deqn{z_{\nu_1,j}=\textrm{sign}(z_{X,\nu_2,j})(|z_{X,\nu_2,j}|-\nu_1)_+.}
 #' Here \eqn{\nu_1} is the threshold for which \code{ppnu} of
