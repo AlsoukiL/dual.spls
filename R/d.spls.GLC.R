@@ -54,14 +54,8 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
   ###################################
   # Initialisation
   ###################################
-  GG=max(indG) #Number of groups
-  PP=array(0,GG) #Initialising the vector of dimension of each group
-
-
-  for (ig in 1:GG)
-  {
-    PP[ig]=sum(indG==ig)
-  }
+  nG=max(indG) #Number of groups
+  PP=sapply(1:nG, function(u) sum(indG==u) )
 
 
   WW=matrix(0,p,ncp) #Initialising W, the matrix of loadings
@@ -70,32 +64,28 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
   YY=matrix(0,n,ncp) #Initialising the matrix of coefficients
   RES=matrix(0,n,ncp) #Initialising the matrix of coefficients
   intercept=rep(0,ncp)
-  zerovar=matrix(0,GG,ncp)
-  listelambda=matrix(0,GG,ncp)
-  listealpha=matrix(0,GG,ncp)
+  zerovar=matrix(0,nG,ncp)
+  listelambda=matrix(0,nG,ncp)
+  listealpha=matrix(0,nG,ncp)
 
 
-  nu=array(0,GG) #Initialising nu for each group
- # lambda=array(0,GG) #Initialising lambda for each group
-#  alpha=array(0,GG) #Initialising alpha for each group
+  nu=array(0,nG) #Initialising nu for each group
   Znu=array(0,p) #Initialising Znu for each group
   w=array(0,p) #Initialising w for each group
-  norm2Znu=array(0,GG) #Initialising norm2 of Znu for each group
-  norm1Znu=array(0,GG) #Initialising norm1 of Znu for each group
+  norm2Znu=array(0,nG) #Initialising norm2 of Znu for each group
+  norm1Znu=array(0,nG) #Initialising norm1 of Znu for each group
 
   ###################################
   # Dua-SPLS
   ###################################
-  sam=10
   #Each step ic in -for loop- determine the icth column of each W, T and Bhat
   Xdef=Xc #Initialising X for Deflation Step
   for (ic in 1:ncp)
   {
-
     Z=t(Xdef)%*%yc #For cov(t(X)y,w)=0, w must be colinear to t(X)y ==> Z=t(X)y
     Z=as.vector(Z)
 
-    for( ig in 1:GG)
+    for( ig in 1:nG)
     {
       #Index of the group
       ind=which(indG==ig)
@@ -111,14 +101,11 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 
       # finding lambda, mu, given nu
       Znu[ind]=sapply(Z[ind],function(u) sign(u)*max(abs(u)-nu[ig],0))
-      #Znu2=d.spls.norm2(Znu)
-      #Znu1=d.spls.norm1(Znu)
 
       ##########Norm 1 of Znu(g)#############
       norm1Znu[ig]=d.spls.norm1(Znu[ind])
       ##########Norm 2 of Znu(g)#############
       norm2Znu[ig]=d.spls.norm2(Znu[ind])
-
     }
     #######################
     mu=sum(norm2Znu)
@@ -129,71 +116,53 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
     lambda=nu/(mu*alpha)
 
     #Computing max of each norm2 of wg
-    max_norm2w=array(0,GG) #Initialising maximum value of norm2 of w for each group
-
-    for ( igg in 1:GG)
-    {
-      ######################
-      max_norm2w[igg]=1/(alpha[igg]*(1+(nu[igg]*norm1Znu[igg]/(mu*alpha[igg])^2)))
-      ######################
-    }
+    max_norm2w=sapply(1:nG,function(u) 1/alpha[u]/(1+(nu[u]*norm1Znu[u]/(mu*alpha[u])^2)))
 
     #Sampling the possible values of wg
-    sample_wg=matrix(0,sam,(GG-1))
-    for ( igg in 1:(GG-1))
+    sample_wg=matrix(0,10,(nG-1))
+    for ( ig in 1:(nG-1))
     {
       ######################
-      sample_wg[,igg]=seq(0,max_norm2w[igg],length.out = sam)
+      sample_wg[,ig]=seq(0,max_norm2w[ig],length.out = 10)
       ######################
     }
-
-    #possible combination
-    temp=data.frame(sample_wg[,1:(GG-1)])
+    # all the possible combinations
+    # due to a linear constraint, the last column is deduced from the others
+    temp=data.frame(sample_wg[,1:(nG-1)])
     comb=expand.grid(temp)
     comb=unique(comb)
     comb=as.matrix(comb)
-    combnum=dim(comb)[1]
-    comb=cbind(comb,rep(0,combnum))
-    denom=alpha[(GG)]*(1+( nu[(GG)] * norm1Znu[(GG)]  /  (mu*alpha[(GG)])^2   ))
-
-    for (j in 1:combnum)
+    ncomb=dim(comb)[1]
+    comb=cbind(comb,rep(0,ncomb))
+    denom=alpha[(nG)]*(1+( nu[(nG)] * norm1Znu[(nG)]  /  (mu*alpha[(nG)])^2   ))
+    for (icomb in 1:ncomb)
     {
-      numg=rep(0,(GG-1))
-      for ( igg in 1:(GG-1))
-      {
-        ######################
-        numg[igg]=alpha[igg]*comb[j,igg]*(1+( nu[igg] * norm1Znu[igg]  /  (mu*alpha[igg])^2   ))
-      }
+      numg=sapply(1:(nG-1), function(u){
+        alpha[u]*comb[icomb,u]*(1+( nu[u]*norm1Znu[u]/(mu*alpha[u])^2)) } )
 
       num=1-sum(numg)
-      comb[j,GG]=num/denom
+      comb[icomb,nG]=num/denom
     }
-    #verification
-    # a=0
-    # norm2wg=comb[14,]
-    # for ( igg in 1:(GG))
-    # {
-    #   a=a+alpha[igg]*norm2wg[igg]*(1+( nu[igg] * norm1Znu[igg]  /  (mu*alpha[igg])^2   ))
-    # }
-    comb=comb[comb[,GG]>=0,]
-    combnum=dim(comb)[1]
-    RMSE=rep(0,combnum)
-    tempw=matrix(0,p,combnum)
-    tempt=matrix(0,n,combnum)
-    tempBhat=matrix(0,p,combnum)
-    tempintercept=rep(0,combnum)
-    for (j in 1:combnum)
+    # suppress inadequate rows (for which comb[,nG] < 0)
+    comb=comb[comb[,nG]>=0,]
+    ncomb=dim(comb)[1]
+
+    RMSE=rep(0,ncomb)
+
+    tempw=matrix(0,p,ncomb)
+    tempt=matrix(0,n,ncomb)
+    tempBhat=matrix(0,p,ncomb)
+    tempintercept=rep(0,ncomb)
+    for (icomb in 1:ncomb)
     {
 
-      for ( igg in 1:(GG-1))
+      for ( ig in 1:nG )
       {
         #Index of the group
-        ind=which(indG==igg)
+        ind=which(indG==ig)
         # calculating w,t at the optimum
-        w[ind]=(comb[j,igg]/(mu*alpha[igg]))*Znu[ind]
+        w[ind]=(comb[icomb,ig]/(mu*alpha[ig]))*Znu[ind]
       }
-      ind=which(indG==GG)
-      w[ind]=(comb[j,GG]/(mu*alpha[GG]))*Znu[ind]
 
       #Finding T
       t=Xdef%*%w
@@ -215,38 +184,41 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
       YY[,ic]=X %*% Bhat[,ic] + tempintercept[ic]
       RES[,ic]=y-YY[,ic]
 
-      tempw[,j]=w
-      tempt[,j]=t
-      tempBhat[,j]=Bhat[,ic]
-      RMSE[j]=sum(RES[,ic]^2)/n
+      tempw[,icomb]=w
+      RMSE[icomb]=sum(RES[,ic]^2)/n
 
     }
     indwmax=which.min(RMSE)
     w=tempw[,indwmax]
-    t=tempt[,indwmax]
+
+    #Finding T
+    t=Xdef%*%w
+    t=t/d.spls.norm2(t)
 
     WW[,ic]=w
     TT[,ic]=t
 
-    Bhat[,ic]=tempBhat[,indwmax]
+    #Coefficient vectors
+    R=t(TT[,1:ic,drop=FALSE])%*%Xc%*%WW[,1:ic,drop=FALSE]
+    R[row(R)>col(R)]<-0 # inserted for numerical stability
+
+    L=backsolve(R,diag(ic))
+    Bhat[,ic]=WW[,1:ic,drop=FALSE]%*%(L%*%(t(TT[,1:ic,drop=FALSE])%*%yc))
 
     listelambda[,ic]=lambda
     listealpha[,ic]=alpha
     intercept[ic] = ym - Xm %*% Bhat[,ic]
 
-    zerovar[1,ic]=sum(Bhat[(1:PP[1]),ic]==0)
-    if (GG>1){
-      for (iggg in 1:(GG-1))
-      {
-        zerovar[iggg+1,ic]=sum(Bhat[((PP[iggg]+1):(PP[iggg]+PP[iggg+1])),ic]==0)
-      }
-    }
+    #Number of zero variables in each group
+    zerovar[,ic]=sapply(1:nG, function(u) {
+      indu=which(indG==u)
+      sum(Bhat[indu,ic]==0)})
+
     #Predictions
     YY[,ic]=X %*% Bhat[,ic] + intercept[ic]
     RES[,ic]=y-YY[,ic]
     #Deflation
     Xdef=Xdef-t%*%t(t)%*%Xdef
-
 
     # results iteration
     if (verbose){

@@ -55,14 +55,8 @@ d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
   ###################################
   # Initialisation
   ###################################
-  GG=max(indG) #Number of groups
-  PP=array(0,GG) #Initialising the vector of dimension of each group
-
-
-  for (ig in 1:GG)
-  {
-    PP[ig]=sum(indG==ig)
-  }
+  nG=max(indG) #Number of groups
+  PP=sapply(1:nG, function(u) sum(indG==u) )
 
 
   WW=matrix(0,p,ncp) #Initialising W, the matrix of loadings
@@ -71,16 +65,16 @@ d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
   YY=matrix(0,n,ncp) #Initialising the matrix of coefficients
   RES=matrix(0,n,ncp) #Initialising the matrix of coefficients
   intercept=rep(0,ncp)
-  zerovar=matrix(0,GG,ncp)
-  listelambda=matrix(0,GG,ncp)
+  zerovar=matrix(0,nG,ncp)
+  listelambda=matrix(0,nG,ncp)
 
 
-  nu=array(0,GG) #Initialising nu for each group
-  lambda=array(0,GG) #Initialising lambda for each group
+  nu=array(0,nG) #Initialising nu for each group
+  lambda=array(0,nG) #Initialising lambda for each group
   Znu=array(0,p) #Initialising Znu for each group
   w=array(0,p) #Initialising w for each group
-  norm2Znu=array(0,GG) #Initialising norm2 of Znu for each group
-  norm1Znu=array(0,GG) #Initialising norm1 of Znu for each group
+  norm2Znu=array(0,nG) #Initialising norm2 of Znu for each group
+  norm1Znu=array(0,nG) #Initialising norm1 of Znu for each group
 
   ###################################
   # Dual-SPLS
@@ -94,7 +88,7 @@ d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
     Z=t(Xdef)%*%yc #For cov(t(X)y,w)=0, w must be colinear to t(X)y ==> Z=t(X)y
     Z=as.vector(Z)
 
-    for( ig in 1:GG)
+    for( ig in 1:nG)
     {
       #Index of the group
       ind=which(indG==ig)
@@ -110,8 +104,6 @@ d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 
       # finding lambda, mu, given nu
       Znu[ind]=sapply(Z[ind],function(u) sign(u)*max(abs(u)-nu[ig],0))
-      #Znu2=d.spls.norm2(Znu)
-      #Znu1=d.spls.norm1(Znu)
 
       ##########Norm 1 of Znu(g)#############
       norm1Znu[ig]=d.spls.norm1(Znu[ind])
@@ -125,13 +117,13 @@ d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 
     #######################
 
-    for ( igg in 1:GG)
+    for ( ig in 1:nG)
     {
       ######################
-      lambda[igg]=nu[igg]/mu #
+      lambda[ig]=nu[ig]/mu #
       ######################
       #Index of the group
-      ind=which(indG==igg)
+      ind=which(indG==ig)
 
       # calculating w,t at the optimum
       w[ind]=(mu/(mu2+ t(nu)%*%norm1Znu))%*%Znu[ind]
@@ -158,13 +150,10 @@ d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
     intercept[ic] = ym - Xm %*% Bhat[,ic]
 
     #Number of zero variables in each group
-    zerovar[1,ic]=sum(Bhat[(1:PP[1]),ic]==0)
-    if (GG>1){
-      for (iggg in 1:(GG-1))
-      {
-        zerovar[iggg+1,ic]=sum(Bhat[((PP[iggg]+1):(PP[iggg]+PP[iggg+1])),ic]==0)
-      }
-    }
+    zerovar[,ic]=sapply(1:nG, function(u) {
+      indu=which(indG==u)
+      sum(Bhat[indu,ic]==0)})
+
     #Predictions
     YY[,ic]=X %*% Bhat[,ic] + intercept[ic]
     RES[,ic]=y-YY[,ic]
