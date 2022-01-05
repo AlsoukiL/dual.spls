@@ -23,7 +23,23 @@
 #' \item \eqn{\sigma} is a positive real value specified by the user and representing the standard
 #' deviation of the Gaussians.
 #' }
-#' The response vector \code{y} is a linear combination of the predictors to which we add a noise of uncertainty \code{sigmay}.
+#' The response vector \code{y} is a linear combination of the predictors to which we add a noise of uncertainty \code{sigmay}. It is computed as follows:
+#'
+#' \deqn{y_i=\textrm{sigmay} \times V_i +\sum\limits_{g=1}^G \sum\limits_{j=1}^4 j \times X^g_{ij}}
+#' Where
+#' \itemize{
+#' \item \eqn{G} is the number of predictor sub matrices,
+#' \item \eqn{i} is the index of the observation,
+#' \item \eqn{X^g_{ij}} is the matrix of the columns \eqn{\textrm{init}_j, \dots, \textrm{fin}_j} from the \eqn{g} sub matrix \eqn{X^g},
+#' \item \eqn{V} is a normally distributed vector of 0 mean and unitary standard deviation.
+#' }
+#' Noting that
+#' \itemize{
+#' \item \eqn{\textrm{init}_1= 0.2 \times p(g)} and \eqn{\textrm{fin}_1= 0.3 \times p(g)}
+#' \item \eqn{\textrm{init}_2= \textrm{init}_1 \times 0.4 \times p(g)} and \eqn{\textrm{fin}_2= \textrm{fin}_1 \times 0.5 \times p(g)}
+#' \item \eqn{\textrm{init}_3= \textrm{init}_2 \times 0.6 \times p(g)} and \eqn{\textrm{fin}_3= \textrm{fin}_2 \times 0.7 \times p(g)}
+#' \item \eqn{\textrm{init}_4= \textrm{init}_3 \times 0.8 \times p(g)} and \eqn{\textrm{fin}_4= \textrm{fin}_3 \times 0.9 \times p(g)}
+#' }
 #' @return A \code{list} of the following attributes
 #' \item{X}{the concatunated predictors matrix.}
 #' \item{y}{the response vector.}
@@ -146,12 +162,12 @@ d.spls.simulate<- function(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)
   #Setting the interval limits for y0
   p1i=round(20/100*p[1])
   p1f=round(30/100*p[1])
-  p2i=round(45/100*p[1])
-  p2f=round(55/100*p[1])
-  p3i=round(55/100*p[1])
-  p3f=round(60/100*p[1])
-  p4i=round(70/100*p[1])
-  p4f=round(80/100*p[1])
+  p2i=round(40/100*p[1])
+  p2f=round(50/100*p[1])
+  p3i=round(60/100*p[1])
+  p3f=round(70/100*p[1])
+  p4i=round(80/100*p[1])
+  p4f=round(90/100*p[1])
 
   #Computing y0 as a sum of intervals of X
   for (j in 1:n){
@@ -168,12 +184,12 @@ d.spls.simulate<- function(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5)
     {
       p1i=round(20/100*p[i])
       p1f=round(30/100*p[i])
-      p2i=round(45/100*p[i])
-      p2f=round(55/100*p[i])
-      p3i=round(55/100*p[i])
-      p3f=round(60/100*p[i])
-      p4i=round(70/100*p[i])
-      p4f=round(80/100*p[i])
+      p2i=round(40/100*p[i])
+      p2f=round(50/100*p[i])
+      p3i=round(60/100*p[i])
+      p3f=round(70/100*p[i])
+      p4i=round(80/100*p[i])
+      p4f=round(90/100*p[i])
       for (j in 1:n){
 
         y0[j]=y0[j]+sum(X[j,(sum(p[1:(i-1)])+p1i):(sum(p[1:(i-1)])+p1f)])+
