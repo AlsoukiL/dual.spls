@@ -121,15 +121,6 @@ d.spls.ridge<- function(X,y,ncp,ppnu,nu2,verbose=FALSE)
     N2TN2=t(Xdef)%*%Xdef
     temp=nu2*N2TN2+diag(p)
     Xsvd=svd(temp)
-    if (max(Xsvd$d)/min(Xsvd$d)<1e15)
-    {
-      warning('Warning: X is invertible' )
-    }
-
-    # if (min(Xsvd$d)<1e-10)
-    # {
-    #   warning('Warning: X is invertible' )
-    # }
     inv=Xsvd$v%*%diag(1/Xsvd$d)%*%t(Xsvd$u)
     #inv=solve(nu2*N2TN2+diag(p))
 
