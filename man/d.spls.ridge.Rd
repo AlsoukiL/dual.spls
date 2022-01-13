@@ -40,7 +40,7 @@ The function \code{d.spls.lasso} performs dimensional reduction as in PLS method
 Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda_1 \|w\|_1 +\lambda_2 \|Xw\|_2 + \|w\|_2.}
 }
 \details{
-The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.LS}, has
+The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.ridge}, has
 a simple closed form expression (ref) deriving from the fact that \eqn{w} is colinear to a vector \eqn{z_{X,\nu_2}} of coordinates
 \deqn{z_{\nu_1,j}=\textrm{sign}(z_{X,\nu_2,j})(|z_{X,\nu_2,j}|-\nu_1)_+.}
 Here \eqn{\nu_1} is the threshold for which \code{ppnu} of
