@@ -2,23 +2,23 @@
 #' @description
 #' The function \code{d.spls.lasso} performs dimensional reduction as in the PLS1 methodology combined with variable selection via the
 #' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2.}
-#' @usage d.spls.lasso(X,y,ncp,ppnu,verbose=FALSE)
+#' @usage d.spls.lasso(X,y,ncp,ppnu,verbose=TRUE)
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
 #' @param ppnu a positive real value, in \eqn{[0,1]}. \code{ppnu} is the desired
 #' proportion of variables to shrink to zero for each component (see Dual-SPLS methodology).
-#' @param verbose a boolean value indicating whether or not to diplay the iterations steps. Default value is \code{TRUE}.
+#' @param verbose a Boolean value indicating whether or not to display the iterations steps. Default value is \code{TRUE}.
 #' @details
 #' The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.lasso}, has
-#' a simple closed form expression (ref) deriving from the fact that \eqn{w} is colinear to a vector \eqn{z_{\nu}} of coordinates
+#' a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu}} of coordinates
 #' \deqn{z_{\nu_j}=\textrm{sign}({z_j})(|z_j|-\nu)_+.}
 #' Here \eqn{\nu} is the threshold for which \code{ppnu} of
 #' the absolute values of the coordinates of \eqn{z=X^Ty} are greater than \eqn{\nu}.
 #'
 #' @return A \code{list} of the following attributes
 #' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-#' \item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations.The \code{scores} represents
+#' \item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations. The \code{scores} represents
 #' the observations in the new component basis computed by the compression step
 #' of the Dual-SPLS.}
 #' \item{loadings}{the matrix of dimension \code{(p,ncp)} that represents the Dual-SPLS components.}
@@ -26,9 +26,9 @@
 #' \item{intercept}{the vector of intercept values for each component.}
 #' \item{fitted.values}{the matrix of dimension \code{(n,ncp)} that represents the predicted values of \code{y}}
 #' \item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
-#'  to the difference between the responses and the fitted values.}
+#' to the difference between the responses and the fitted values.}
 #' \item{lambda}{the vector of length \code{ncp} collecting the parameters of sparsity  used to fit the model at each iteration.}
-#' \item{zerovar}{the vector of length \code{ncp} representing the number of variables shrinked to zero per component.}
+#' \item{zerovar}{the vector of length \code{ncp} representing the number of variables shrank to zero per component.}
 #' @author Louna Alsouki François Wahl
 #' @seealso `browseVignettes("dual.spls")`
 #'
@@ -52,7 +52,7 @@
 #'
 #' ### plotting the observed values VS predicted values for 6 components
 #' plot(y,mod.dspls$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
-#'  main="Observed VS Predicted for 6 components")
+#' main="Observed VS Predicted for 6 components")
 #' points(-1000:1000,-1000:1000,type='l')
 #'
 #' ### plotting the regression coefficients
@@ -69,45 +69,45 @@
 #' @export
 
 
-d.spls.lasso<- function(X,y,ncp,ppnu,verbose=FALSE)
+d.spls.lasso<- function(X,y,ncp,ppnu,verbose=TRUE)
 {
 
   ###################################
   # Dimensions
   ###################################
-  n=length(y) #Number of observations
-  p=dim(X)[2] #Number of variables
+  n=length(y) # number of observations
+  p=dim(X)[2] # number of variables
 
   ###################################
   # Centering Data
   ###################################
-  Xm = apply(X, 2, mean) #Mean of X
-  Xc=X - rep(1,n) %*% t(Xm) #Centering predictor matrix
+  Xm = apply(X, 2, mean) # mean of X
+  Xc=X - rep(1,n) %*% t(Xm) # centering predictor matrix
 
-  ym=mean(y) #Mean of y
-  yc=y-ym #Centering response vector
+  ym=mean(y) # mean of y
+  yc=y-ym # centering response vector
 
   ###################################
-  # Initialisation
+  # Initialization
   ###################################
-  WW=matrix(0,p,ncp) #Initialising W, the matrix of loadings
-  TT=matrix(0,n,ncp) #Initialising T, the matrix of scores
-  Bhat=matrix(0,p,ncp) #Initialising the matrix of coefficients
-  YY=matrix(0,n,ncp) #Initialising the matrix of coefficients
-  RES=matrix(0,n,ncp) #Initialising the matrix of coefficients
-  intercept=rep(0,ncp)
-  zerovar=rep(0,ncp)
-  listelambda=rep(0,ncp)
+  WW=matrix(0,p,ncp) # initialising WW, the matrix of loadings
+  TT=matrix(0,n,ncp) # initialising TT, the matrix of scores
+  Bhat=matrix(0,p,ncp) # initialising Bhat, the matrix of coefficients
+  YY=matrix(0,n,ncp) # initialising YY, the matrix of coefficients
+  RES=matrix(0,n,ncp) # initialising RES, the matrix of coefficients
+  intercept=rep(0,ncp) # initialising intercept, the vector of intercepts
+  zerovar=rep(0,ncp) # initialising zerovar, the vector of final number of zeros coefficients for each component
+  listelambda=rep(0,ncp) # initialising listelambda, the vector of values of lambda
   ###################################
   # Dual-SPLS
   ###################################
 
-  #Each step ic in -for loop- determine the icth column of each W, T and Bhat
-  Xdef=Xc #Initialising X for Deflation Step
+  # each step ic in -for loop- determine the icth column or element of each element initialized
+  Xdef=Xc # initializing X for Deflation Step
   for (ic in 1:ncp)
   {
 
-    Z=t(Xdef)%*%yc #For cov(t(X)y,w)=0, w must be colinear to t(X)y ==> Z=t(X)y
+    Z=t(Xdef)%*%yc
     Z=as.vector(Z)
 
     #Optimizing nu
@@ -129,31 +129,39 @@ d.spls.lasso<- function(X,y,ncp,ppnu,verbose=FALSE)
     ##############
 
     # calculating w,t at the optimum
-    w=(mu/(nu*Znu1 + mu^2))*Znu
 
-    #Finding T
+    # finding W
+    w=(mu/(nu*Znu1 + mu^2))*Znu
+    WW[,ic]=w
+
+    # finding T
     t=Xdef%*%w
     t=t/d.spls.norm2(t)
-
-    WW[,ic]=w
     TT[,ic]=t
 
-    #Deflation
+    # deflation
     Xdef=Xdef-t%*%t(t)%*%Xdef
 
-    #Coefficient vectors
+    # coefficient vectors
     R=t(TT[,1:ic,drop=FALSE])%*%Xc%*%WW[,1:ic,drop=FALSE]
     R[row(R)>col(R)]<-0 # inserted for numerical stability
 
     L=backsolve(R,diag(ic))
     Bhat[,ic]=WW[,1:ic,drop=FALSE]%*%(L%*%(t(TT[,1:ic,drop=FALSE])%*%yc))
 
+    # lambda
     listelambda[ic]=lambda
+
+    # intercept
     intercept[ic] = ym - Xm %*% Bhat[,ic]
+
+    # zerovar
     zerovar[ic]=sum(Bhat[,ic]==0)
 
-    #Predictions
+    # predictions
     YY[,ic]=X %*% Bhat[,ic] + intercept[ic]
+
+    # residuals
     RES[,ic]=y-YY[,ic]
 
     # results iteration
