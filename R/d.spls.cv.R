@@ -22,6 +22,10 @@
 #' errors are computed accordingly for each components. \code{nrepcv} iteration are done and the mean of each of the \code{nrepcv} errors for each
 #' component. The latent component of the smallest mean value is selected as the best.
 #' @return The best number of latent components to be used in the Dual-SPLS regression based on the cross validation procedure.
+#' @references
+#' A. L. Boulesteix and K. Strimmer (2005). Predicting Transcription Factor Activities from Combined Analysis of Microarray and ChIP Data: A Partial Least Squares Approach. \cr
+#' \cr
+#' H. Wold. Path Models with Latent Variables: The NIPALS Approach. In H.M. Blalock et al., editor, Quantitative Sociology: International Perspectives on Mathematical and Statistical Model Building, pages 307–357. Academic Press, 1975.
 #' @author Louna Alsouki François Wahl
 #' @seealso `browseVignettes("dual.spls")`
 #'

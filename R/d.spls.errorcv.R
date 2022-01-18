@@ -14,7 +14,7 @@
 #' proportion of variables to shrink to zero for each component (see Dual-SPLS methodology).
 #' @param nu2 a positive real value. \code{nu2} is a constraint parameter used in the ridge norm.
 #' @param indG a numeric vector of group index for each observation. It is used in the cases of the group lasso norms.
-#' @param gamma a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{GLB}.
+#' @param gamma a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in the case of \code{GLB} norm.
 #' @return a numeric vector representing the errors for each fitted model
 #' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.cv()],[dual.spls::d.spls.lasso()],`browseVignettes("dual.spls")`

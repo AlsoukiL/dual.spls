@@ -35,7 +35,7 @@ proportion of variables to shrink to zero for each component (see Dual-SPLS meth
 
 \item{indG}{a numeric vector of group index for each observation. It is used in the cases of the group lasso norms.}
 
-\item{gamma}{a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{GLB}.}
+\item{gamma}{a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in the case of \code{GLB} norm.}
 }
 \value{
 a numeric vector representing the errors for each fitted model

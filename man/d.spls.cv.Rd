@@ -100,6 +100,11 @@ inonz=which(mod.dspls.lasso$Bhat[,i]!=0)
 points(inonz,mod.dspls.lasso$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 }
+\references{
+A. L. Boulesteix and K. Strimmer (2005). Predicting Transcription Factor Activities from Combined Analysis of Microarray and ChIP Data: A Partial Least Squares Approach. \cr
+\cr
+H. Wold. Path Models with Latent Variables: The NIPALS Approach. In H.M. Blalock et al., editor, Quantitative Sociology: International Perspectives on Mathematical and Statistical Model Building, pages 307–357. Academic Press, 1975.
+}
 \seealso{
 \code{browseVignettes("dual.spls")}
 }
