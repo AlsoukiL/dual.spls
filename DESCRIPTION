@@ -26,5 +26,4 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     stats,
-    pdist,
-    mathjaxr
+    pdist
