@@ -1,12 +1,12 @@
 #' Univariate Partial Least Squares regression
 #' @description
-#' The function \code{d.spls.lasso} performs the PLS1 dimensional reduction methodology using Wold's NIPALS algorithm. It is
+#' The function \code{d.spls.pls} performs the PLS1 dimensional reduction methodology using Wold's NIPALS algorithm. It is
 #' a Dual-SPLS regression with the norm \deqn{\Omega(w)=\|w\|_2.}
-#' @usage d.spls.pls(X,y,ncp,verbose=FALSE)
+#' @usage d.spls.pls(X,y,ncp,verbose=TRUE)
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
-#' @param verbose a boolean value indicating whether or not to diplay the iterations steps. Default value is \code{FALSE}.
+#' @param verbose a Boolean value indicating whether or not to display the iterations steps. Default value is \code{TRUE}.
 #' @details
 #'
 #' The resulting solution for \eqn{w} and hence for the coefficients vector, in the PLS regression for one component is
@@ -23,6 +23,8 @@
 #' \item{fitted.values}{the matrix of dimension \code{(n,ncp)} that represents the predicted values of \code{y}}
 #' \item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
 #'  to the difference between the responses and the fitted values.}
+#' @references
+#' H. Wold. Path Models with Latent Variables: The NIPALS Approach. In H.M. Blalock et al., editor, Quantitative Sociology: International Perspectives on Mathematical and Statistical Model Building, pages 307–357. Academic Press, 1975.
 #' @author Louna Alsouki François Wahl
 #' @seealso `browseVignettes("dual.spls")`
 #'
@@ -58,7 +60,7 @@
 #'     ylab='',xlab='' )
 #' @export
 #'
-d.spls.pls<- function(X,y,ncp,verbose=FALSE)
+d.spls.pls<- function(X,y,ncp,verbose=TRUE)
 {
 
   ###################################
