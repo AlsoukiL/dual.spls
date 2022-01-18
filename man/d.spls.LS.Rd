@@ -4,7 +4,7 @@
 \alias{d.spls.LS}
 \title{Dual Sparse Partial Least Squares (Dual-SPLS) regression for the least squares norm}
 \usage{
-d.spls.LS(X,y,ncp,ppnu,verbose=FALSE)
+d.spls.LS(X,y,ncp,ppnu,verbose=TRUE)
 }
 \arguments{
 \item{X}{a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.}
@@ -16,12 +16,12 @@ d.spls.LS(X,y,ncp,ppnu,verbose=FALSE)
 \item{ppnu}{a positive real value, in \eqn{[0,1]}. \code{ppnu} is the desired
 proportion of variables to shrink to zero for each component (see Dual-SPLS methodology).}
 
-\item{verbose}{a boolean value indicating whether or not to diplay the iterations steps. Default value is \code{TRUE}.}
+\item{verbose}{a Boolean value indicating whether or not to display the iterations steps. Default value is \code{TRUE}.}
 }
 \value{
 A \code{list} of the following attributes
 \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-\item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations.The \code{scores} represents
+\item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations. The \code{scores} represents
 the observations in the new component basis computed by the compression step
 of the Dual-SPLS.}
 \item{loadings}{the matrix of dimension \code{(p,ncp)} that represents the Dual-SPLS components.}
@@ -30,15 +30,15 @@ of the Dual-SPLS.}
 \item{fitted.values}{the matrix of dimension \code{(n,ncp)} that represents the predicted values of \code{y}}
 \item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
 to the difference between the responses and the fitted values.}
-\item{zerovar}{the vector of length \code{ncp} representing the number of variables shrinked to zero per component.}
+\item{zerovar}{the vector of length \code{ncp} representing the number of variables shrank to zero per component.}
 }
 \description{
-The function \code{d.spls.lasso} performs dimensional reduction as in PLS1 methodology combined to variable selection via the
+The function \code{d.spls.LS} performs dimensional reduction as in PLS1 methodology combined to variable selection via the
 Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda \|N_1w\|_1 + \|Xw\|_2.}
 }
 \details{
 The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.LS}, has
-a simple closed form expression (ref) deriving from the fact that \eqn{w} is colinear to a vector \eqn{z_{\nu}} of coordinates
+a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu}} of coordinates
 \deqn{z_{\nu_j}=\textrm{sign}(\hat{\beta}_{LS_j})(|\hat{\beta}_{LS_j}|-\nu)_+.}
 Here \eqn{\nu} is the threshold for which \code{ppnu} of
 the absolute values of the coordinates of \eqn{\hat{\beta}_{LS}} are greater than \eqn{\nu} where \eqn{\hat{\beta}_{LS}=(X^TX)^{-1}X^Ty}.
@@ -65,7 +65,7 @@ str(mod.dspls)
 
 ### plotting the observed values VS predicted values
 plot(y,mod.dspls$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
- main="Observed VS Predicted for 6 components")
+main="Observed VS Predicted for 6 components")
 points(-1000:1000,-1000:1000,type='l')
 
 ### plotting the regression coefficients
