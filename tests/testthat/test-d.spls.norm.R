@@ -1,16 +1,15 @@
-
+test_that("d.spls.norm works", {
 
 #Data1
 vec=1:100
 
 #Positive value
-test_that("norm1", {expect_gt(d.spls.norm1(vec),0)})
-test_that("norm2", {expect_gt(d.spls.norm2(vec),0)})
+expect_gt(d.spls.norm1(vec),0)
+expect_gt(d.spls.norm2(vec),0)
+
 #equal norm1 and norm2
-
-test_that("norm1", {expect_equal(d.spls.norm1(vec),sum(abs(vec)))})
-test_that("norm2", {expect_equal(d.spls.norm2(vec),sqrt(sum(vec^2)))})
-
+expect_equal(d.spls.norm1(vec),sum(abs(vec)))
+expect_equal(d.spls.norm2(vec),sqrt(sum(vec^2)))
 
 #Data2
 n <- 100
@@ -22,11 +21,11 @@ X <- data$X
 y <- data$y
 
 #Positive value
-test_that("norm1", {expect_gt(d.spls.norm1(y),0)})
-test_that("norm2", {expect_gt(d.spls.norm2(y),0)})
-#equal norm1 and norm2
+expect_gt(d.spls.norm1(y),0)
+expect_gt(d.spls.norm2(y),0)
 
-test_that("norm1", {expect_equal(d.spls.norm1(y),sum(abs(y)))})
-test_that("norm2", {expect_equal(d.spls.norm2(y),sqrt(sum(y^2)))})
+#equal norm1 and norm2
+expect_equal(d.spls.norm1(y),sum(abs(y)))
+expect_equal(d.spls.norm2(y),sqrt(sum(y^2)))})
 
 

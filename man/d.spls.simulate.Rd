@@ -23,9 +23,9 @@ vector \code{y}.}
 }
 \value{
 A \code{list} of the following attributes
-\item{X}{the concatunated predictors matrix.}
+\item{X}{the concatenated predictors matrix.}
 \item{y}{the response vector.}
-\item{y0}{the reponse vector without noise \code{sigmay}.}
+\item{y0}{the response vector without noise \code{sigmay}.}
 \item{sigmay}{the uncertainty on \code{y}.}
 \item{sigmaondes}{the standard deviation of the Gaussians.}
 \item{G}{the number of groups.}
@@ -36,7 +36,7 @@ a data set of predictors \code{X} and response \code{y} in a way that \code{X} c
 the values of \code{y} depend on the values of \code{X}.
 }
 \details{
-The predictors matrix \code{X} is a concatunations of \code{G} predictors sub matrices. Each is computed using
+The predictors matrix \code{X} is a concatenations of \code{G} predictors sub matrices. Each is computed using
 a mixture of Gaussian i.e. summing the following Gaussians:
 \deqn{A \exp{(-\frac{(\textrm{xech}-\mu)^2}{2 \sigma^2})}}.
 Where
@@ -59,7 +59,7 @@ Where
 \item \eqn{K} is the length of the vector \code{int.coeff},
 \item \eqn{\textrm{sum}X^{g}} is a matrix of \eqn{n} rows and \eqn{K} columns.
 The values of the column \eqn{k} are the sum of selected parts of each row of the sub matrix \eqn{X^g}. The columns of \eqn{X^g} are
-seperated equally and each part is used for the \eqn{K} columns of \eqn{\textrm{sum}X^{g}}.
+separated equally and each part is used for the \eqn{K} columns of \eqn{\textrm{sum}X^{g}}.
 }
 }
 \examples{

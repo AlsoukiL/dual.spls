@@ -68,7 +68,7 @@ d.spls.predict<- function(mod.spls,X,liste_cp)
 
   ncp=length(liste_cp)
 
-  # predictions on validation
+  # predictions on X
   M1=matrix(mod.spls$intercept[liste_cp],ncp,n)
   M1=t(M1)
   yhat=X %*% mod.spls$Bhat[,liste_cp] + M1

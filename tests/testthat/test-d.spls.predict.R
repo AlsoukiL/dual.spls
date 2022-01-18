@@ -1,5 +1,5 @@
-### load dual.spls library
-library(dual.spls)
+test_that("d.spls.predict works", {
+
 ### parameters
 n <- 100
 p <- 50
@@ -35,12 +35,9 @@ liste_cp=1:ncp
 yvalhat=d.spls.predict(mod.dspls,Xval, liste_cp=liste_cp)
 
 #Dimension testing
-test_that("yhat", {
-  expect_equal(dim(yvalhat), c(length(indval),length(liste_cp)))
-               })
+expect_equal(dim(yvalhat), c(length(indval),length(liste_cp)))
 
-#Prediction testing testing
-test_that("ycal prediction", {
-  expect_setequal(ycalhat, d.spls.predict(mod.dspls,Xcal, liste_cp=1:ncp))
+#Prediction testing
+expect_setequal(ycalhat, d.spls.predict(mod.dspls,Xcal, liste_cp=1:ncp))
   })
 

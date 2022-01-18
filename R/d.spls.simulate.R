@@ -13,7 +13,7 @@
 #' @param int.coef a numeric vector of the coefficients of the linear combination in the construction of the response
 #' vector \code{y}.
 #' @details
-#' The predictors matrix \code{X} is a concatunations of \code{G} predictors sub matrices. Each is computed using
+#' The predictors matrix \code{X} is a concatenations of \code{G} predictors sub matrices. Each is computed using
 #' a mixture of Gaussian i.e. summing the following Gaussians:
 #' \deqn{A \exp{(-\frac{(\textrm{xech}-\mu)^2}{2 \sigma^2})}}.
 #' Where
@@ -36,13 +36,13 @@
 #' \item \eqn{K} is the length of the vector \code{int.coeff},
 #' \item \eqn{\textrm{sum}X^{g}} is a matrix of \eqn{n} rows and \eqn{K} columns.
 #' The values of the column \eqn{k} are the sum of selected parts of each row of the sub matrix \eqn{X^g}. The columns of \eqn{X^g} are
-#' seperated equally and each part is used for the \eqn{K} columns of \eqn{\textrm{sum}X^{g}}.
+#' separated equally and each part is used for the \eqn{K} columns of \eqn{\textrm{sum}X^{g}}.
 #' }
 #'
 #' @return A \code{list} of the following attributes
-#' \item{X}{the concatunated predictors matrix.}
+#' \item{X}{the concatenated predictors matrix.}
 #' \item{y}{the response vector.}
-#' \item{y0}{the reponse vector without noise \code{sigmay}.}
+#' \item{y0}{the response vector without noise \code{sigmay}.}
 #' \item{sigmay}{the uncertainty on \code{y}.}
 #' \item{sigmaondes}{the standard deviation of the Gaussians.}
 #' \item{G}{the number of groups.}
@@ -129,12 +129,13 @@ d.spls.simulate<- function(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5,int.
       stop("dimensions of sigmaondes and p differ")
     }
   }
-  X=matrix(0,n,sum(p)) #initializing the predictors matrix X
+  X=matrix(0,n,sum(p)) # initializing the predictors matrix X
 
-  ampl=matrix(runif(nondes[1]*n),nrow=n, ncol=nondes[1])
-  modes=runif(nondes[1])
-  xech=seq(0,1,length.out=p[1]) #setting the p variables
+  ampl=matrix(runif(nondes[1]*n),nrow=n, ncol=nondes[1]) # initializing amplitude of each Gaussian
+  modes=runif(nondes[1]) # choosing the random Gaussian means
+  xech=seq(0,1,length.out=p[1]) # setting the p variables
 
+  # computing the first mixture
   for (j in 1:n){
 
     for (io in 1:nondes[1]){
@@ -142,6 +143,7 @@ d.spls.simulate<- function(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5,int.
     }
   }
 
+  # computing the rest of the mixture if one chooses to simulate concatenated X
   if (length(p)>1)
   {
     for (i in 2:length(p))
@@ -158,11 +160,11 @@ d.spls.simulate<- function(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5,int.
     }
   }
 
-  y0=rep(0,n) #initializing the response vector without noise y0
-  #Setting the interval limits for y0
+  y0=rep(0,n) # initializing the response vector without noise y0
+  # setting the interval limits for y0
   pif=round(seq(10,100,length.out = 2*length(int.coef))*p[1]/100)
 
-  #Computing y0 as a sum of intervals of X
+  # computing y0 as a sum of intervals of X
   sumX=matrix(0,n,length(int.coef))
   for (i in 1:length(int.coef))
   {

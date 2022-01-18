@@ -27,7 +27,7 @@ penalization that leads to sparse regression coefficients for variable selection
 where
 \eqn{\sum\limits_{g=1}^G \alpha_g=\sum\limits_{g=1}^G \gamma_g=1} \cr and \eqn{\Omega(w_g)=\gamma_g},
 \item Norm C: \eqn{\Omega(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} where
-\eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1; \sum\limits_{g=1}^G \alpha_g=1},
+\eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1 \textrm{ and } \sum\limits_{g=1}^G \alpha_g=1},
 }
 where \eqn{G} is the number of groups and \eqn{\alpha_g}, \eqn{\lambda_g} and \eqn{\gamma_g} are all positive scalars.
 \item Least Squares: \eqn{\Omega(w)=\lambda \|N_1w\|_1 + \|Xw\|_2} where \eqn{N_1} is a matrix and \eqn{\lambda} is a positive scalar,
@@ -36,7 +36,8 @@ where \eqn{G} is the number of groups and \eqn{\alpha_g}, \eqn{\lambda_g} and \e
 This package also suggests \itemize{
 \item a calibration and validation method based on a modified version of the Kennard
 and Stone Algorithm,
-\item a function that simulates data composed of Gaussian mixtures.
+\item a function that simulates data composed of Gaussian mixtures,
+\item a function that chooses the number of components according to the cross validation procedure.
 }
 }
 \seealso{
