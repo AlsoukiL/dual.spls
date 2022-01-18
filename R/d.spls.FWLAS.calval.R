@@ -2,20 +2,20 @@
 #' @description
 #' The function \code{d.spls.FWLAS.calval} divides the data \code{X} into a calibration and a validation. According to the values
 #' of the response vector, the observations are divided into groups. The Method uses
-#' the Kennard and Stone startegy for each group at a time and according to the number of calibration desired
+#' the Kennard and Stone strategy for each group at a time and according to the number of calibration desired
 #' from each group, it selects the calibration points.
 #' @usage d.spls.FWLAS.calval(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
 #' @param X a numeric matrix of predictors values.
 #' @param pcal a positive integer between 0 and 100. \code{pcal} is the percentage
 #' of calibration samples to be selected. Default value is NULL, meaning as long as \code{Listecal} is
 #' specified, \code{pcal} is not necessary.
-#' @param Datatype A vecor of index specifying each observation belonging to wich group index.
+#' @param Datatype A vector of index specifying each observation belonging to wich group index.
 #' Default value is \code{NULL}, meaning the function will use the internal function \code{type} to compute the vector for \code{ncells}.
 #' If \code{NULL}, parameter \code{y} should be specified.
 #' @param y a numeric vector of responses. Default value is \code{NULL}, meaning as long as \code{Datatype} is specified,
 #' \code{y} is not necessary.
 #' @param ncells a positive integer. \code{ncells} is the number of groups dividing the observations. If
-#' \code{Datatype} is not specified, the function devides the observations into \code{ncells} groups. Default value
+#' \code{Datatype} is not specified, the function divides the observations into \code{ncells} groups. Default value
 #' is \code{10}.
 #' @param Listecal a numeric vector specifying how many observations from each group should be selected as calibration.
 #' Default value is \code{NULL}, meaning the function will consider a percentage of \code{pcal} from each group
@@ -34,7 +34,7 @@
 #' the concerned group and each \eqn{P_{i,cal}} from the calibration set. The selected candidate verify the following distance:
 #' \deqn{d_{selected}=\max\limits_{P_{i,g}} ( \min\limits_{P_{i,cal}} (d_{P_{i,g},P_{i,cal}}) )}
 #'
-#' Once each of the vector \code{Listecal} elements are null, the procedure is done.
+#' Once each of the vector \code{Listecal} elements are null; the procedure is done.
 #' @return A \code{list} of the following attributes
 #' \item{indcal}{a numeric vector giving the row indices of the input data selected for calibration.}
 #' \item{indval}{a numeric vector giving the row indices of the remaining observations.}

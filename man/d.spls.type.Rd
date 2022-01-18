@@ -12,7 +12,7 @@ d.spls.type(y, ncells)
 \item{ncells}{a positive integer. \code{ncells} is the number of subsamples desired.}
 }
 \value{
-A vecor of index specifying each observation belonging to wich group index.
+A vector of index specifying each observation belonging to which group index.
 }
 \description{
 The internal function \code{type} divides the response vector \code{y} in \code{cells}

@@ -2,10 +2,10 @@
 #' @keywords internal
 #' @description
 #' The function \code{d.spls.calval} divides the data \code{X} into a calibration and a validation set using
-#' the Kennard and Stone startegy for each group at a time and according to the number of calibration desired
+#' the Kennard and Stone strategy for each group at a time and according to the number of calibration desired
 #' from each group.
 #' @param X a numeric matrix.
-#' @param Xtype a vector of index specifying to wich group belongs each observation.
+#' @param Xtype a vector of index specifying to which group belongs each observation.
 #' @param Listecal a vector specifying how many observations from each group should be selected as calibration.
 #' @return a numeric vector giving the row indices of the input data selected for calibration
 #' @author Louna Alsouki François Wahl
@@ -47,10 +47,10 @@ d.spls.calval<- function(X,Xtype,Listecal)
 
   ###################################
 
-  # Centroid of X
+  # centroid of X
   G=apply(X,2,mean)
 
-  # Distance matrix between each observation of X and the centroid
+  # distance matrix between each observation of X and the centroid
   D_XG=as.matrix(pdist::pdist(X,Y=G))
   # the furthest observation from the centroid
   N=which.max(D_XG)
@@ -58,14 +58,15 @@ d.spls.calval<- function(X,Xtype,Listecal)
   # first element of indcal
   ical=1
   indcal[ical]=N
-  # The group to which it belongs
+
+  # the group to which it belongs
   Listecal[Xtype[N]]=Listecal[Xtype[N]]-1
 
-  #the counter index
+  # the counter index
   i=Xtype[indcal[1]]
   while (sum(Listecal)>0)
   {
-    # Finding which group to consider next
+    # finding which group to consider next
     for (i1 in ((i+1):(i+n_grp))){
       if (i1 <= n_grp)
         igr=i1
@@ -77,7 +78,7 @@ d.spls.calval<- function(X,Xtype,Listecal)
     }
     i=igr
 
-    # Find the maxmin point for calibration
+    # find the maxmin point for calibration
     indreste=1:n_exp
     indreste=indreste[-indcal]
     indreste=indreste[Xtype[indreste]==igr]

@@ -1,3 +1,4 @@
+test_that("d.spls.FWLAS.calval works", {
 
 n <- 100
 p <- 50
@@ -13,8 +14,9 @@ Datatype <- d.spls.type(y,ncells=ncells)
 
 pcal <- 70
 #Error testing
-test_that("Error testing", {expect_error(d.spls.FWLAS.calval(X,pcal=pcal,ncells=10))})
-test_that("Error testing", {expect_error(d.spls.FWLAS.calval(X,Datatype=Datatype,ncells=10))})
+expect_error(d.spls.FWLAS.calval(X,pcal=pcal,ncells=10))
+expect_error(d.spls.FWLAS.calval(X,Datatype=Datatype,ncells=10))
+
 L1=floor(0.7*length(which(Datatype==1)))
 L2=floor(0.8*length(which(Datatype==2)))
 L3=floor(0.6*length(which(Datatype==3)))
@@ -33,11 +35,11 @@ test0=which(index.cal==0)
 ycounts=sapply(1:ncells,function(u) sum(Datatype==u) )
 Listecal=ceiling(ycounts*pcal/100)
 
-test_that("number of calibration points", {
+# number of calibration points
   expect_equal(length(index.cal), sum(Listecal))
-})
 
-test_that("content of calibration index vector", {
+
+# content of calibration index vector"
   expect_equal(test0, integer())
 })
 

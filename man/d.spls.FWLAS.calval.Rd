@@ -13,7 +13,7 @@ d.spls.FWLAS.calval(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
 of calibration samples to be selected. Default value is NULL, meaning as long as \code{Listecal} is
 specified, \code{pcal} is not necessary.}
 
-\item{Datatype}{A vecor of index specifying each observation belonging to wich group index.
+\item{Datatype}{A vector of index specifying each observation belonging to wich group index.
 Default value is \code{NULL}, meaning the function will use the internal function \code{type} to compute the vector for \code{ncells}.
 If \code{NULL}, parameter \code{y} should be specified.}
 
@@ -21,7 +21,7 @@ If \code{NULL}, parameter \code{y} should be specified.}
 \code{y} is not necessary.}
 
 \item{ncells}{a positive integer. \code{ncells} is the number of groups dividing the observations. If
-\code{Datatype} is not specified, the function devides the observations into \code{ncells} groups. Default value
+\code{Datatype} is not specified, the function divides the observations into \code{ncells} groups. Default value
 is \code{10}.}
 
 \item{Listecal}{a numeric vector specifying how many observations from each group should be selected as calibration.
@@ -36,7 +36,7 @@ A \code{list} of the following attributes
 \description{
 The function \code{d.spls.FWLAS.calval} divides the data \code{X} into a calibration and a validation. According to the values
 of the response vector, the observations are divided into groups. The Method uses
-the Kennard and Stone startegy for each group at a time and according to the number of calibration desired
+the Kennard and Stone strategy for each group at a time and according to the number of calibration desired
 from each group, it selects the calibration points.
 }
 \details{
@@ -53,7 +53,7 @@ When there is more than one calibration sample, the procedure computes the dista
 the concerned group and each \eqn{P_{i,cal}} from the calibration set. The selected candidate verify the following distance:
 \deqn{d_{selected}=\max\limits_{P_{i,g}} ( \min\limits_{P_{i,cal}} (d_{P_{i,g},P_{i,cal}}) )}
 
-Once each of the vector \code{Listecal} elements are null, the procedure is done.
+Once each of the vector \code{Listecal} elements are null; the procedure is done.
 }
 \examples{
 ### load dual.spls library

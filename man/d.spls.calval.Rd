@@ -9,7 +9,7 @@ d.spls.calval(X, Xtype, Listecal)
 \arguments{
 \item{X}{a numeric matrix.}
 
-\item{Xtype}{a vector of index specifying to wich group belongs each observation.}
+\item{Xtype}{a vector of index specifying to which group belongs each observation.}
 
 \item{Listecal}{a vector specifying how many observations from each group should be selected as calibration.}
 }
@@ -18,7 +18,7 @@ a numeric vector giving the row indices of the input data selected for calibrati
 }
 \description{
 The function \code{d.spls.calval} divides the data \code{X} into a calibration and a validation set using
-the Kennard and Stone startegy for each group at a time and according to the number of calibration desired
+the Kennard and Stone strategy for each group at a time and according to the number of calibration desired
 from each group.
 }
 \seealso{

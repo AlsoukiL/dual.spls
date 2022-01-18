@@ -1,3 +1,4 @@
+test_that("d.spls.calval works", {
 
 n <- 100
 p <- 50
@@ -18,10 +19,11 @@ Listecal <- ceiling(ycounts*pcal/100)
 index.cal <- d.spls.calval(X,Datatype,Listecal)
 
 test0=which(index.cal==0)
-test_that("number of calibration points", {
-  expect_equal(length(index.cal), sum(Listecal))
-})
 
-test_that("content of calibration index vector", {
+# number of calibration points
+expect_equal(length(index.cal), sum(Listecal))
+
+
+# content of calibration index vector"
   expect_equal(test0, integer())
 })
