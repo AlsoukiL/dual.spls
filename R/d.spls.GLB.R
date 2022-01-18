@@ -1,25 +1,25 @@
 #' Dual Sparse Partial Least Squares (Dual-SPLS) regression for the group lasso norm B
 #' @keywords internal
 #' @description
-#' The function \code{d.spls.GLB} performs dimentional reduction as in PLS methodology combined to variable selection using the
+#' The function \code{d.spls.GLB} performs dimensional reduction as in PLS methodology combined to variable selection using the
 #' Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1} for combined data where
 #' \eqn{\sum\limits_{g=1}^G \alpha_g=1; \Omega(w_g)=\gamma_g ;\sum\limits_{g=1}^G \gamma_g=1}. Where \code{G} is the number of groups.
 #' Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 #' variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 #' threshold as in the dual sparse lasso methodology,
-#' that is each \eqn{w_g} will be colinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
+#' that is each \eqn{w_g} will be collinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
 #' and constrained by the threshold \eqn{\nu_g}. Norm B assigns user to define weights for each group.
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
-#' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each converstation.
+#' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
 #' @param ppnu a positive real value or a vector of length the number of groups, in \eqn{[0,1]}.
 #' \code{ppnu} is the desired proportion of variables to shrink to zero for each component and for each group.
 #' @param indG a numeric vector of group index for each observation.
 #' @param gamma a numeric vector of the norm \eqn{\Omega} for each \eqn{w_g} verifying \eqn{\sum\sum\limits_{g=1}^G \gamma_g=1}.
-#' @param verbose a boolean value indicating whether or not to diplay the iterations steps.
+#' @param verbose a Boolean value indicating whether or not to display the iterations steps.
 #' @return A \code{list} of the following attributes
 #' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-#' \item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations.The \code{scores} represents
+#' \item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations. The \code{scores} represents
 #' the observations in the new component basis computed by the compression step
 #' of the Dual-SPLS.}
 #' \item{loadings}{the matrix of dimension \code{(p,ncp)} that represents the Dual-SPLS components.}
@@ -30,7 +30,7 @@
 #'  to the difference between the responses and the fitted values.}
 #' \item{lambda}{the matrix of dimension \code{(G,ncp)} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group.}
 #' \item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group.}
-#' \item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrinked to zero per component and per group.}
+#' \item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrank to zero per component and per group.}
 #' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.GLA()],[dual.spls::d.spls.GLC()],[dual.spls::d.spls.GL()],`browseVignettes("dual.spls")`
 #'
@@ -50,17 +50,17 @@ d.spls.GLB<- function(X,y,ncp,ppnu,indG,gamma,verbose=FALSE)
   ###################################
   # Dimensions
   ###################################
-  n=length(y) #Number of observations
-  p=dim(X)[2] #Number of variables
+  n=length(y) # number of observations
+  p=dim(X)[2] # number of variables
 
   ###################################
   # Centering Data
   ###################################
-  Xm = apply(X, 2, mean) #Mean of X
-  Xc=X - rep(1,n) %*% t(Xm) #Centering predictor matrix
+  Xm = apply(X, 2, mean) # mean of X
+  Xc=X - rep(1,n) %*% t(Xm) # centering predictor matrix
 
-  ym=mean(y) #Mean of y
-  yc=y-ym #Centering response vector
+  ym=mean(y) # mean of y
+  yc=y-ym # centering response vector
 
   ###################################
   # Initialisation
@@ -68,43 +68,42 @@ d.spls.GLB<- function(X,y,ncp,ppnu,indG,gamma,verbose=FALSE)
   nG=max(indG) #Number of groups
   PP=sapply(1:nG, function(u) sum(indG==u) )
 
-  WW=matrix(0,p,ncp) #Initialising W, the matrix of loadings
-  TT=matrix(0,n,ncp) #Initialising T, the matrix of scores
-  Bhat=matrix(0,p,ncp) #Initialising the matrix of coefficients
-  YY=matrix(0,n,ncp) #Initialising the matrix of coefficients
-  RES=matrix(0,n,ncp) #Initialising the matrix of coefficients
-  intercept=rep(0,ncp)
-  zerovar=matrix(0,nG,ncp)
-  listelambda=matrix(0,nG,ncp)
-  listealpha=matrix(0,nG,ncp)
+  WW=matrix(0,p,ncp) # initializing WW, the matrix of loadings
+  TT=matrix(0,n,ncp) # initializing TT, the matrix of scores
+  Bhat=matrix(0,p,ncp) # initializing Bhat, the matrix of coefficients
+  YY=matrix(0,n,ncp) # initializing YY, the matrix of coefficients
+  RES=matrix(0,n,ncp) # initializing RES, the matrix of coefficients
+  intercept=rep(0,ncp) # initializing intercept, the vector of intercepts
+  zerovar=matrix(0,nG,ncp) # initializing zerovar, the matrix of final number of zeros coefficients for each component and for each group
+  listelambda=matrix(0,nG,ncp) # initializing listelambda, the matrix of values of lambda for each group
+  listealpha=matrix(0,nG,ncp) # initializing listealpha, the matrix of values of alpha for each group
 
-
-  nu=array(0,nG) #Initialising nu for each group
-  lambda=array(0,nG) #Initialising lambda for each group
-  alpha=array(0,nG) #Initialising alpha for each group
-  Znu=array(0,p) #Initialising Znu for each group
-  w=array(0,p) #Initialising w for each group
-  norm2Znu=array(0,nG) #Initialising norm2 of Znu for each group
-  norm1Znu=array(0,nG) #Initialising norm1 of Znu for each group
+  nu=array(0,nG) # initializing nu for each group
+  lambda=array(0,nG) # initializing lambda for each group
+  alpha=array(0,nG) # initialising alpha for each group
+  Znu=array(0,p) # initializing Znu for each group
+  w=array(0,p) # initializing w for each group
+  norm2Znu=array(0,nG) # initializing norm2 of Znu for each group
+  norm1Znu=array(0,nG) # initializing norm1 of Znu for each group
 
   ###################################
   # Dual-SPLS
   ###################################
 
-  #Each step ic in -for loop- determine the icth column of each W, T and Bhat
-  Xdef=Xc #Initialising X for Deflation Step
+  # each step ic in -for loop- determine the icth column or element of each element initialized
+  Xdef=Xc # initializing X for Deflation Step
   for (ic in 1:ncp)
   {
 
-    Z=t(Xdef)%*%yc #For cov(t(X)y,w)=0, w must be colinear to t(X)y ==> Z=t(X)y
+    Z=t(Xdef)%*%yc
     Z=as.vector(Z)
 
     for( ig in 1:nG)
     {
-      #Index of the group
+      # index of the group
       ind=which(indG==ig)
 
-      #Optimizing nu(g)
+      # optimizing nu(g)
       Zs=sort(abs(Z[ind]))
       d=length(Zs)
       Zsp=(1:d)/d
@@ -113,10 +112,8 @@ d.spls.GLB<- function(X,y,ncp,ppnu,indG,gamma,verbose=FALSE)
       nu[ig]=Zs[iz] #
       ###########
 
-      # finding lambda, mu, given nu
+      # finding mu, given nu
       Znu[ind]=sapply(Z[ind],function(u) sign(u)*max(abs(u)-nu[ig],0))
-      #Znu2=d.spls.norm2(Znu)
-      #Znu1=d.spls.norm1(Znu)
 
       ##########Norm 1 of Znu(g)#############
       norm1Znu[ig]=d.spls.norm1(Znu[ind])
@@ -126,50 +123,59 @@ d.spls.GLB<- function(X,y,ncp,ppnu,indG,gamma,verbose=FALSE)
     }
     #######################
     mu=sum(norm2Znu)
-
     #######################
 
     for ( igg in 1:nG)
     {
-      #Index of the group
+      # index of the group
       ind=which(indG==igg)
+      # finding alpha and lambda, given nu
       ######################
       alpha[igg]=norm2Znu[igg]/mu
       ######################
       lambda[igg]=nu[igg]/mu #
       ######################
 
-      # calculating w,t at the optimum
+      # calculating w, at the optimum
       w[ind]=(gamma[igg]*Znu[ind])/(alpha[igg]*norm2Znu[igg]+lambda[igg]*norm1Znu[igg])
     }
 
-    #Finding T
+    # finding WW
+    WW[,ic]=w
+
+    # finding TT
     t=Xdef%*%w
     t=t/d.spls.norm2(t)
-
-    WW[,ic]=w
     TT[,ic]=t
 
-    #Deflation
+    # deflation
     Xdef=Xdef-t%*%t(t)%*%Xdef
 
-    #Coefficient vectors
+    # coefficient vectors
     R=t(TT[,1:ic,drop=FALSE])%*%Xc%*%WW[,1:ic,drop=FALSE]
     R[row(R)>col(R)]<-0 # inserted for numerical stability
 
     L=backsolve(R,diag(ic))
     Bhat[,ic]=WW[,1:ic,drop=FALSE]%*%(L%*%(t(TT[,1:ic,drop=FALSE])%*%yc))
 
+    # lambda
     listelambda[,ic]=lambda
+
+    # alpha
     listealpha[,ic]=alpha
+
+    # intercept
     intercept[ic] = ym - Xm %*% Bhat[,ic]
 
+    #zerovar
     zerovar[,ic]=sapply(1:nG, function(u) {
       indu=which(indG==u)
       sum(Bhat[indu,ic]==0)})
 
-    #Predictions
+    # predictions
     YY[,ic]=X %*% Bhat[,ic] + intercept[ic]
+
+    # residuals
     RES[,ic]=y-YY[,ic]
 
     # results iteration

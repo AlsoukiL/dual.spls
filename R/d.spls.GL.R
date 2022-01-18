@@ -14,7 +14,7 @@
 #' Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 #' variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 #' threshold as in the dual sparse lasso methodology,
-#' that is each \eqn{w_g} will be colinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
+#' that is each \eqn{w_g} will be collinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
 #' and constrained by the threshold \eqn{\nu_g}.
 #'
 #' Three variants are defined here depending on the groups combination in the global norm and the weights
@@ -22,18 +22,19 @@
 #' \itemize{
 #' \item Norm A is the genuine alternative, it gives the same result as the lasso norm for \eqn{G=1},
 #' \item Norm B assigns user to define weights for each group,
-#' \item Norm C applies the lasso norm for each group individually while constraining the overall norm.
+#' \item Norm C applies the lasso norm for each group individually while constraining the overall norm. Moreover,
+#' the Euclidian norm of each \eqn{w_g} is computed while minimizing the root mean squares error of prediction.
 #' }
 #' @usage d.spls.GL(X,y,ncp,ppnu,indG,gamma=NULL,norm="A",verbose=FALSE)
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
-#' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each converstation.
+#' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
 #' @param ppnu a positive real value or a vector of length the number of groups, in \eqn{[0,1]}.
 #' \code{ppnu} is the desired proportion of variables to shrink to zero for each component and for each group.
 #' @param indG a numeric vector of group index for each observation.
 #' @param gamma a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{norm="B"}.
 #' @param norm a character specifying the norm chosen between A, B and C. Default value is \code{A}.
-#' @param verbose a boolean value indicating whether or not to diplay the iterations steps. Default value is \code{FALSE}.
+#' @param verbose a Boolean value indicating whether or not to display the iterations steps. Default value is \code{FALSE}.
 #' @details
 #' The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.GL}, has
 #' a simple closed form expression (ref) deriving from the fact that for each group \eqn{g}, \eqn{w_g}
@@ -43,7 +44,7 @@
 #' the absolute values of the coordinates of \eqn{z_j} are greater than \eqn{\nu_g}.
 #' @return A \code{list} of the following attributes
 #' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-#' \item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations.The \code{scores} represents
+#' \item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations. The \code{scores} represents
 #' the observations in the new component basis computed by the compression step
 #' of the Dual-SPLS.}
 #' \item{loadings}{the matrix of dimension \code{(p,ncp)} that represents the Dual-SPLS components.}
@@ -51,10 +52,10 @@
 #' \item{intercept}{the vector of length \code{ncp} representing the intercept values for each component.}
 #' \item{fitted.values}{the matrix of dimension \code{(n,ncp)} that represents the predicted values of \code{y}}
 #' \item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
-#'  to the difference between the responses and the fitted values.}
+#' to the difference between the responses and the fitted values.}
 #' \item{lambda}{the matrix of dimension \code{(G,ncp)} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group.}
 #' \item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group when the norm chosen is \code{B} or \code{C}.}
-#' \item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrinked to zero per component and per group.}
+#' \item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrank to zero per component and per group.}
 #' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.GLA()], [dual.spls::d.spls.GLB()], [dual.spls::d.spls.GLC()], `browseVignettes("dual.spls")`
 #'
@@ -115,7 +116,7 @@
 #'
 #' ### plotting the observed values VS predicted values
 #' plot(y,mod.dsplsB$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
-#'  main="Observed VS Predicted for 6 components")
+#' main="Observed VS Predicted for 6 components")
 #' points(-1000:1000,-1000:1000,type='l')
 #'
 #' ### plotting the regression coefficients
@@ -140,7 +141,7 @@
 #'
 #' ### plotting the observed values VS predicted values
 #' plot(y,mod.dsplsC$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
-#'  main="Observed VS Predicted for 6 components")
+#' main="Observed VS Predicted for 6 components")
 #' points(-1000:1000,-1000:1000,type='l')
 #'
 #' ### plotting the regression coefficients
