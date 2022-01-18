@@ -9,7 +9,7 @@ d.spls.GL(X,y,ncp,ppnu,indG,gamma=NULL,norm="A",verbose=FALSE)
 \arguments{
 \item{X}{a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.}
 
-\item{y}{a numeric vector or a one column matrix of responses. It represents the response variable for each converstation.}
+\item{y}{a numeric vector or a one column matrix of responses. It represents the response variable for each observation.}
 
 \item{ncp}{a positive integer. \code{ncp} is the number of Dual-SPLS components.}
 
@@ -22,12 +22,12 @@ d.spls.GL(X,y,ncp,ppnu,indG,gamma=NULL,norm="A",verbose=FALSE)
 
 \item{norm}{a character specifying the norm chosen between A, B and C. Default value is \code{A}.}
 
-\item{verbose}{a boolean value indicating whether or not to diplay the iterations steps. Default value is \code{FALSE}.}
+\item{verbose}{a Boolean value indicating whether or not to display the iterations steps. Default value is \code{FALSE}.}
 }
 \value{
 A \code{list} of the following attributes
 \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-\item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations.The \code{scores} represents
+\item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations. The \code{scores} represents
 the observations in the new component basis computed by the compression step
 of the Dual-SPLS.}
 \item{loadings}{the matrix of dimension \code{(p,ncp)} that represents the Dual-SPLS components.}
@@ -38,7 +38,7 @@ of the Dual-SPLS.}
 to the difference between the responses and the fitted values.}
 \item{lambda}{the matrix of dimension \code{(G,ncp)} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group.}
 \item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group when the norm chosen is \code{B} or \code{C}.}
-\item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrinked to zero per component and per group.}
+\item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrank to zero per component and per group.}
 }
 \description{
 The function performs dimensional reduction with the group lasso norms. Three norms are available
@@ -55,7 +55,7 @@ for the observations belonging to the group \eqn{g} and \eqn{\alpha_g}, \eqn{\la
 Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 threshold as in the dual sparse lasso methodology,
-that is each \eqn{w_g} will be colinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
+that is each \eqn{w_g} will be collinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
 and constrained by the threshold \eqn{\nu_g}.
 
 Three variants are defined here depending on the groups combination in the global norm and the weights
@@ -63,7 +63,8 @@ assigned to each group.
 \itemize{
 \item Norm A is the genuine alternative, it gives the same result as the lasso norm for \eqn{G=1},
 \item Norm B assigns user to define weights for each group,
-\item Norm C applies the lasso norm for each group individually while constraining the overall norm.
+\item Norm C applies the lasso norm for each group individually while constraining the overall norm. Moreover,
+the Euclidian norm of each \eqn{w_g} is computed while minimizing the root mean squares error of prediction.
 }
 }
 \details{
@@ -130,7 +131,7 @@ str(mod.dsplsB)
 
 ### plotting the observed values VS predicted values
 plot(y,mod.dsplsB$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
- main="Observed VS Predicted for 6 components")
+main="Observed VS Predicted for 6 components")
 points(-1000:1000,-1000:1000,type='l')
 
 ### plotting the regression coefficients
@@ -155,7 +156,7 @@ str(mod.dsplsC)
 
 ### plotting the observed values VS predicted values
 plot(y,mod.dsplsC$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
- main="Observed VS Predicted for 6 components")
+main="Observed VS Predicted for 6 components")
 points(-1000:1000,-1000:1000,type='l')
 
 ### plotting the regression coefficients

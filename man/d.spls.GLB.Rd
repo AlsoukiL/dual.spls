@@ -9,7 +9,7 @@ d.spls.GLB(X, y, ncp, ppnu, indG, gamma, verbose = FALSE)
 \arguments{
 \item{X}{a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.}
 
-\item{y}{a numeric vector or a one column matrix of responses. It represents the response variable for each converstation.}
+\item{y}{a numeric vector or a one column matrix of responses. It represents the response variable for each observation.}
 
 \item{ncp}{a positive integer. \code{ncp} is the number of Dual-SPLS components.}
 
@@ -20,12 +20,12 @@ d.spls.GLB(X, y, ncp, ppnu, indG, gamma, verbose = FALSE)
 
 \item{gamma}{a numeric vector of the norm \eqn{\Omega} for each \eqn{w_g} verifying \eqn{\sum\sum\limits_{g=1}^G \gamma_g=1}.}
 
-\item{verbose}{a boolean value indicating whether or not to diplay the iterations steps.}
+\item{verbose}{a Boolean value indicating whether or not to display the iterations steps.}
 }
 \value{
 A \code{list} of the following attributes
 \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
-\item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations.The \code{scores} represents
+\item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations. The \code{scores} represents
 the observations in the new component basis computed by the compression step
 of the Dual-SPLS.}
 \item{loadings}{the matrix of dimension \code{(p,ncp)} that represents the Dual-SPLS components.}
@@ -36,16 +36,16 @@ of the Dual-SPLS.}
 to the difference between the responses and the fitted values.}
 \item{lambda}{the matrix of dimension \code{(G,ncp)} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group.}
 \item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group.}
-\item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrinked to zero per component and per group.}
+\item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrank to zero per component and per group.}
 }
 \description{
-The function \code{d.spls.GLB} performs dimentional reduction as in PLS methodology combined to variable selection using the
+The function \code{d.spls.GLB} performs dimensional reduction as in PLS methodology combined to variable selection using the
 Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1} for combined data where
 \eqn{\sum\limits_{g=1}^G \alpha_g=1; \Omega(w_g)=\gamma_g ;\sum\limits_{g=1}^G \gamma_g=1}. Where \code{G} is the number of groups.
 Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 threshold as in the dual sparse lasso methodology,
-that is each \eqn{w_g} will be colinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
+that is each \eqn{w_g} will be collinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
 and constrained by the threshold \eqn{\nu_g}. Norm B assigns user to define weights for each group.
 }
 \seealso{

@@ -3,7 +3,7 @@
 #' @description
 #' The function \code{d.spls.GLC} performs dimensional reduction as in PLS methodology combined to variable selection using the
 #' Dual-SPLS algorithm with the norm \eqn{\Omega_g(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} for combined data where
-#' \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \Omega_g(w)=1; \sum\limits_{g=1}^G \alpha_g=1 \textrm{ and  } \code{G} is the number of groups.
+#' \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \Omega_g(w)=1; \sum\limits_{g=1}^G \alpha_g=1} and \code{G} is the number of groups.
 #' Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 #' variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 #' threshold as in the dual sparse lasso methodology,
@@ -77,7 +77,7 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
   ###################################
   # Dua-SPLS
   ###################################
-  # each step ic in -for loop- determine the icth column of each W, T and Bhat
+  # each step ic in -for loop- determine the icth column or element of each element initialized
   Xdef=Xc # initialising X for Deflation Step
   for (ic in 1:ncp)
   {
