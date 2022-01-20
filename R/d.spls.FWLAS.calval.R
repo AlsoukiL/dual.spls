@@ -21,7 +21,7 @@
 #' Default value is \code{NULL}, meaning the function will consider a percentage of \code{pcal} from each group
 #' to be in the calibration set. If \code{NULL}, parameter \code{pcal} should be specified.
 #' @details
-#' The modified Kennard and Stone algorithm allows to select samples using the classical Kennard and stone on
+#' The FWLAS algorithm allows to select samples using the classical Kennard and stone on
 #' each group of observations one by one. It starts by selecting the point that is the furthest away from the centroid.
 #' This point is assigned as the calibration set and is removed from the list of candidates. Then, it identifies to which
 #' group belongs this first observation and consider the group \eqn{g} that comes after.
@@ -35,9 +35,13 @@
 #' \deqn{d_{selected}=\max\limits_{P_{i,g}} ( \min\limits_{P_{i,cal}} (d_{P_{i,g},P_{i,cal}}) )}
 #'
 #' Once each of the vector \code{Listecal} elements are null; the procedure is done.
+#'
+#' The FWLAS algorithm for only one group corresponds to the classical Kennard and Stone algorithm.
 #' @return A \code{list} of the following attributes
 #' \item{indcal}{a numeric vector giving the row indices of the input data selected for calibration.}
 #' \item{indval}{a numeric vector giving the row indices of the remaining observations.}
+#' @references
+#' Kennard, Ronald W, and Larry A Stone. 1969. “Computer Aided Design of Experiments.” Technometrics 11 (1): 137–48.
 #' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.calval()],[dual.spls::d.spls.type()],`browseVignettes("dual.spls")`
 #'
