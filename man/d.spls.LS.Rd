@@ -31,6 +31,7 @@ of the Dual-SPLS.}
 \item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
 to the difference between the responses and the fitted values.}
 \item{zerovar}{the vector of length \code{ncp} representing the number of variables shrank to zero per component.}
+\item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{LS}. }
 }
 \description{
 The function \code{d.spls.LS} performs dimensional reduction as in PLS1 methodology combined to variable selection via the
@@ -42,24 +43,27 @@ a simple closed form expression (ref) deriving from the fact that \eqn{w} is col
 \deqn{z_{\nu_j}=\textrm{sign}(\hat{\beta}_{LS_j})(|\hat{\beta}_{LS_j}|-\nu)_+.}
 Here \eqn{\nu} is the threshold for which \code{ppnu} of
 the absolute values of the coordinates of \eqn{\hat{\beta}_{LS}} are greater than \eqn{\nu} where \eqn{\hat{\beta}_{LS}=(X^TX)^{-1}X^Ty}.
-Therefore, the least squares norm is adapted to the situation where \eqn{X} is invertible. If the condition is not verified,
+Therefore, the least squares norm is adapted to the situation where \eqn{X^TX} is invertible. The singularity \eqn{X^TX} is tested
+using the function \code{kappa()} in \code{R} that computes the ratio of the largest to the smallest non-zero singular value of the matrix.
+A finite large ratio means that the matrix is close to being singular. If the singularity condition is not verified,
 one might choose to apply the Dual-SPLS for the ridge norm.
 }
 \examples{
 ### load dual.spls library
 library(dual.spls)
 ### parameters
-n <- 100
-p <- 50
-nondes <- 20
-sigmaondes <- 0.5
+set.seed(14)
+n <- 1000
+p <- 40
+nondes <- 100
+sigmaondes <- 0.01
 data=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
 
 X <- data$X
 y <- data$y
 
 #fitting the model
-mod.dspls <- d.spls.LS(X=X,y=y,ncp=10,ppnu=0.9,verbose=TRUE)
+mod.dspls <- d.spls.LS(X=X,y=y,ncp=7,ppnu=0.9,verbose=TRUE)
 
 str(mod.dspls)
 
