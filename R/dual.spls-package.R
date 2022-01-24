@@ -34,13 +34,19 @@
 #' \item a calibration and validation method based on a modified version of the Kennard
 #'  and Stone Algorithm,
 #'\item a function that simulates data composed of Gaussian mixtures,
-#'\item a function that chooses the number of components according to the cross validation procedure.
+#'\item a function that chooses the number of components according to the cross validation procedure,
+#'\item a series of functions that displays results and helps in the interpretations.
 #'}
 #' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.lasso()], [dual.spls::d.spls.LS()], [dual.spls::d.spls.ridge()],
-#' [dual.spls::d.spls.GL()], `browseVignettes("dual.spls")`
+#' [dual.spls::d.spls.GL()]
 #'
 #' @importFrom pdist pdist
 #' @importFrom stats rnorm
 #' @importFrom stats runif
+#' @importFrom graphics points
+#' @importFrom graphics par
+#' @importFrom graphics legend
+#' @importFrom graphics plot
+#'
 "_PACKAGE"

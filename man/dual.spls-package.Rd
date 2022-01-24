@@ -37,12 +37,13 @@ This package also suggests \itemize{
 \item a calibration and validation method based on a modified version of the Kennard
 and Stone Algorithm,
 \item a function that simulates data composed of Gaussian mixtures,
-\item a function that chooses the number of components according to the cross validation procedure.
+\item a function that chooses the number of components according to the cross validation procedure,
+\item a series of functions that displays results and helps in the interpretations.
 }
 }
 \seealso{
 \code{\link[=d.spls.lasso]{d.spls.lasso()}}, \code{\link[=d.spls.LS]{d.spls.LS()}}, \code{\link[=d.spls.ridge]{d.spls.ridge()}},
-\code{\link[=d.spls.GL]{d.spls.GL()}}, \code{browseVignettes("dual.spls")}
+\code{\link[=d.spls.GL]{d.spls.GL()}}
 }
 \author{
 Louna Alsouki François Wahl
