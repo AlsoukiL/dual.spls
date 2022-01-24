@@ -42,7 +42,7 @@ a mixture of Gaussian i.e. summing the following Gaussians:
 Where
 \itemize{
 \item \eqn{A} is a numeric vector of random values between 0 and 1,
-\item xech is a sequence of \eqn{p(g)} equally spaced values from 0 to 1. \eqn{p(g)} is the number
+\item xech is an element from the sequence of \eqn{p(g)} equally spaced values from 0 to 1. \eqn{p(g)} is the number
 of variables of the sub matrix \eqn{g}, for \eqn{g \in \{1, \dots, G\}},
 \item \eqn{\mu} is a random value in \eqn{[0,1]} representing the mean of the Gaussians,
 \item \eqn{\sigma} is a positive real value specified by the user and representing the standard

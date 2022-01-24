@@ -4,10 +4,10 @@
 \alias{d.spls.predict}
 \title{Makes predictions from a fitted Dual-SPLS model}
 \usage{
-d.spls.predict(mod.spls,X,liste_cp)
+d.spls.predict(mod.dspls,X,liste_cp)
 }
 \arguments{
-\item{mod.spls}{is a fitted Dual-SPLS object.}
+\item{mod.dspls}{a fitted Dual-SPLS object.}
 
 \item{X}{a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.}
 

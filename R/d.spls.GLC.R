@@ -31,6 +31,8 @@
 #' \item{lambda}{the matrix of dimension \code{(G,ncp)} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group.}
 #' \item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group.}
 #' \item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrank to zero per component and per group.}
+#' \item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
+#' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{GLC}. }
 #' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.GLA()],[dual.spls::d.spls.GLB()],[dual.spls::d.spls.GL()],`browseVignettes("dual.spls")`
 #'
@@ -238,5 +240,5 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 
   return(list(Xmean=Xm,scores=TT,loadings=WW,Bhat=Bhat,intercept=intercept,
               fitted.values=YY,residuals=RES,
-              lambda=listelambda,alpha=listealpha,zerovar=zerovar))
+              lambda=listelambda,alpha=listealpha,zerovar=zerovar,PP=PP,type="GLC"))
 }

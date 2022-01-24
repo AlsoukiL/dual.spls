@@ -39,6 +39,8 @@ to the difference between the responses and the fitted values.}
 \item{lambda}{the matrix of dimension \code{(G,ncp)} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group.}
 \item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group when the norm chosen is \code{B} or \code{C}.}
 \item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrank to zero per component and per group.}
+\item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
+\item{type}{a character specifying the Dual-SPLS norm used. In this case it is either \code{GLA}, \code{GLB} or \code{GLC}. }
 }
 \description{
 The function performs dimensional reduction with the group lasso norms. Three norms are available
@@ -124,8 +126,7 @@ points(inonz,mod.dsplsA$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 
 # norm B
-mod.dsplsB <- d.spls.GL(X=X,y=y,ncp=ncp,ppnu=ppnu,indG=indG,
-gamma=c(0.5,0.5),norm="B",verbose=TRUE)
+mod.dsplsB <- d.spls.GL(X=X,y=y,ncp=ncp,ppnu=ppnu,indG=indG,gamma=c(0.5,0.5),norm="B",verbose=TRUE)
 
 str(mod.dsplsB)
 

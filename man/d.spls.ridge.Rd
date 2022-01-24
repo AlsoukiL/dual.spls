@@ -34,6 +34,7 @@ of the Dual-SPLS.}
 to the difference between the responses and the fitted values.}
 \item{lambda1}{the vector of length \code{ncp} collecting the parameters of sparsity used to fit the model at each iteration.}
 \item{zerovar}{the vector of length \code{ncp} representing the number of variables shrank to zero per component.}
+\item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{ridge}. }
 }
 \description{
 The function \code{d.spls.lasso} performs dimensional reduction as in PLS methodology combined to variable selection via the

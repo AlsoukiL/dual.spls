@@ -5,7 +5,7 @@
 #' @usage d.spls.cv(X,Y,ncomp,dspls="lasso",ppnu,nu2,nrepcv=30,pctcv=70,indG,gamma)
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
 #' @param Y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
-#' @param ncomp a positive integer or a numeric vector of the number of latent numbers to choose from.
+#' @param ncomp a positive integer or a numeric vector of the number of Dual-SPLS components to choose from.
 #' @param dspls the norm type of the Dual-SPLS regression applied. Default value is \code{lasso}. Options are \code{pls}, \code{LS},
 #' \code{ridge}, \code{GLA}, \code{GLB} and \code{GLC}.
 #' @param ppnu a positive real value, in \eqn{[0,1]}. \code{ppnu} is the desired

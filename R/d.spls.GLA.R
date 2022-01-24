@@ -29,6 +29,8 @@
 #'  to the difference between the responses and the fitted values.}
 #' \item{lambda}{the matrix of dimension \code{(G,ncp)} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group.}
 #' \item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrank to zero per component and per group.}
+#' \item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
+#' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{GLA}. }
 #' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.GLB()], [dual.spls::d.spls.GLC()], [dual.spls::d.spls.GL()], `browseVignettes("dual.spls")`
 #'
@@ -169,5 +171,5 @@ d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 
   return(list(Xmean=Xm,scores=TT,loadings=WW,Bhat=Bhat,intercept=intercept,
               fitted.values=YY,residuals=RES,
-              lambda=listelambda,zerovar=zerovar))
+              lambda=listelambda,zerovar=zerovar,PP=PP,type="GLA"))
 }

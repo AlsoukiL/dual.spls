@@ -1,8 +1,8 @@
 #' Makes predictions from a fitted Dual-SPLS model
 #' @description
 #' The function \code{d.spls} makes predictions from a fitted Dual-SPLS model.
-#' @usage d.spls.predict(mod.spls,X,liste_cp)
-#' @param mod.spls is a fitted Dual-SPLS object.
+#' @usage d.spls.predict(mod.dspls,X,liste_cp)
+#' @param mod.dspls a fitted Dual-SPLS object.
 #' @param X a numeric matrix of predictors values. Each row represents an observation and each column a predictor variable.
 #' @param liste_cp a numeric vector of the components for which prediction is required.
 #' @details
@@ -55,7 +55,7 @@
 #'
 #' @export
 
-d.spls.predict<- function(mod.spls,X,liste_cp)
+d.spls.predict<- function(mod.dspls,X,liste_cp)
 {
   # dimensions
   n=dim(X)[1]
@@ -63,15 +63,15 @@ d.spls.predict<- function(mod.spls,X,liste_cp)
   ###################################
   # Centering Data
   ###################################
-  Xm = mod.spls$Xmean #Mean of X
+  Xm = mod.dspls$Xmean #Mean of X
   Xc=X - rep(1,n) %*% t(Xm) #Centering predictor matrix
 
   ncp=length(liste_cp)
 
   # predictions on X
-  M1=matrix(mod.spls$intercept[liste_cp],ncp,n)
+  M1=matrix(mod.dspls$intercept[liste_cp],ncp,n)
   M1=t(M1)
-  yhat=X %*% mod.spls$Bhat[,liste_cp] + M1
+  yhat=X %*% mod.dspls$Bhat[,liste_cp] + M1
 
   return(yhat)
 

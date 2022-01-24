@@ -31,6 +31,7 @@
 #'  to the difference between the responses and the fitted values.}
 #' \item{lambda1}{the vector of length \code{ncp} collecting the parameters of sparsity used to fit the model at each iteration.}
 #' \item{zerovar}{the vector of length \code{ncp} representing the number of variables shrank to zero per component.}
+#' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{ridge}. }
 #' @author Louna Alsouki François Wahl
 #' @seealso `browseVignettes("dual.spls")`, [dual.spls::d.spls.LS()]
 #'
@@ -189,6 +190,6 @@ d.spls.ridge<- function(X,y,ncp,ppnu,nu2,verbose=TRUE)
 
   return(list(Xmean=Xm,scores=TT,loadings=WW,Bhat=Bhat,intercept=intercept,
               fitted.values=YY,residuals=RES,
-              lambda1=listelambda1,zerovar=zerovar))
+              lambda1=listelambda1,zerovar=zerovar,type="ridge"))
 
 }

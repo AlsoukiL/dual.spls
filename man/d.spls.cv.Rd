@@ -11,7 +11,7 @@ d.spls.cv(X,Y,ncomp,dspls="lasso",ppnu,nu2,nrepcv=30,pctcv=70,indG,gamma)
 
 \item{Y}{a numeric vector or a one column matrix of responses. It represents the response variable for each observation.}
 
-\item{ncomp}{a positive integer or a numeric vector of the number of latent numbers to choose from.}
+\item{ncomp}{a positive integer or a numeric vector of the number of Dual-SPLS components to choose from.}
 
 \item{dspls}{the norm type of the Dual-SPLS regression applied. Default value is \code{lasso}. Options are \code{pls}, \code{LS},
 \code{ridge}, \code{GLA}, \code{GLB} and \code{GLC}.}
