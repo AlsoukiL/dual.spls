@@ -19,7 +19,7 @@ The internal function \code{type} divides the response vector \code{y} in \code{
 of equal range and attributes a index type to the observations according to the corresponding cell
 }
 \seealso{
-\code{\link[=d.spls.split]{d.spls.split()}}, \code{\link[=d.spls.calval]{d.spls.calval()}}
+\link{d.spls.split}, \link{d.spls.calval}
 }
 \author{
 Louna Alsouki François Wahl

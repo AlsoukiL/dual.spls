@@ -85,7 +85,7 @@ points(inonz,mod.dspls$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 }
 \seealso{
-\code{\link[=d.spls.LS]{d.spls.LS()}}
+\link{d.spls.LS}
 }
 \author{
 Louna Alsouki François Wahl

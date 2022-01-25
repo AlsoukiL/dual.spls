@@ -1,17 +1,15 @@
 #' Splits data into calibration and validation sets using the splitting method that takes into account X and y
 #' @description
-#' The function \code{d.spls.calval} divides the data \code{X} into a calibration and a validation. According to the values
-#' of the response vector, the observations are divided into groups. The Method uses
-#' the Kennard and Stone strategy for each group at a time and according to the number of calibration desired
-#' from each group, it selects the calibration points.
+#' The function \code{d.spls.calval} divides the data \code{X} into a calibration and a validation.
+#' It uses a variation on the Kennard and Stone strategy by dividing observations into groups (see details for more explanations).
 #' @usage d.spls.calval(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
 #' @param X a numeric matrix of predictors values.
 #' @param pcal a positive integer between 0 and 100. \code{pcal} is the percentage
 #' of calibration samples to be selected. Default value is NULL, meaning as long as \code{Listecal} is
 #' specified, \code{pcal} is not necessary.
-#' @param Datatype A vector of index specifying each observation belonging to wich group index.
+#' @param Datatype A vector of index specifying each observation belonging to which group index.
 #' Default value is \code{NULL}, meaning the function will use the internal function \code{type} to compute the vector for \code{ncells}.
-#' If \code{NULL}, parameter \code{y} should be specified.
+#' If \code{NULL}, parameter \code{y} should be specified. (see details for more explanation)
 #' @param y a numeric vector of responses. Default value is \code{NULL}, meaning as long as \code{Datatype} is specified,
 #' \code{y} is not necessary.
 #' @param ncells a positive integer. \code{ncells} is the number of groups dividing the observations. If
@@ -38,13 +36,17 @@
 #' Once each of the vector \code{Listecal} elements are null; the procedure is done.
 #'
 #' The algorithm for only one group corresponds to the classical Kennard and Stone algorithm.
+#'
+#' If \code{Datatype} is not specified, the function devides the observations into \code{ncells} groups. First, the observations
+#' are sorted according to the values of \eqn{y}. Second, the interval \eqn{[y_min,y_max]}{[ymin,ymax]} is devided into equal \code{ncells}.
+#' Finally, each observation with a value of \eqn{y} belonging to a sub interval is assigned the number of the corresponding cell.
 #' @return A \code{list} of the following attributes
 #' \item{indcal}{a numeric vector giving the row indices of the input data selected for calibration.}
 #' \item{indval}{a numeric vector giving the row indices of the remaining observations.}
 #' @references
 #' Kennard, Ronald W, and Larry A Stone. 1969. “Computer Aided Design of Experiments.” Technometrics 11 (1): 137–48.
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.split()],[dual.spls::d.spls.type()]
+#' @seealso [dual.spls::d.spls.split],[dual.spls::d.spls.type]
 #'
 #' @examples
 #' ### load dual.spls library
@@ -75,8 +77,9 @@
 #' ###calibration parameters for split2
 #' ncells <- 3
 #' dimtype=floor(n/3)
+#' # type of observations
 #' Datatype <- c(rep(1,dimtype),rep(2,dimtype),rep(3,(n-dimtype*2)))
-#'
+#' # how many observations of each type are to be selected in the calibration set
 #' L1=floor(0.7*length(which(Datatype==1)))
 #' L2=floor(0.8*length(which(Datatype==2)))
 #' L3=floor(0.6*length(which(Datatype==3)))

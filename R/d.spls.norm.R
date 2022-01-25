@@ -7,7 +7,6 @@
 #' @param x a numeric vector.
 #' @return A positive integer of the norm value.
 #' @author Louna Alsouki François Wahl
-#' @seealso `browseVignettes("dual.spls")`
 
 
 d.spls.norm1 <- function(x) {

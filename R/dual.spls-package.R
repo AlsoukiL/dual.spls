@@ -38,8 +38,8 @@
 #'\item a series of functions that display results and help in the interpretations.
 #'}
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.lasso()], [dual.spls::d.spls.LS()], [dual.spls::d.spls.ridge()],
-#' [dual.spls::d.spls.GL()]
+#' @seealso [dual.spls::d.spls.lasso], [dual.spls::d.spls.LS], [dual.spls::d.spls.ridge],
+#' [dual.spls::d.spls.GL]
 #'
 #' @importFrom pdist pdist
 #' @importFrom stats rnorm

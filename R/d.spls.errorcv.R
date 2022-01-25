@@ -17,7 +17,7 @@
 #' @param gamma a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in the case of \code{GLB} norm.
 #' @return a numeric vector representing the errors for each fitted model
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.cv()],[dual.spls::d.spls.lasso()]
+#' @seealso [dual.spls::d.spls.cv],[dual.spls::d.spls.lasso]
 #'
 #'
 d.spls.errorcv<-function (cvcal, X, Y, ncomp,dspls="lasso",ppnu=0.9,nu2,indG,gamma)

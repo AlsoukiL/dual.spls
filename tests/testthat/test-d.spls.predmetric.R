@@ -1,4 +1,4 @@
-test_that("d.spls.predmetric works", {
+test_that("d.spls.metric works", {
   n <- 100
   p <- 50
   nondes <- 20
@@ -14,7 +14,7 @@ test_that("d.spls.predmetric works", {
   n <- dim(X)[1]
   p <- dim(X)[2]
 
-  predmetric= d.spls.predmetric(mod.dspls,y)
+  predmetric= d.spls.metric(mod.dspls,y)
 
   #Dimension testing
   expect_equal(dim(mod.dspls$residuals), c(n,ncp))

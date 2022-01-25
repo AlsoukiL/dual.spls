@@ -42,8 +42,8 @@ and Stone Algorithm,
 }
 }
 \seealso{
-\code{\link[=d.spls.lasso]{d.spls.lasso()}}, \code{\link[=d.spls.LS]{d.spls.LS()}}, \code{\link[=d.spls.ridge]{d.spls.ridge()}},
-\code{\link[=d.spls.GL]{d.spls.GL()}}
+\link{d.spls.lasso}, \link{d.spls.LS}, \link{d.spls.ridge},
+\link{d.spls.GL}
 }
 \author{
 Louna Alsouki François Wahl

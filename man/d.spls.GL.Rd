@@ -73,10 +73,11 @@ the Euclidian norm of each \eqn{w_g} is computed while minimizing the root mean 
 \details{
 The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.GL}, has
 a simple closed form expression (ref) deriving from the fact that for each group \eqn{g}, \eqn{w_g}
-is colinear to a vector
+is collinear to a vector
 \deqn{z_{\nu,g}=\textrm{sign}({z_g})(|z_g|-\nu_g)_+.}{z.\nu_g=sign(z_g)(|z_g|-\nu_g)_+.}
 Here, for each group \eqn{g}, \eqn{\nu_g} is the threshold for which \code{ppnu} of the group \eqn{g} of
-the absolute values of the coordinates of \eqn{z_j} are greater than \eqn{\nu_g}.
+the absolute values of the coordinates of \eqn{z_j} are greater than \eqn{\nu_g}. The norms differ in the coefficient of the
+collinearity expression. (see reference for detail)
 }
 \examples{
 ### load dual.spls library
@@ -177,7 +178,7 @@ legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",
 
 }
 \seealso{
-\code{\link[=d.spls.GLA]{d.spls.GLA()}}, \code{\link[=d.spls.GLB]{d.spls.GLB()}}, \code{\link[=d.spls.GLC]{d.spls.GLC()}}
+\link{d.spls.GLA}, \link{d.spls.GLB}, \link{d.spls.GLC}
 }
 \author{
 Louna Alsouki François Wahl

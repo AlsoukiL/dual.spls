@@ -46,7 +46,7 @@ to fit the Dual-SPLS regression. This function is an internal function used in t
 the best number of latent variables of any of the Dual-SPLS versions.
 }
 \seealso{
-\code{\link[=d.spls.cv]{d.spls.cv()}},\code{\link[=d.spls.lasso]{d.spls.lasso()}}
+\link{d.spls.cv},\link{d.spls.lasso}
 }
 \author{
 Louna Alsouki François Wahl

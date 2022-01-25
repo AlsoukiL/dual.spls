@@ -48,7 +48,7 @@ that is each \eqn{w_g} will be collinear to a vector \eqn{z.\nu_g} built from th
 and constrained by the threshold \eqn{\nu_g}. The Norm A is the genuine alternative, it gives the same result as the lasso norm for \eqn{G=1}.
 }
 \seealso{
-\code{\link[=d.spls.GLB]{d.spls.GLB()}}, \code{\link[=d.spls.GLC]{d.spls.GLC()}}, \code{\link[=d.spls.GL]{d.spls.GL()}}
+\link{d.spls.GLB}, \link{d.spls.GLC}, \link{d.spls.GL}
 }
 \author{
 Louna Alsouki François Wahl

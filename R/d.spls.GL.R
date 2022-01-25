@@ -39,10 +39,11 @@
 #' @details
 #' The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.GL}, has
 #' a simple closed form expression (ref) deriving from the fact that for each group \eqn{g}, \eqn{w_g}
-#' is colinear to a vector
+#' is collinear to a vector
 #' \deqn{z_{\nu,g}=\textrm{sign}({z_g})(|z_g|-\nu_g)_+.}{z.\nu_g=sign(z_g)(|z_g|-\nu_g)_+.}
 #' Here, for each group \eqn{g}, \eqn{\nu_g} is the threshold for which \code{ppnu} of the group \eqn{g} of
-#' the absolute values of the coordinates of \eqn{z_j} are greater than \eqn{\nu_g}.
+#' the absolute values of the coordinates of \eqn{z_j} are greater than \eqn{\nu_g}. The norms differ in the coefficient of the
+#' collinearity expression. (see reference for detail)
 #' @return A \code{list} of the following attributes
 #' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
 #' \item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations. The \code{scores} represents
@@ -60,7 +61,7 @@
 #' \item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
 #' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is either \code{GLA}, \code{GLB} or \code{GLC}. }
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.GLA()], [dual.spls::d.spls.GLB()], [dual.spls::d.spls.GLC()]
+#' @seealso [dual.spls::d.spls.GLA], [dual.spls::d.spls.GLB], [dual.spls::d.spls.GLC]
 #'
 #'
 #' @examples

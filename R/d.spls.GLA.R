@@ -32,7 +32,7 @@
 #' \item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
 #' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{GLA}. }
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.GLB()], [dual.spls::d.spls.GLC()], [dual.spls::d.spls.GL()]
+#' @seealso [dual.spls::d.spls.GLB], [dual.spls::d.spls.GLC], [dual.spls::d.spls.GL]
 #'
 d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 {

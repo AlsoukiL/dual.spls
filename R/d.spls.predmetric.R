@@ -2,7 +2,7 @@
 #' @description
 #' This function computes evaluation metrics commonly used in modelling. It provides the values of the root mean square
 #' error (RMSE), the mean absolute error (MAE) and the Rsquared.
-#' @usage d.spls.predmetric(mod.dspls,real.y)
+#' @usage d.spls.metric(mod.dspls,real.y)
 #' @param mod.dspls is a fitted Dual-SPLS object.
 #' @param real.y a numeric vector. It represents the response variable for each observation.
 #' @details
@@ -44,7 +44,7 @@
 #' ncomplasso <- d.spls.cv(X=X,Y=y,ncomp=10,dspls="lasso",ppnu=0.9,nrepcv=20,pctcv=75)
 #' mod.dspls.lasso <- d.spls.lasso(X=X,y=y,ncp=ncomplasso,ppnu=0.9,verbose=TRUE)
 #'
-#' predmetric= d.spls.predmetric(mod.dspls.lasso,y)
+#' predmetric= d.spls.metric(mod.dspls.lasso,y)
 #'
 #' #Error plots
 #' plot(1:ncomplasso,predmetric$RMSE,
@@ -58,7 +58,7 @@
 #'  cex = 0.8, col = c("blue", "red","green"), lty = c(1,1,1))
 #' @export
 
-d.spls.predmetric<-function (mod.dspls,real.y)
+d.spls.metric<-function (mod.dspls,real.y)
 {
   #residuals
   res=mod.dspls$residuals

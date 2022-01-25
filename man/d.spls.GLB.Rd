@@ -51,7 +51,7 @@ that is each \eqn{w_g} will be collinear to a vector \eqn{z.\nu_g} built from th
 and constrained by the threshold \eqn{\nu_g}. Norm B assigns user to define weights for each group.
 }
 \seealso{
-\code{\link[=d.spls.GLA]{d.spls.GLA()}},\code{\link[=d.spls.GLC]{d.spls.GLC()}},\code{\link[=d.spls.GL]{d.spls.GL()}}
+\link{d.spls.GLA},\link{d.spls.GLC},\link{d.spls.GL}
 }
 \author{
 Louna Alsouki François Wahl

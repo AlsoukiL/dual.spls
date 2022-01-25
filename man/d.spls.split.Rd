@@ -22,7 +22,7 @@ the Kennard and Stone strategy for each group at a time and according to the num
 from each group.
 }
 \seealso{
-\code{\link[=d.spls.type]{d.spls.type()}},\code{\link[=d.spls.calval]{d.spls.calval()}}
+\link{d.spls.type},\link{d.spls.calval}
 }
 \author{
 Louna Alsouki François Wahl

@@ -1,6 +1,6 @@
 #' Determination of the number of latent components to be used in a Dual-SPLS regression
 #' @description
-#' The function \code{d.spls.cv} uses the cross validation approach described in Boulesteix and Strimmer (2005) in order to
+#' The function \code{d.spls.cv} uses the cross validation approach described in Boulesteix and Strimmer (2005) (see in references) in order to
 #' choose the most adequat number of latent components for a Dual-SPLS regression.
 #' @usage d.spls.cv(X,Y,ncomp,dspls="lasso",ppnu,nu2,nrepcv=30,pctcv=70,indG,gamma)
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.

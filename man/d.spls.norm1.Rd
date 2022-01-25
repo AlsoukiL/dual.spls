@@ -17,9 +17,6 @@ A positive integer of the norm value.
 \description{
 The internal functions \code{norm1} and \code{norm2} computes the l1 and l2 norm of any vector
 }
-\seealso{
-\code{browseVignettes("dual.spls")}
-}
 \author{
 Louna Alsouki François Wahl
 }

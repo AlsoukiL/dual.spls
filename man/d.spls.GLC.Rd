@@ -51,7 +51,7 @@ and constrained by the threshold \eqn{\nu_g}. Norm C applies the lasso norm for 
 the Euclidian norm of each \eqn{w_g} is computed while minimizing the root mean squares error of prediction.
 }
 \seealso{
-\code{\link[=d.spls.GLA]{d.spls.GLA()}},\code{\link[=d.spls.GLB]{d.spls.GLB()}},\code{\link[=d.spls.GL]{d.spls.GL()}}
+\link{d.spls.GLA},\link{d.spls.GLB},\link{d.spls.GL}
 }
 \author{
 Louna Alsouki François Wahl

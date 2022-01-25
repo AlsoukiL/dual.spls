@@ -33,7 +33,7 @@
 #' \item{zerovar}{the vector of length \code{ncp} representing the number of variables shrank to zero per component.}
 #' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{ridge}. }
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.LS()]
+#' @seealso [dual.spls::d.spls.LS]
 #'
 #' @examples
 #' ### load dual.spls library

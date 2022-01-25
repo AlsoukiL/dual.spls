@@ -9,7 +9,7 @@
 #' @param Listecal a vector specifying how many observations from each group should be selected as calibration.
 #' @return a numeric vector giving the row indices of the input data selected for calibration
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.type()],[dual.spls::d.spls.calval()]
+#' @seealso [dual.spls::d.spls.type],[dual.spls::d.spls.calval]
 #' @importFrom pdist pdist
 #'
 d.spls.split<- function(X,Xtype,Listecal)
