@@ -1,6 +1,6 @@
 #' Determination of the number of latent components to be used in a Dual-SPLS regression
 #' @description
-#' The function \code{d.spls.cv} use the cross validation approach described in Boulesteix and Strimmer (2005) in order to
+#' The function \code{d.spls.cv} uses the cross validation approach described in Boulesteix and Strimmer (2005) in order to
 #' choose the most adequat number of latent components for a Dual-SPLS regression.
 #' @usage d.spls.cv(X,Y,ncomp,dspls="lasso",ppnu,nu2,nrepcv=30,pctcv=70,indG,gamma)
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
@@ -17,17 +17,16 @@
 #' @param indG a numeric vector of group index for each observation. It is used in the cases of the group lasso norms.
 #' @param gamma a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{GLB}.
 #' @details
-#' The procedure is described in the Boulesteix and Strimmer. It is based on randomly selecting, \code{pctcv%} calibration observations at each
+#' The procedure is described in the Boulesteix and Strimmer. It is based on randomly selecting, \code{pctcv%} of calibration observations at each
 #' cross validation iteration and performing the Dual-SPLS regression. The rest of the observation are used as a validation and the
-#' errors are computed accordingly for each components. \code{nrepcv} iteration are done and the mean of each of the \code{nrepcv} errors for each
-#' component. The latent component of the smallest mean value is selected as the best.
+#' errors are computed accordingly for each components. \code{nrepcv} iterations are done and the mean squared of each of the \code{nrepcv} errors for each
+#' component are computed. The latent component with the smallest mean value is selected as the best.
 #' @return The best number of latent components to be used in the Dual-SPLS regression based on the cross validation procedure.
 #' @references
 #' A. L. Boulesteix and K. Strimmer (2005). Predicting Transcription Factor Activities from Combined Analysis of Microarray and ChIP Data: A Partial Least Squares Approach. \cr
 #' \cr
 #' H. Wold. Path Models with Latent Variables: The NIPALS Approach. In H.M. Blalock et al., editor, Quantitative Sociology: International Perspectives on Mathematical and Statistical Model Building, pages 307–357. Academic Press, 1975.
 #' @author Louna Alsouki François Wahl
-#' @seealso `browseVignettes("dual.spls")`
 #'
 #' @examples
 #' ### load dual.spls library
@@ -71,7 +70,7 @@
 #'
 #' ### plotting the observed values VS predicted values for ncomp components
 #' plot(y,mod.dspls.lasso$fitted.values[,ncomplasso], xlab="Observed values", ylab="Predicted values",
-#'  main=paste("Observed VS Predicted for ", ncomplasso," components"))
+#' main=paste("Observed VS Predicted for ", ncomplasso," components"))
 #' points(-1000:1000,-1000:1000,type='l')
 #'
 #' ### plotting the regression coefficients

@@ -1,7 +1,7 @@
 #' Computes the error of a cross validation iteration
 #' @keywords internal
 #' @description
-#' The function \code{d.spls.errorcv} computes the error of a validation set according to a calibration set \code{cvcal} used
+#' The function \code{d.spls.errorcv} computes the sum of squared errors of a validation set according to a calibration set \code{cvcal} used
 #' to fit the Dual-SPLS regression. This function is an internal function used in the cross validation procedure in order to determine
 #' the best number of latent variables of any of the Dual-SPLS versions.
 #' @param cvcal a numeric vector representing the index of the calibration set to be used in the fitting.
@@ -17,7 +17,7 @@
 #' @param gamma a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in the case of \code{GLB} norm.
 #' @return a numeric vector representing the errors for each fitted model
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.cv()],[dual.spls::d.spls.lasso()],`browseVignettes("dual.spls")`
+#' @seealso [dual.spls::d.spls.cv()],[dual.spls::d.spls.lasso()]
 #'
 #'
 d.spls.errorcv<-function (cvcal, X, Y, ncomp,dspls="lasso",ppnu=0.9,nu2,indG,gamma)

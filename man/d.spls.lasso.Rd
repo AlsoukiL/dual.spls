@@ -36,12 +36,12 @@ to the difference between the responses and the fitted values.}
 }
 \description{
 The function \code{d.spls.lasso} performs dimensional reduction as in the PLS1 methodology combined with variable selection via the
-Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2.}
+Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2.}{\Omega(w)=\lambda ||w||_1 + ||w||_2.}
 }
 \details{
 The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.lasso}, has
-a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu}} of coordinates
-\deqn{z_{\nu_j}=\textrm{sign}({z_j})(|z_j|-\nu)_+.}
+a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu}}{z.{\nu}} of coordinates
+\deqn{z_{\nu_j}=\textrm{sign}({z_j})(|z_j|-\nu)_+.}{z.\nu_j=sign(z_j)(|z_j|-\nu)_+.}
 Here \eqn{\nu} is the threshold for which \code{ppnu} of
 the absolute values of the coordinates of \eqn{z=X^Ty} are greater than \eqn{\nu}.
 }
@@ -79,9 +79,6 @@ plot(1:dim(X)[2],mod.dspls$Bhat[,i],type='l',
 inonz=which(mod.dspls$Bhat[,i]!=0)
 points(inonz,mod.dspls$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
-}
-\seealso{
-\code{browseVignettes("dual.spls")}
 }
 \author{
 Louna Alsouki François Wahl

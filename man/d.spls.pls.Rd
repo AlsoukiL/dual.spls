@@ -30,7 +30,7 @@ to the difference between the responses and the fitted values.}
 }
 \description{
 The function \code{d.spls.pls} performs the PLS1 dimensional reduction methodology using Wold's NIPALS algorithm. It is
-a Dual-SPLS regression with the norm \deqn{\Omega(w)=\|w\|_2.}
+a Dual-SPLS regression with the norm \deqn{\Omega(w)=||w||_2.}
 }
 \details{
 The resulting solution for \eqn{w} and hence for the coefficients vector, in the PLS regression for one component is
@@ -70,9 +70,6 @@ plot(1:dim(X)[2],mod.dspls$Bhat[,i],type='l',
 }
 \references{
 H. Wold. Path Models with Latent Variables: The NIPALS Approach. In H.M. Blalock et al., editor, Quantitative Sociology: International Perspectives on Mathematical and Statistical Model Building, pages 307–357. Academic Press, 1975.
-}
-\seealso{
-\code{browseVignettes("dual.spls")}
 }
 \author{
 Louna Alsouki François Wahl

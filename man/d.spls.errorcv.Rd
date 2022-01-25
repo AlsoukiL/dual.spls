@@ -41,12 +41,12 @@ proportion of variables to shrink to zero for each component (see Dual-SPLS meth
 a numeric vector representing the errors for each fitted model
 }
 \description{
-The function \code{d.spls.errorcv} computes the error of a validation set according to a calibration set \code{cvcal} used
+The function \code{d.spls.errorcv} computes the sum of squared errors of a validation set according to a calibration set \code{cvcal} used
 to fit the Dual-SPLS regression. This function is an internal function used in the cross validation procedure in order to determine
 the best number of latent variables of any of the Dual-SPLS versions.
 }
 \seealso{
-\code{\link[=d.spls.cv]{d.spls.cv()}},\code{\link[=d.spls.lasso]{d.spls.lasso()}},\code{browseVignettes("dual.spls")}
+\code{\link[=d.spls.cv]{d.spls.cv()}},\code{\link[=d.spls.lasso]{d.spls.lasso()}}
 }
 \author{
 Louna Alsouki François Wahl

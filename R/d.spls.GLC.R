@@ -2,12 +2,13 @@
 #' @keywords internal
 #' @description
 #' The function \code{d.spls.GLC} performs dimensional reduction as in PLS methodology combined to variable selection using the
-#' Dual-SPLS algorithm with the norm \eqn{\Omega_g(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} for combined data where
-#' \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \Omega_g(w)=1; \sum\limits_{g=1}^G \alpha_g=1} and \code{G} is the number of groups.
+#' Dual-SPLS algorithm with the norm \deqn{\Omega_g(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1}{\Omega_g(w)=||w_g||_2+ \lambda_g ||w_g||_1} for combined data where
+#' \eqn{\Omega(w)=\sum\limits_{g=1}{^G} \alpha_g \Omega_g(w)=1}{\Omega(w)=\sum_{g=1,G} \alpha_g \Omega_g(w)=1};
+#' \eqn{\sum\limits_{g=1}^G \alpha_g=1}{\sum_{g=1,G} \alpha_g=1} and \code{G} is the number of groups.
 #' Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 #' variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 #' threshold as in the dual sparse lasso methodology,
-#' that is each \eqn{w_g} will be collinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
+#' that is each \eqn{w_g} will be collinear to a vector \eqn{z.\nu_g} built from the coordinate of \eqn{z}
 #' and constrained by the threshold \eqn{\nu_g}. Norm C applies the lasso norm for each group individually while constraining the overall norm. Moreover,
 #' the Euclidian norm of each \eqn{w_g} is computed while minimizing the root mean squares error of prediction.
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
@@ -34,7 +35,7 @@
 #' \item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
 #' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{GLC}. }
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.GLA()],[dual.spls::d.spls.GLB()],[dual.spls::d.spls.GL()],`browseVignettes("dual.spls")`
+#' @seealso [dual.spls::d.spls.GLA()],[dual.spls::d.spls.GLB()],[dual.spls::d.spls.GL()]
 #'
 d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 {

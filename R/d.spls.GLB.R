@@ -2,12 +2,12 @@
 #' @keywords internal
 #' @description
 #' The function \code{d.spls.GLB} performs dimensional reduction as in PLS methodology combined to variable selection using the
-#' Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1} for combined data where
-#' \eqn{\sum\limits_{g=1}^G \alpha_g=1; \Omega(w_g)=\gamma_g ;\sum\limits_{g=1}^G \gamma_g=1}. Where \code{G} is the number of groups.
+#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1}{\Omega(w)=\sum_{g=1,G} \alpha_g ||w ||_2+\sum_{g=1,G} \lambda_g ||w_g ||_1} for
+#' \eqn{\sum\limits_{g=1}^G \alpha_g=1}{\sum_{g=1,G} \alpha_g=1};  \eqn{\Omega(w_g)=\gamma_g}{\Omega(w_g)=\gamma_g} and \eqn{\sum\limits_{g=1}^G \gamma_g=1.}{\sum_{g=1,G} \gamma_g=1.} Where \code{G} is the number of groups.
 #' Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 #' variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 #' threshold as in the dual sparse lasso methodology,
-#' that is each \eqn{w_g} will be collinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
+#' that is each \eqn{w_g} will be collinear to a vector \eqn{z.\nu_g} built from the coordinate of \eqn{z}
 #' and constrained by the threshold \eqn{\nu_g}. Norm B assigns user to define weights for each group.
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
@@ -34,7 +34,7 @@
 #' \item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
 #' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{GLB}. }
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.GLA()],[dual.spls::d.spls.GLC()],[dual.spls::d.spls.GL()],`browseVignettes("dual.spls")`
+#' @seealso [dual.spls::d.spls.GLA()],[dual.spls::d.spls.GLC()],[dual.spls::d.spls.GL()]
 #'
 
 

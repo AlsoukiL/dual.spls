@@ -1,7 +1,7 @@
 #' Univariate Partial Least Squares regression
 #' @description
 #' The function \code{d.spls.pls} performs the PLS1 dimensional reduction methodology using Wold's NIPALS algorithm. It is
-#' a Dual-SPLS regression with the norm \deqn{\Omega(w)=\|w\|_2.}
+#' a Dual-SPLS regression with the norm \deqn{\Omega(w)=||w||_2.}
 #' @usage d.spls.pls(X,y,ncp,verbose=TRUE)
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
@@ -26,7 +26,6 @@
 #' @references
 #' H. Wold. Path Models with Latent Variables: The NIPALS Approach. In H.M. Blalock et al., editor, Quantitative Sociology: International Perspectives on Mathematical and Statistical Model Building, pages 307–357. Academic Press, 1975.
 #' @author Louna Alsouki François Wahl
-#' @seealso `browseVignettes("dual.spls")`
 #'
 #' @examples
 #' ### load dual.spls library

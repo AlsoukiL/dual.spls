@@ -2,12 +2,12 @@
 #' @keywords internal
 #' @description
 #' The function \code{d.spls.GLA} performs dimensional reduction as in PLS methodology combined to variable selection using the
-#' Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\|w\|_2+\sum\limits_\limits_{g=1}^G \lambda_g\|w_g\|_1} for combined data.
+#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\|w\|_2+\sum\limits_\limits_{g=1}^G \lambda_g\|w_g\|_1}{\Omega(w)=||w||_2+\sum_{g=1,G} \lambda_g||w_g||_1} for combined data.
 #' Where \code{G} is the number of groups.
 #' Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 #' variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 #' threshold as in the dual sparse lasso methodology,
-#' that is each \eqn{w_g} will be collinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
+#' that is each \eqn{w_g} will be collinear to a vector \eqn{z.\nu_g} built from the coordinate of \eqn{z}
 #' and constrained by the threshold \eqn{\nu_g}. The Norm A is the genuine alternative, it gives the same result as the lasso norm for \eqn{G=1}.
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
@@ -32,7 +32,7 @@
 #' \item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
 #' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{GLA}. }
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.GLB()], [dual.spls::d.spls.GLC()], [dual.spls::d.spls.GL()], `browseVignettes("dual.spls")`
+#' @seealso [dual.spls::d.spls.GLB()], [dual.spls::d.spls.GLC()], [dual.spls::d.spls.GL()]
 #'
 d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 {

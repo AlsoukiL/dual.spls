@@ -39,7 +39,7 @@ y <- data$y
 pcal <- 70
 ncells <- 3
 
-split <- d.spls.FWLAS.calval(X=X,pcal=pcal,y=y,ncells=ncells)
+split <- d.spls.calval(X=X,pcal=pcal,y=y,ncells=ncells)
 
 indcal= split$indcal
 indval= split$indval
@@ -64,9 +64,6 @@ RMSEval.dspls=apply(yvalhat,2,function(u) sqrt(mean((yval-u)^2)) )
 
 
 
-}
-\seealso{
-\code{browseVignettes("dual.spls")}
 }
 \author{
 François Wahl Louna Alsouki

@@ -10,7 +10,6 @@
 #' Users can choose how many Dual-SPLS components should be used.
 #' @return Vector or matrix of estimated responses.
 #' @author François Wahl Louna Alsouki
-#' @seealso `browseVignettes("dual.spls")`
 #'
 #' @examples
 #' ### load dual.spls library
@@ -28,7 +27,7 @@
 #' pcal <- 70
 #' ncells <- 3
 #'
-#' split <- d.spls.FWLAS.calval(X=X,pcal=pcal,y=y,ncells=ncells)
+#' split <- d.spls.calval(X=X,pcal=pcal,y=y,ncells=ncells)
 #'
 #' indcal= split$indcal
 #' indval= split$indval

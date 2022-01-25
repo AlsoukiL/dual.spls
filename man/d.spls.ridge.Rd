@@ -38,14 +38,14 @@ to the difference between the responses and the fitted values.}
 }
 \description{
 The function \code{d.spls.lasso} performs dimensional reduction as in PLS methodology combined to variable selection via the
-Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda_1 \|w\|_1 +\lambda_2 \|Xw\|_2 + \|w\|_2.}
+Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda_1 \|w\|_1 +\lambda_2 \|Xw\|_2 + \|w\|_2.}{\Omega(w)=\lambda1 ||w||_1 +\lambda2 ||Xw||_2 + ||w||_2.}
 }
 \details{
 The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.ridge}, has
-a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{X,\nu_2}} of coordinates
-\deqn{z_{\nu_1,j}=\textrm{sign}(z_{X,\nu_2,j})(|z_{X,\nu_2,j}|-\nu_1)_+.}
-Here \eqn{\nu_1} is the threshold for which \code{ppnu} of
-the absolute values of the coordinates of \eqn{z_{X,\nu_2}} are greater than \eqn{\nu_1} and \eqn{z_{X,\nu_2}=(\nu_2 X^TX + I_p)^{-1}X^Ty}.
+a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu_1}}{z.\nu1} of coordinates
+\deqn{z_{\nu_1,j}=\textrm{sign}(z_{X,\nu_2,j})(|z_{X,\nu_2,j}|-\nu_1)_+.}{z.\nu1_j=sign(z.X.\nu2_j)(|z.X.\nu2_j|-\nu1)_+.}
+Here \eqn{\nu_1}{\nu1} is the threshold for which \code{ppnu} of
+the absolute values of the coordinates of \eqn{z_{X,\nu_2}}{z.X.\nu2} are greater than \eqn{\nu_1}{\nu1} and \eqn{z_{X,\nu_2}=(\nu_2 X^TX + I_p)^{-1}X^Ty}{z.X.\nu2=inv(\nu2 X^TX + I) X^Ty}.
 Therefore, the ridge norm is beneficial to the situation where \eqn{X} is not invertible. If \eqn{X} is invertible, one
 can choose to use the Dual-SPLS of least squares norm.
 }
@@ -85,7 +85,7 @@ points(inonz,mod.dspls$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 }
 \seealso{
-\code{browseVignettes("dual.spls")}, \code{\link[=d.spls.LS]{d.spls.LS()}}
+\code{\link[=d.spls.LS]{d.spls.LS()}}
 }
 \author{
 Louna Alsouki François Wahl

@@ -39,16 +39,16 @@ to the difference between the responses and the fitted values.}
 }
 \description{
 The function \code{d.spls.GLA} performs dimensional reduction as in PLS methodology combined to variable selection using the
-Dual-SPLS algorithm with the norm \eqn{\Omega(w)=\|w\|_2+\sum\limits_\limits_{g=1}^G \lambda_g\|w_g\|_1} for combined data.
+Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\|w\|_2+\sum\limits_\limits_{g=1}^G \lambda_g\|w_g\|_1}{\Omega(w)=||w||_2+\sum_{g=1,G} \lambda_g||w_g||_1} for combined data.
 Where \code{G} is the number of groups.
 Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 threshold as in the dual sparse lasso methodology,
-that is each \eqn{w_g} will be collinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
+that is each \eqn{w_g} will be collinear to a vector \eqn{z.\nu_g} built from the coordinate of \eqn{z}
 and constrained by the threshold \eqn{\nu_g}. The Norm A is the genuine alternative, it gives the same result as the lasso norm for \eqn{G=1}.
 }
 \seealso{
-\code{\link[=d.spls.GLB]{d.spls.GLB()}}, \code{\link[=d.spls.GLC]{d.spls.GLC()}}, \code{\link[=d.spls.GL]{d.spls.GL()}}, \code{browseVignettes("dual.spls")}
+\code{\link[=d.spls.GLB]{d.spls.GLB()}}, \code{\link[=d.spls.GLC]{d.spls.GLC()}}, \code{\link[=d.spls.GL]{d.spls.GL()}}
 }
 \author{
 Louna Alsouki François Wahl

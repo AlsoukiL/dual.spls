@@ -35,14 +35,14 @@ to the difference between the responses and the fitted values.}
 }
 \description{
 The function \code{d.spls.LS} performs dimensional reduction as in PLS1 methodology combined to variable selection via the
-Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda \|N_1w\|_1 + \|Xw\|_2.}
+Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda \|N_1w\|_1 + \|Xw\|_2.}{\Omega(w)=\lambda ||N_1w||_1 + ||Xw||_2.}
 }
 \details{
 The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.LS}, has
-a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu}} of coordinates
-\deqn{z_{\nu_j}=\textrm{sign}(\hat{\beta}_{LS_j})(|\hat{\beta}_{LS_j}|-\nu)_+.}
+a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu}}{z.\nu} of coordinates
+\deqn{z_{\nu_j}=\textrm{sign}(\hat{\beta}_{LS_j})(|\hat{\beta}_{LS_j}|-\nu)_+.}{z.\nu_j=sign(hat\beta.LS_j)(|hat\beta.LS_j|-\nu)_+.}
 Here \eqn{\nu} is the threshold for which \code{ppnu} of
-the absolute values of the coordinates of \eqn{\hat{\beta}_{LS}} are greater than \eqn{\nu} where \eqn{\hat{\beta}_{LS}=(X^TX)^{-1}X^Ty}.
+the absolute values of the coordinates of \eqn{\hat{\beta}_{LS}}{hat\beta.LS} are greater than \eqn{\nu} where \eqn{\hat{\beta}_{LS}=(X^TX)^{-1}X^Ty}{hat\beta.LS=inv(X^TX)X^Ty}.
 Therefore, the least squares norm is adapted to the situation where \eqn{X^TX} is invertible. The singularity \eqn{X^TX} is tested
 using the function \code{kappa()} in \code{R} that computes the ratio of the largest to the smallest non-zero singular value of the matrix.
 A finite large ratio means that the matrix is close to being singular. If the singularity condition is not verified,
@@ -85,7 +85,7 @@ points(inonz,mod.dspls$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 }
 \seealso{
-\code{browseVignettes("dual.spls")}, \code{\link[=d.spls.ridge]{d.spls.ridge()}}
+\code{\link[=d.spls.ridge]{d.spls.ridge()}}
 }
 \author{
 Louna Alsouki François Wahl

@@ -14,7 +14,7 @@ d.spls.simulate(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5,int.coef=1:5)
 \item{nondes}{a numeric vector of length \code{G}. \code{nondes} is the number of Guassians in each mixture. Default value is \code{50}.}
 
 \item{sigmaondes}{a numeric vector of length \code{G}. \code{sigmaondes} is the standard deviation of the
-Gaussians for each group \eqn{g \in [1,G]}. Default value is \code{0.05}.}
+Gaussians for each group \eqn{g}. Default value is \code{0.05}.}
 
 \item{sigmay}{a real value. \code{sigmay} is the uncertainty on \code{y}. Default value is \code{0.5}.}
 
@@ -38,28 +38,28 @@ the values of \code{y} depend on the values of \code{X}.
 \details{
 The predictors matrix \code{X} is a concatenations of \code{G} predictors sub matrices. Each is computed using
 a mixture of Gaussian i.e. summing the following Gaussians:
-\deqn{A \exp{(-\frac{(\textrm{xech}-\mu)^2}{2 \sigma^2})}}.
+\deqn{A \exp{(-\frac{(\textrm{xech}-\mu)^2}{2 \sigma^2})}.}{A exp(-(xech-\mu)^2/(2\sigma^2)).}
 Where
 \itemize{
 \item \eqn{A} is a numeric vector of random values between 0 and 1,
 \item xech is an element from the sequence of \eqn{p(g)} equally spaced values from 0 to 1. \eqn{p(g)} is the number
-of variables of the sub matrix \eqn{g}, for \eqn{g \in \{1, \dots, G\}},
+of variables of the sub matrix \eqn{g}, for \eqn{g \in \{1, \dots, G\}}{g in {1, \dots, G}},
 \item \eqn{\mu} is a random value in \eqn{[0,1]} representing the mean of the Gaussians,
 \item \eqn{\sigma} is a positive real value specified by the user and representing the standard
 deviation of the Gaussians.
 }
 The response vector \code{y} is a linear combination of the predictors to which we add a noise of uncertainty \code{sigmay}. It is computed as follows:
 
-\deqn{y_i= \sigma_y \times V_i +\sum\limits_{g=1}^G \sum\limits_{k=1}^K \textrm{int.coeff}_k \times \textrm{sum}X^{g}_{ik}}
+\deqn{y_i= \sigma_y \times V_i +\sum\limits_{g=1}^G \sum\limits_{k=1}^K \textrm{int.coeff}_k \times \textrm{sum}X^{g}_{ik}}{y_i= \sigma_y x V_i +\sum_{g=1,G} \sum_{k=1,K} int.coeff_k x sumX.g_ik}
 Where
 \itemize{
 \item \eqn{G} is the number of predictor sub matrices,
 \item \eqn{i} is the index of the observation,
 \item \eqn{V} is a normally distributed vector of 0 mean and unitary standard deviation,
 \item \eqn{K} is the length of the vector \code{int.coeff},
-\item \eqn{\textrm{sum}X^{g}} is a matrix of \eqn{n} rows and \eqn{K} columns.
-The values of the column \eqn{k} are the sum of selected parts of each row of the sub matrix \eqn{X^g}. The columns of \eqn{X^g} are
-separated equally and each part is used for the \eqn{K} columns of \eqn{\textrm{sum}X^{g}}.
+\item \eqn{\textrm{sum}X^{g}}{sumX.g} is a matrix of \eqn{n} rows and \eqn{K} columns.
+The values of the column \eqn{k} are the sum of selected parts of each row of the sub matrix \eqn{X^g}{X.g}. The columns of \eqn{X^g}{X.g} are
+separated equally and each part is used for the \eqn{K} columns of \eqn{\textrm{sum}X^{g}}{sumX.g}.
 }
 }
 \examples{
@@ -78,9 +78,7 @@ ya <- data1$y
 
 ###plotting the data
 plot(Xa[1,],type='l',ylim=c(0,max(Xa)),main='Data', ylab='Xa',col=1)
-for (i in 2:n){
- lines(Xa[i,],col=i)
-}
+for (i in 2:n){ lines(Xa[i,],col=i) }
 
 ####two predictors matrix
 ### parameters
@@ -97,24 +95,15 @@ yb <- data2$y
 
 ###plotting the data
 plot(Xb[1,],type='l',ylim=c(0,max(Xb)),main='Data', ylab='Xb',col=1)
-for (i in 2:n){
- lines(Xb[i,],col=i)
-}
+for (i in 2:n){ lines(Xb[i,],col=i) }
 
 ###plotting the data
 plot(X1[1,],type='l',ylim=c(0,max(X1)),main='Data X1', ylab='X1',col=1)
-for (i in 2:n){
- lines(X1[i,],col=i)
-}
+for (i in 2:n){ lines(X1[i,],col=i) }
 
 ###plotting the data
 plot(X2[1,],type='l',ylim=c(0,max(X2)),main='Data X2', ylab='X2',col=1)
-for (i in 2:n){
- lines(X2[i,],col=i)
-}
-}
-\seealso{
-\code{browseVignettes("dual.spls")}
+for (i in 2:n){ lines(X2[i,],col=i) }
 }
 \author{
 Louna Alsouki François Wahl

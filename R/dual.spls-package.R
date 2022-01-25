@@ -23,7 +23,7 @@
 #' \item Norm B: \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1}
 #'  where
 #' \eqn{\sum\limits_{g=1}^G \alpha_g=\sum\limits_{g=1}^G \gamma_g=1} \cr and \eqn{\Omega(w_g)=\gamma_g},
-#' \item Norm C: \eqn{\Omega(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} where
+#' \item Norm C: \eqn{\Omega_g(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} where
 #' \eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1 \textrm{ and } \sum\limits_{g=1}^G \alpha_g=1},
 #' }
 #' where \eqn{G} is the number of groups and \eqn{\alpha_g}, \eqn{\lambda_g} and \eqn{\gamma_g} are all positive scalars.
@@ -35,7 +35,7 @@
 #'  and Stone Algorithm,
 #'\item a function that simulates data composed of Gaussian mixtures,
 #'\item a function that chooses the number of components according to the cross validation procedure,
-#'\item a series of functions that displays results and helps in the interpretations.
+#'\item a series of functions that display results and help in the interpretations.
 #'}
 #' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.lasso()], [dual.spls::d.spls.LS()], [dual.spls::d.spls.ridge()],

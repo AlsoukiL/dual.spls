@@ -47,17 +47,18 @@ The function performs dimensional reduction with the group lasso norms. Three no
 where \code{G} is the number of groups, the vectors \eqn{w_g} hold the coordinates of \eqn{w}
 for the observations belonging to the group \eqn{g} and \eqn{\alpha_g}, \eqn{\lambda_g} and \eqn{\gamma_g} are all positive scalars.
 \itemize{
-\item Norm A: \eqn{\Omega(w)=\|w\|_2+\sum\limits_{g=1}^G \lambda_g\|w_g\|_1.}
-\item Norm B: \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1} for
-\eqn{\sum\limits_{g=1}^G \alpha_g=1 \textrm{; } \Omega(w_g)=\gamma_g \textrm{ and  } \sum\limits_{g=1}^G \gamma_g=1.}
-\item Norm C: \eqn{\Omega(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} for
-\eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1\textrm{;  } \sum\limits_{g=1}^G \alpha_g=1
-\textrm{ and  } \forall g_1 \textrm{,  } g_2 \in \{1,\dots,G\}, \|w_{g_1} \|_2=\|w_{g_2} \|_2.}
+\item Norm A: \eqn{\Omega(w)=\|w\|_2+\sum\limits_{g=1}^G \lambda_g\|w_g\|_1.}{\Omega(w)=||w||_2+\sum_{g=1,G} \lambda_g||w_g||_1.}
+\item Norm B: \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1}{\Omega(w)=\sum_{g=1,G} \alpha_g ||w ||_2+\sum_{g=1,G} \lambda_g ||w_g ||_1} for
+\eqn{\sum\limits_{g=1}^G \alpha_g=1}{\sum_{g=1,G} \alpha_g=1};  \eqn{\Omega(w_g)=\gamma_g}{\Omega(w_g)=\gamma_g} and \eqn{\sum\limits_{g=1}^G \gamma_g=1.}{\sum_{g=1,G} \gamma_g=1.}
+\item Norm C: \eqn{\Omega_g(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1}{\Omega_g(w)=||w_g||_2+ \lambda_g ||w_g||_1} for
+\eqn{\Omega(w)=\sum\limits_{g=1}{^G} \alpha_g \Omega_g(w)=1}{\Omega(w)=\sum_{g=1,G} \alpha_g \Omega_g(w)=1};
+\eqn{\sum\limits_{g=1}^G \alpha_g=1}{\sum_{g=1,G} \alpha_g=1}
 }
+
 Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
-variables can be divided in distinct meaningful groups. Each group is constrained by an independent
+variables can be divided into distinct meaningful groups. Each group is constrained by an independent
 threshold as in the dual sparse lasso methodology,
-that is each \eqn{w_g} will be collinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
+that is each \eqn{w_g} will be collinear to a vector \eqn{z_{\nu_g}}{z.\nu_g} built from the coordinate of \eqn{z}
 and constrained by the threshold \eqn{\nu_g}.
 
 Three variants are defined here depending on the groups combination in the global norm and the weights
@@ -73,7 +74,7 @@ the Euclidian norm of each \eqn{w_g} is computed while minimizing the root mean 
 The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.GL}, has
 a simple closed form expression (ref) deriving from the fact that for each group \eqn{g}, \eqn{w_g}
 is colinear to a vector
-\deqn{z_{\nu,g}=\textrm{sign}({z_g})(|z_g|-\nu_g)_+.}
+\deqn{z_{\nu,g}=\textrm{sign}({z_g})(|z_g|-\nu_g)_+.}{z.\nu_g=sign(z_g)(|z_g|-\nu_g)_+.}
 Here, for each group \eqn{g}, \eqn{\nu_g} is the threshold for which \code{ppnu} of the group \eqn{g} of
 the absolute values of the coordinates of \eqn{z_j} are greater than \eqn{\nu_g}.
 }
@@ -176,7 +177,7 @@ legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",
 
 }
 \seealso{
-\code{\link[=d.spls.GLA]{d.spls.GLA()}}, \code{\link[=d.spls.GLB]{d.spls.GLB()}}, \code{\link[=d.spls.GLC]{d.spls.GLC()}}, \code{browseVignettes("dual.spls")}
+\code{\link[=d.spls.GLA]{d.spls.GLA()}}, \code{\link[=d.spls.GLB]{d.spls.GLB()}}, \code{\link[=d.spls.GLC]{d.spls.GLC()}}
 }
 \author{
 Louna Alsouki François Wahl

@@ -7,17 +7,17 @@
 #' @param real.y a numeric vector. It represents the response variable for each observation.
 #' @details
 #' The Root Mean Square Error (RMSE) is the standard deviation of the residuals. It is computed as follows:
-#' \deqn{RMSE=\sqrt{\sum\limits_{i=1}^n \frac{(y_f-y_r)^2}{n}}.}
+#' \deqn{RMSE=\sqrt{\sum\limits_{i=1}^n \frac{(y_{fi}-y_{ri})^2}{n}}.}{RMSE=\sqrt(1/n\sum (y.f-y.r)^2).}
 #'
 #' The Mean Absolute Error measures the average magnitude of the errors in a set of predictions,
 #' without considering their direction. It is computed as follows:
-#' \deqn{MAE=\frac{1}{n}\sum\limits_{i=1}^n |y_f-y_r|.}
+#' \deqn{MAE=\frac{1}{n}\sum\limits_{i=1}^n |y_{fi}-y_{ri}|.}{MAE=1/n \sum |y_f-y_r|.}
 #'
 #' The Rsquared represents the proportion of the variance for a dependent
 #' variable that's explained by an independent variable in a regresison. It is computed as follows:
 #'
-#'\deqn{R2=\frac{\sum\limits_{i=1}^n (y_f-\bar{y})^2}{\sum\limits_{i=1}^n (y_r-\bar{y})^2}.}
-#'Where \eqn{\bar{y}=\frac{1}{n}\sum\limits_{i=1}^n y_f}
+#'\deqn{R2=\frac{\sum\limits_{i=1}^n (y_{fi}-\bar{y})^2}{\sum\limits_{i=1}^n (y_{ri}-\bar{y})^2}.}{R2=\sum_{i=1,n} (y_f-bar.y)^2/ \sum_{i=1,n} (y_r-bar.y)^2.}
+#'Where \eqn{\bar{y}=\frac{1}{n}\sum\limits_{i=1}^n y_{fi}}{bar.y=1/n\sum y_f}. Note that \eqn{y_f}{y.f} are the fitted values and \eqn{y_r}{y.r} are the real ones.
 #'
 #' @return A \code{list} of the following attributes
 #' \item{RMSE}{the vector of the root mean square error values for each component.}
