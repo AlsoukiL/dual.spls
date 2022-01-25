@@ -7,7 +7,7 @@
 #' @param ncells a positive integer. \code{ncells} is the number of subsamples desired.
 #' @return A vector of index specifying each observation belonging to which group index.
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.calval()], [dual.spls::d.spls.FWLAS.calval()], `browseVignettes("dual.spls")`
+#' @seealso [dual.spls::d.spls.split()], [dual.spls::d.spls.calval()]
 
 
 d.spls.type<- function(y,ncells)
