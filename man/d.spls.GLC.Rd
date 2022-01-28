@@ -36,6 +36,7 @@ to the difference between the responses and the fitted values.}
 \item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group.}
 \item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrank to zero per component and per group.}
 \item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
+\item{ind_diff0}{the list of \code{ncp} elements representing the index of the none null regression coefficients elements.}
 \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{GLC}. }
 }
 \description{

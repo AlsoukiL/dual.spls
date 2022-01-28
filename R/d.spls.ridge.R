@@ -1,14 +1,15 @@
 #' Dual Sparse Partial Least Squares (Dual-SPLS) regression for the ridge norm
 #' @description
 #' The function \code{d.spls.lasso} performs dimensional reduction as in PLS methodology combined to variable selection via the
-#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda_1 \|w\|_1 +\lambda_2 \|Xw\|_2 + \|w\|_2.}{\Omega(w)=\lambda1 ||w||_1 +\lambda2 ||Xw||_2 + ||w||_2.}
+#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda_1 \|w\|_1 +\lambda_2 \|Xw\|_2 + \|w\|_2.}{\Omega(w)=\lambda1 ||w||_1 +\lambda2 ||Xw||_2 + ||w||_2.}.
+#' In the algorithm, the parameters \eqn{\lambda}, \eqn{\lambda_1}{\lambda1} and \eqn{\lambda_2}{\lambda2} are transformed into more meaningful values, \code{ppnu} and \eqn{\nu_2}{\nu2}.
 #' @usage d.spls.ridge(X,y,ncp,ppnu,nu2,verbose=TRUE)
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
 #' @param ppnu a positive real value, in \eqn{[0,1]}. \code{ppnu} is the desired
 #' proportion of variables to shrink to zero for each component (see Dual-SPLS methodology).
-#' @param nu2 a positive real value. \code{nu2} is a constraint parameter.
+#' @param nu2 a positive real value. \code{nu2} is a regularization parameter on \eqn{X^TX}{XTX}.
 #' @param verbose a Boolean value indicating whether or not to display the iterations steps. Default value is \code{TRUE}.
 #' @details
 #' The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.ridge}, has
@@ -16,8 +17,8 @@
 #' \deqn{z_{\nu_1,j}=\textrm{sign}(z_{X,\nu_2,j})(|z_{X,\nu_2,j}|-\nu_1)_+.}{z.\nu1_j=sign(z.X.\nu2_j)(|z.X.\nu2_j|-\nu1)_+.}
 #' Here \eqn{\nu_1}{\nu1} is the threshold for which \code{ppnu} of
 #' the absolute values of the coordinates of \eqn{z_{X,\nu_2}}{z.X.\nu2} are greater than \eqn{\nu_1}{\nu1} and \eqn{z_{X,\nu_2}=(\nu_2 X^TX + I_p)^{-1}X^Ty}{z.X.\nu2=inv(\nu2 X^TX + I) X^Ty}.
-#' Therefore, the ridge norm is beneficial to the situation where \eqn{X} is not invertible. If \eqn{X} is invertible, one
-#' can choose to use the Dual-SPLS of least squares norm.
+#' Therefore, the ridge norm is beneficial to the situation where \eqn{X^TX}{XTX} is singular. If \eqn{X^TX}{XTX} is invertible, one
+#' can choose to use the Dual-SPLS for the least squares norm instead.
 #' @return A \code{list} of the following attributes
 #' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
 #' \item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations. The \code{scores} represents
@@ -31,6 +32,7 @@
 #'  to the difference between the responses and the fitted values.}
 #' \item{lambda1}{the vector of length \code{ncp} collecting the parameters of sparsity used to fit the model at each iteration.}
 #' \item{zerovar}{the vector of length \code{ncp} representing the number of variables shrank to zero per component.}
+#' \item{ind_diff0}{the list of \code{ncp} elements representing the index of the none null regression coefficients elements.}
 #' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{ridge}. }
 #' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.LS]
@@ -50,7 +52,7 @@
 #'
 #'
 #' #fitting the model
-#' mod.dspls <- d.spls.ridge(X=X,y=y,ncp=10,ppnu=0.9,nu2=0.05,verbose=TRUE)
+#' mod.dspls <- d.spls.ridge(X=X,y=y,ncp=10,ppnu=0.9,nu2=100,verbose=TRUE)
 #'
 #' str(mod.dspls)
 #'
@@ -101,6 +103,9 @@ d.spls.ridge<- function(X,y,ncp,ppnu,nu2,verbose=TRUE)
   intercept=rep(0,ncp) # initialising intercept, the vector of intercepts
   zerovar=rep(0,ncp) # initialising zerovar, the vector of final number of zeros coefficients for each component
   listelambda1=rep(0,ncp) # initialising listelambda1, the vector of values of lambda1
+  ind.diff0=vector(mode = "list", length = ncp) # initializing ind0, the list of the index of the none zero coefficients
+  names(ind.diff0)=paste0("in.diff0_", 1:ncp)
+
   ###################################
   # Dual-SPLS
   ###################################
@@ -179,6 +184,10 @@ d.spls.ridge<- function(X,y,ncp,ppnu,nu2,verbose=TRUE)
     #zerovar
     zerovar[ic]=sum(Bhat[,ic]==0)
 
+    # ind.diff0
+    name=paste("in.diff0_",ic,sep="")
+    ind.diff0[name]=list(which(Bhat[,ic]!=0))
+
     # results iteration
     if (verbose){
       cat('Dual PLS ic=',ic,'lambda1=',lambda1,
@@ -190,6 +199,6 @@ d.spls.ridge<- function(X,y,ncp,ppnu,nu2,verbose=TRUE)
 
   return(list(Xmean=Xm,scores=TT,loadings=WW,Bhat=Bhat,intercept=intercept,
               fitted.values=YY,residuals=RES,
-              lambda1=listelambda1,zerovar=zerovar,type="ridge"))
+              lambda1=listelambda1,zerovar=zerovar,ind.diff0=ind.diff0,type="ridge"))
 
 }

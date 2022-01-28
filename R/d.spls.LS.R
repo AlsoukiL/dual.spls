@@ -35,6 +35,7 @@
 #' \item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
 #' to the difference between the responses and the fitted values.}
 #' \item{zerovar}{the vector of length \code{ncp} representing the number of variables shrank to zero per component.}
+#' \item{ind_diff0}{the list of \code{ncp} elements representing the index of the none null regression coefficients elements.}
 #' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{LS}. }
 #' @author Louna Alsouki François Wahl
 #' @seealso  [dual.spls::d.spls.ridge]
@@ -106,6 +107,8 @@ d.spls.LS<- function(X,y,ncp,ppnu,verbose=TRUE)
   intercept=rep(0,ncp) # initialising intercept, the vector of intercepts
   zerovar=rep(0,ncp) # initialising zerovar, the vector of final number of zeros coefficients for each component
   listelambda=rep(0,ncp) # initialising listelambda, the vector of values of lambda
+  ind.diff0=vector(mode = "list", length = ncp) # initializing ind0, the list of the index of the none zero coefficients
+  names(ind.diff0)=paste0("in.diff0_", 1:ncp)
 
   ###################################
   # Dual-SPLS
@@ -156,7 +159,6 @@ d.spls.LS<- function(X,y,ncp,ppnu,verbose=TRUE)
     t=t/d.spls.norm2(t)
     TT[,ic]=t
 
-    Xd=Xi
     kappa=kappa(t(Xi)%*%Xi)
     # deflation
     Xi=Xi-t%*%t(t)%*%Xi
@@ -183,6 +185,10 @@ d.spls.LS<- function(X,y,ncp,ppnu,verbose=TRUE)
     #zerovar
     zerovar[ic]=sum(Bhat[,ic]==0)
 
+    # ind.diff0
+    name=paste("in.diff0_",ic,sep="")
+    ind.diff0[name]=list(which(Bhat[,ic]!=0))
+
     # results iteration
     if (verbose){
       cat('Dual PLS LS, ic=',ic,
@@ -193,5 +199,5 @@ d.spls.LS<- function(X,y,ncp,ppnu,verbose=TRUE)
 
   return(list(Xmean=Xm,scores=TT,loadings=WW,Bhat=Bhat,intercept=intercept,
               fitted.values=YY,residuals=RES,
-              lambda=listelambda,zerovar=zerovar,Xd=Xd,type="LS"))
+              lambda=listelambda,zerovar=zerovar,ind.diff0=ind.diff0,type="LS"))
 }

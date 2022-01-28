@@ -33,6 +33,7 @@
 #' \item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group.}
 #' \item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrank to zero per component and per group.}
 #' \item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
+#' \item{ind_diff0}{the list of \code{ncp} elements representing the index of the none null regression coefficients elements.}
 #' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{GLC}. }
 #' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.GLA],[dual.spls::d.spls.GLB],[dual.spls::d.spls.GL]
@@ -70,6 +71,8 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
   zerovar=matrix(0,nG,ncp) # initializing zerovar, the matrix of final number of zeros coefficients for each component and for each group
   listelambda=matrix(0,nG,ncp) # initializing listelambda, the matrix of values of lambda for each group
   listealpha=matrix(0,nG,ncp) # initializing listealpha, the matrix of values of alpha for each group
+  ind.diff0=vector(mode = "list", length = ncp) # initializing ind0, the list of the index of the none zero coefficients
+  names(ind.diff0)=paste0("in.diff0_", 1:ncp)
 
   nu=array(0,nG) # initializing nu for each group
   Znu=array(0,p) # initializing Znu for each group
@@ -225,6 +228,10 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
       indu=which(indG==u)
       sum(Bhat[indu,ic]==0)})
 
+    # ind.diff0
+    name=paste("in.diff0_",ic,sep="")
+    ind.diff0[name]=list(which(Bhat[,ic]!=0))
+
     # predictions
     YY[,ic]=X %*% Bhat[,ic] + intercept[ic]
 
@@ -241,5 +248,5 @@ d.spls.GLC<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 
   return(list(Xmean=Xm,scores=TT,loadings=WW,Bhat=Bhat,intercept=intercept,
               fitted.values=YY,residuals=RES,
-              lambda=listelambda,alpha=listealpha,zerovar=zerovar,PP=PP,type="GLC"))
+              lambda=listelambda,alpha=listealpha,zerovar=zerovar,PP=PP,ind.diff0=ind.diff0,type="GLC"))
 }

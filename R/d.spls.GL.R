@@ -59,6 +59,7 @@
 #' \item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group when the norm chosen is \code{B} or \code{C}.}
 #' \item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrank to zero per component and per group.}
 #' \item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
+#' \item{ind_diff0}{the list of \code{ncp} elements representing the index of the none null regression coefficients elements.}
 #' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is either \code{GLA}, \code{GLB} or \code{GLC}. }
 #' @author Louna Alsouki François Wahl
 #' @seealso [dual.spls::d.spls.GLA], [dual.spls::d.spls.GLB], [dual.spls::d.spls.GLC]

@@ -31,6 +31,7 @@ of the Dual-SPLS.}
 \item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
 to the difference between the responses and the fitted values.}
 \item{zerovar}{the vector of length \code{ncp} representing the number of variables shrank to zero per component.}
+\item{ind_diff0}{the list of \code{ncp} elements representing the index of the none null regression coefficients elements.}
 \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{LS}. }
 }
 \description{
