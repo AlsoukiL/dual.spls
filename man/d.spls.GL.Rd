@@ -76,8 +76,8 @@ a simple closed form expression (ref) deriving from the fact that for each group
 is collinear to a vector
 \deqn{z_{\nu,g}=\textrm{sign}({z_g})(|z_g|-\nu_g)_+.}{z.\nu_g=sign(z_g)(|z_g|-\nu_g)_+.}
 Here, for each group \eqn{g}, \eqn{\nu_g} is the threshold for which \code{ppnu} of the group \eqn{g} of
-the absolute values of the coordinates of \eqn{z_j} are greater than \eqn{\nu_g}. The norms differ in the coefficient of the
-collinearity expression. (see reference for detail)
+the absolute values of the coordinates of \eqn{z_j} are greater than \eqn{\nu_g}. The norms differ in the value of the threshold for each group,
+that is the expression of \eqn{\nu_g}{\nu_g}. (see reference for detail)
 }
 \examples{
 ### load dual.spls library

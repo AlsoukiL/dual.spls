@@ -42,8 +42,8 @@
 #' is collinear to a vector
 #' \deqn{z_{\nu,g}=\textrm{sign}({z_g})(|z_g|-\nu_g)_+.}{z.\nu_g=sign(z_g)(|z_g|-\nu_g)_+.}
 #' Here, for each group \eqn{g}, \eqn{\nu_g} is the threshold for which \code{ppnu} of the group \eqn{g} of
-#' the absolute values of the coordinates of \eqn{z_j} are greater than \eqn{\nu_g}. The norms differ in the coefficient of the
-#' collinearity expression. (see reference for detail)
+#' the absolute values of the coordinates of \eqn{z_j} are greater than \eqn{\nu_g}. The norms differ in the value of the threshold for each group,
+#' that is the expression of \eqn{\nu_g}{\nu_g}. (see reference for detail)
 #' @return A \code{list} of the following attributes
 #' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
 #' \item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations. The \code{scores} represents
