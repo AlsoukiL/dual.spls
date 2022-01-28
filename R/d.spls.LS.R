@@ -123,10 +123,16 @@ d.spls.LS<- function(X,y,ncp,ppnu,verbose=TRUE)
     zi=as.vector(zi)
 
     # computing the inverse of t(X)%*%X
-    Xsvd=svd(t(Xi)%*%Xi)
-    if (kappa(t(Xi)%*%Xi)>1e20){ warning('XtX is close to being singular' ) }
-
-    XtXmoins1=Xsvd$v%*%diag(1/Xsvd$d)%*%t(Xsvd$u)
+    Xsvd=svd(Xi)
+    #Xsvd=svd(t(Xi)%*%Xi)
+    invD=1/Xsvd$d
+    if (ic==1 && min(Xsvd$d)/max(Xsvd$d)<1e-16) warning('XtX is close to being singular')
+        else if (min(Xsvd$d)/max(Xsvd$d[-((p-ic+2):p)])<1e-16)
+          {
+          warning('deflated XtX is close to being singular on component number ',ic )
+          invD[((p-ic+2):p)]=0
+        }
+    XtXmoins1=Xsvd$v%*%diag(invD^2)%*%t(Xsvd$v)
 
     #Optimizing nu
     wLS=XtXmoins1%*%zi
@@ -159,7 +165,6 @@ d.spls.LS<- function(X,y,ncp,ppnu,verbose=TRUE)
     t=t/d.spls.norm2(t)
     TT[,ic]=t
 
-    kappa=kappa(t(Xi)%*%Xi)
     # deflation
     Xi=Xi-t%*%t(t)%*%Xi
 
@@ -193,7 +198,7 @@ d.spls.LS<- function(X,y,ncp,ppnu,verbose=TRUE)
     if (verbose){
       cat('Dual PLS LS, ic=',ic,
           'nu=',nu,
-          'nbzeros=',zerovar[ic],kappa=kappa, '\n')
+          'nbzeros=',zerovar[ic], '\n')
     }
   }
 
