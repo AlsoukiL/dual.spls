@@ -32,5 +32,6 @@ test_that("d.spls.metric works", {
 
   #R2
   expect_setequal(predmetric$Rsquared[i], sum((mod.dspls$fitted.values[,1:i]-mean(y))^2)/sum((y-mean(y))^2))
+  expect_lt(predmetric$Rsquared[i],1)
 
 })

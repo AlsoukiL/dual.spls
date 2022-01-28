@@ -78,7 +78,7 @@ d.spls.metric<-function (mod.dspls,real.y)
   p=dim(res)[2] # number of components
   SCReg=rep(0,p) # regression sum of squares
 
-  for (i in 1:p) {SCReg[i]=sum((fitted.y[,1:i]-ybar)^2)}
+  for (i in 1:p) {SCReg[i]=sum((fitted.y[,i]-ybar)^2)}
   R2=SCReg/SCT
 
   return(list(RMSE=RMSE,MAE=MAE,Rsquared=R2))
