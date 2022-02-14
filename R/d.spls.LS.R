@@ -124,14 +124,19 @@ d.spls.LS<- function(X,y,ncp,ppnu,verbose=TRUE)
 
     # computing the inverse of t(X)%*%X
     Xsvd=svd(Xi)
+    len=min(p,n)
     #Xsvd=svd(t(Xi)%*%Xi)
     invD=1/Xsvd$d
-    if (ic==1 && min(Xsvd$d)/max(Xsvd$d)<1e-16) warning('XtX is close to being singular')
-        else if (min(Xsvd$d)/max(Xsvd$d[-((p-ic+2):p)])<1e-16)
-          {
-          warning('deflated XtX is close to being singular on component number ',ic )
-          invD[((p-ic+2):p)]=0
-        }
+    if (ic==1 && min(Xsvd$d)/max(Xsvd$d)<1e-16)
+    {
+      warning('XtX is close to being singular')
+    }
+    else
+      if (ic>1 && min(Xsvd$d)/max(Xsvd$d[-((len-ic+2):len)])<1e-16)
+      {
+        warning('deflated XtX is close to being singular on component number ',ic )
+        invD[((len-ic+2):len)]=0
+      }
     XtXmoins1=Xsvd$v%*%diag(invD^2)%*%t(Xsvd$v)
 
     #Optimizing nu
