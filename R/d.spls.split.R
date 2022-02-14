@@ -15,7 +15,7 @@
 d.spls.split<- function(X,Xtype,Listecal)
 {
 
-  if (length(Xtype)< dim(X)[1] || all.equal(sort(unique(Xtype)),c(1:max(Xtype))) != T)
+  if (length(Xtype)< dim(X)[1])
   {
     stop("some observations are badly indexed")
   }
