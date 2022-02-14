@@ -2,8 +2,8 @@
 #' @description
 #' This function computes evaluation metrics commonly used in modelling. It provides the values of the root mean square
 #' error (RMSE), the mean absolute error (MAE) and the Rsquared.
-#' @usage d.spls.metric(mod.dspls,real.y)
-#' @param mod.dspls is a fitted Dual-SPLS object.
+#' @usage d.spls.metric(hat.y,real.y)
+#' @param hat.y a numeric vector. It represents the fitted response variable for each observation using a Dual-SPLS method.
 #' @param real.y a numeric vector. It represents the response variable for each observation.
 #' @details
 #' The Root Mean Square Error (RMSE) is the standard deviation of the residuals. It is computed as follows:
@@ -44,7 +44,7 @@
 #' ncomplasso <- d.spls.cv(X=X,Y=y,ncomp=10,dspls="lasso",ppnu=0.9,nrepcv=20,pctcv=75)
 #' mod.dspls.lasso <- d.spls.lasso(X=X,y=y,ncp=ncomplasso,ppnu=0.9,verbose=TRUE)
 #'
-#' predmetric= d.spls.metric(mod.dspls.lasso,y)
+#' predmetric= d.spls.metric(mod.dspls.lasso$fitted.values,y)
 #'
 #' #Error plots
 #' plot(1:ncomplasso,predmetric$RMSE,
@@ -58,13 +58,13 @@
 #'  cex = 0.8, col = c("blue", "red","green"), lty = c(1,1,1))
 #' @export
 
-d.spls.metric<-function (mod.dspls,real.y)
+d.spls.metric<-function (hat.y,real.y)
 {
   #residuals
-  res=mod.dspls$residuals
+  res=real.y-hat.y
 
   #fitted values
-  fitted.y=mod.dspls$fitted.values
+  fitted.y=hat.y
 
   #RMSE
   RMSE=apply(res,2,function(u) sqrt(mean(u^2)) )

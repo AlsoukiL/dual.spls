@@ -4,10 +4,10 @@
 \alias{d.spls.metric}
 \title{Computes predictions criterias}
 \usage{
-d.spls.metric(mod.dspls,real.y)
+d.spls.metric(hat.y,real.y)
 }
 \arguments{
-\item{mod.dspls}{is a fitted Dual-SPLS object.}
+\item{hat.y}{a numeric vector. It represents the fitted response variable for each observation using a Dual-SPLS method.}
 
 \item{real.y}{a numeric vector. It represents the response variable for each observation.}
 }
@@ -53,7 +53,7 @@ y <- data$y
 ncomplasso <- d.spls.cv(X=X,Y=y,ncomp=10,dspls="lasso",ppnu=0.9,nrepcv=20,pctcv=75)
 mod.dspls.lasso <- d.spls.lasso(X=X,y=y,ncp=ncomplasso,ppnu=0.9,verbose=TRUE)
 
-predmetric= d.spls.metric(mod.dspls.lasso,y)
+predmetric= d.spls.metric(mod.dspls.lasso$fitted.values,y)
 
 #Error plots
 plot(1:ncomplasso,predmetric$RMSE,

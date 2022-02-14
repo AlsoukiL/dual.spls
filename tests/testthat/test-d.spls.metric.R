@@ -14,7 +14,7 @@ test_that("d.spls.metric works", {
   n <- dim(X)[1]
   p <- dim(X)[2]
 
-  predmetric= d.spls.metric(mod.dspls,y)
+  predmetric= d.spls.metric(mod.dspls$fitted.values,y)
 
   #Dimension testing
   expect_equal(dim(mod.dspls$residuals), c(n,ncp))
