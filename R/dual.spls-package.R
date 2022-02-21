@@ -44,6 +44,7 @@
 #' @importFrom pdist pdist
 #' @importFrom stats rnorm
 #' @importFrom stats runif
+#' @importFrom stats prcomp
 #' @importFrom graphics points
 #' @importFrom graphics par
 #' @importFrom graphics legend

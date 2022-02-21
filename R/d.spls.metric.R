@@ -76,10 +76,9 @@ d.spls.metric<-function (hat.y,real.y)
   ybar=mean(real.y) # mean of y
   SCT=sum((real.y-ybar)^2) # total sum of squares
   p=dim(res)[2] # number of components
-  SCReg=rep(0,p) # regression sum of squares
-
-  for (i in 1:p) {SCReg[i]=sum((fitted.y[,i]-ybar)^2)}
-  R2=SCReg/SCT
+  SSres=rep(0,p) # regression sum of squares
+  for (i in 1:p) {SSres[i]=sum((res[,i])^2)}
+  R2=1-SSres/SCT
 
   return(list(RMSE=RMSE,MAE=MAE,Rsquared=R2))
 }

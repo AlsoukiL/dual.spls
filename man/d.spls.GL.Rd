@@ -94,7 +94,7 @@ data=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
 
 X <- data$X
 X1 <- X[,(1:p[1])]
-X2 <- X[,(p[1]+1):p[2]]
+X2 <- X[,(p[1]+1):sum(p)]
 y <- data$y
 
 indG <-c(rep(1,p[1]),rep(2,p[2]))

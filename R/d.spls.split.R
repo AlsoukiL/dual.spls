@@ -14,7 +14,6 @@
 #'
 d.spls.split<- function(X,Xtype,Listecal)
 {
-
   if (length(Xtype)< dim(X)[1])
   {
     stop("some observations are badly indexed")

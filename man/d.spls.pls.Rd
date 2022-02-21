@@ -27,6 +27,7 @@ of the Dual-SPLS.}
 \item{fitted.values}{the matrix of dimension \code{(n,ncp)} that represents the predicted values of \code{y}}
 \item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
 to the difference between the responses and the fitted values.}
+\item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{ridge}. }
 }
 \description{
 The function \code{d.spls.pls} performs the PLS1 dimensional reduction methodology using Wold's NIPALS algorithm. It is

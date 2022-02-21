@@ -4,7 +4,8 @@
 \alias{d.spls.calval}
 \title{Splits data into calibration and validation sets using the splitting method that takes into account X and y}
 \usage{
-d.spls.calval(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
+d.spls.calval(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL,
+center=TRUE,method="svd-euclidien",pc=0.9)
 }
 \arguments{
 \item{X}{a numeric matrix of predictors values.}
@@ -27,6 +28,16 @@ is \code{10}.}
 \item{Listecal}{a numeric vector specifying how many observations from each group should be selected as calibration.
 Default value is \code{NULL}, meaning the function will consider a percentage of \code{pcal} from each group
 to be in the calibration set. If \code{NULL}, parameter \code{pcal} should be specified.}
+
+\item{center}{logical value indicating wether the matrix \code{X} should be centered. Default set to TRUE.}
+
+\item{method}{the method and norm used for the distance computation. It is by default equal to "svd-euclidien"
+which means euclidien distance is used after a SVD transformation with \code{pc} components. "pca-euclidien" means
+euclidien distance on PCA scores with \code{pc} components. For "euclidien", original \code{X} is used with euclidien norm.}
+
+\item{pc}{a positive real value indicating the number of component to consider when applying the SVD transformation or the PCA.
+If \code{pc} \eqn{< 1}, the number of components kept corresponds to the number of components explaining at least
+(\code{pc} \eqn{< 1}) percent of the total variance.}
 }
 \value{
 A \code{list} of the following attributes

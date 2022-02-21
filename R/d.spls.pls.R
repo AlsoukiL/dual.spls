@@ -22,8 +22,8 @@
 #' \item{intercept}{the vector of intercept values for each component.}
 #' \item{fitted.values}{the matrix of dimension \code{(n,ncp)} that represents the predicted values of \code{y}}
 #' \item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
-#' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{ridge}. }
 #'  to the difference between the responses and the fitted values.}
+#' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{ridge}. }
 #' @references
 #' H. Wold. Path Models with Latent Variables: The NIPALS Approach. In H.M. Blalock et al., editor, Quantitative Sociology: International Perspectives on Mathematical and Statistical Model Building, pages 307–357. Academic Press, 1975.
 #' @author Louna Alsouki François Wahl

@@ -2,7 +2,8 @@
 #' @description
 #' The function \code{d.spls.calval} divides the data \code{X} into a calibration and a validation.
 #' It uses a variation on the Kennard and Stone strategy by dividing observations into groups (see details for more explanations).
-#' @usage d.spls.calval(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
+#' @usage d.spls.calval(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL,
+#' center=TRUE,method="svd-euclidien",pc=0.9)
 #' @param X a numeric matrix of predictors values.
 #' @param pcal a positive integer between 0 and 100. \code{pcal} is the percentage
 #' of calibration samples to be selected. Default value is NULL, meaning as long as \code{Listecal} is
@@ -18,6 +19,13 @@
 #' @param Listecal a numeric vector specifying how many observations from each group should be selected as calibration.
 #' Default value is \code{NULL}, meaning the function will consider a percentage of \code{pcal} from each group
 #' to be in the calibration set. If \code{NULL}, parameter \code{pcal} should be specified.
+#' @param center logical value indicating wether the matrix \code{X} should be centered. Default set to TRUE.
+#' @param method the method and norm used for the distance computation. It is by default equal to "svd-euclidien"
+#' which means euclidien distance is used after a SVD transformation with \code{pc} components. "pca-euclidien" means
+#' euclidien distance on PCA scores with \code{pc} components. For "euclidien", original \code{X} is used with euclidien norm.
+#' @param pc a positive real value indicating the number of component to consider when applying the SVD transformation or the PCA.
+#' If \code{pc} \eqn{< 1}, the number of components kept corresponds to the number of components explaining at least
+#' (\code{pc} \eqn{< 1}) percent of the total variance.
 #' @details
 #' The algorithm allows to select samples using the classical Kennard and Stone on
 #' each group of observations one by one. It starts by selecting the point that is the furthest away from the centroid.
@@ -97,8 +105,15 @@
 #' @export
 
 
-d.spls.calval<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL)
+d.spls.calval<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL,center=TRUE,method="svd-euclidien",pc=0.9)
 {
+  n=dim(X)[1]
+
+  if (center==T) {
+    Xm = apply(X, 2, mean)
+    X = X - rep(1, n) %*% t(Xm)
+  }
+
   if (is.null(Datatype) & is.null(y)){
     stop('if Datatype=NULL, y should not be NULL' )
   }
@@ -122,6 +137,29 @@ d.spls.calval<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NUL
   if(max(Datatype) != length(Listecal)){
     stop('length of Listecal does not match with values of Datatype' )
   }
+
+  if (pc<0)
+  {
+    pc=0.9
+    warning('pc cannot be negative, pc is set to 0.9 (see details)')
+  }
+  pca=prcomp(X)
+  if (pc<1)
+  {
+    var=pca$sdev^2/sum(pca$sdev^2)
+    cumsum=cumsum(var)
+    pc=which.max(cumsum<=pc)
+
+  }
+  if (method=="pca-euclidien") X=pca$x[, 1:pc]
+
+  if (method=="svd-euclidien")
+  {
+    svdX=svd(X)
+    X=svdX$u[,1:pc]
+  }
+
+  X=as.matrix(X)
 
   # index of calibration/validation
   indcal=d.spls.split(X=X,Xtype=Datatype,Listecal=Listecal)
