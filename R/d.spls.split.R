@@ -30,10 +30,8 @@ d.spls.split<- function(X,Xtype,Listecal)
   ###################################
   # Sorting the data
   ###################################
-  # groups
-  grp=unique(Xtype)
   # number of groups
-  n_grp=length(grp)
+  n_grp=max(Xtype)
   # number of observations
   n_exp=dim(X)[1]
 
