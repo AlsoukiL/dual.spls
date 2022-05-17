@@ -62,6 +62,7 @@ d.spls.metric<-function (hat.y,real.y)
 {
   #residuals
   res=real.y-hat.y
+  res=as.matrix(res)
 
   #fitted values
   fitted.y=hat.y
