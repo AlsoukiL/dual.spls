@@ -20,9 +20,9 @@
 #' Default value is \code{NULL}, meaning the function will consider a percentage of \code{pcal} from each group
 #' to be in the calibration set. If \code{NULL}, parameter \code{pcal} should be specified.
 #' @param center logical value indicating wether the matrix \code{X} should be centered. Default set to TRUE.
-#' @param method the method and norm used for the distance computation. It is by default equal to "svd-euclidien"
-#' which means euclidien distance is used after a SVD transformation with \code{pc} components. "pca-euclidien" means
-#' euclidien distance on PCA scores with \code{pc} components. For "euclidien", original \code{X} is used with euclidien norm.
+#' @param method the method and norm used for the distance computation. It is by default equal to "euclidean" which means
+#'original \code{X} is used with euclidien norm. "svd-euclidien" means euclidien distance is used after a SVD transformation with \code{pc} components. "pca-euclidien" means
+#' euclidien distance on PCA scores with \code{pc} components. For
 #' @param pc a positive real value indicating the number of component to consider when applying the SVD transformation or the PCA.
 #' If \code{pc} \eqn{< 1}, the number of components kept corresponds to the number of components explaining at least
 #' (\code{pc} \eqn{< 1}) percent of the total variance.
@@ -105,7 +105,7 @@
 #' @export
 
 
-d.spls.calval<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL,center=TRUE,method="svd-euclidien",pc=0.9)
+d.spls.calval<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL,center=TRUE,method="euclidean",pc=0.9)
 {
   n=dim(X)[1]
 
@@ -127,12 +127,7 @@ d.spls.calval<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NUL
     stop('if Listecal=NULL, pcal should not be NULL' )
   }
 
-  #percentage of calibration
-  if(is.null(Listecal)){
-    # nb elts in calibration for each cell
-    ycounts=sapply(1:ncells,function(u) sum(Datatype==u) )
-    Listecal=ceiling(ycounts*pcal/100)
-  }
+  if (is.null(Listecal)) Listecal=d.spls.listecal(Datatype,pcal)
 
   if(max(Datatype) != length(Listecal)){
     stop('length of Listecal does not match with values of Datatype' )

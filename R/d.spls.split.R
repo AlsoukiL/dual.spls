@@ -12,7 +12,7 @@
 #' @seealso [dual.spls::d.spls.type],[dual.spls::d.spls.calval]
 #' @importFrom pdist pdist
 #'
-d.spls.split<- function(X,Xtype,Listecal)
+d.spls.split<- function(X,Xtype,Listecal=NULL)
 {
   if (length(Xtype)< dim(X)[1])
   {

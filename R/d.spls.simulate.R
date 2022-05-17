@@ -153,7 +153,8 @@ d.spls.simulate<- function(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5,int.
 
   y0=rep(0,n) # initializing the response vector without noise y0
   # setting the interval limits for y0
-  pif=round(seq(10,100,length.out = 2*length(int.coef))*p[1]/100)
+  pif=round(seq(10,100,length.out = length(int.coef))*p[1]/100)
+  pif=c(0,pif)
 
   # computing y0 as a sum of intervals of X
   sumX=matrix(0,n,length(int.coef))
