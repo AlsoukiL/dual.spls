@@ -4,7 +4,7 @@
 \alias{d.spls.GLC}
 \title{Dual Sparse Partial Least Squares (Dual-SPLS) regression for the group lasso norm C}
 \usage{
-d.spls.GLC(X, y, ncp, ppnu, indG, verbose = FALSE)
+d.spls.GLC(X, y, ncp, ppnu, indG, gamma, verbose = FALSE)
 }
 \arguments{
 \item{X}{a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.}
@@ -17,6 +17,8 @@ d.spls.GLC(X, y, ncp, ppnu, indG, verbose = FALSE)
 \code{ppnu} is the desired proportion of variables to shrink to zero for each component and for each group.}
 
 \item{indG}{a numeric vector of group index for each observation.}
+
+\item{gamma}{a numeric vector of the norm \eqn{\Omega} for each \eqn{w_g} verifying \eqn{\sum\sum\limits_{g=1}^G \gamma_g=1}.}
 
 \item{verbose}{a Boolean value indicating whether or not to display the iterations steps.}
 }
@@ -41,18 +43,16 @@ to the difference between the responses and the fitted values.}
 }
 \description{
 The function \code{d.spls.GLC} performs dimensional reduction as in PLS methodology combined to variable selection using the
-Dual-SPLS algorithm with the norm \deqn{\Omega_g(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1}{\Omega_g(w)=||w_g||_2+ \lambda_g ||w_g||_1} for combined data where
-\eqn{\Omega(w)=\sum\limits_{g=1}{^G} \alpha_g \Omega_g(w)=1}{\Omega(w)=\sum_{g=1,G} \alpha_g \Omega_g(w)=1};
-\eqn{\sum\limits_{g=1}^G \alpha_g=1}{\sum_{g=1,G} \alpha_g=1} and \code{G} is the number of groups.
+Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1}{\Omega(w)=\sum_{g=1,G} \alpha_g ||w ||_2+\sum_{g=1,G} \lambda_g ||w_g ||_1} for
+\eqn{\sum\limits_{g=1}^G \alpha_g=1}{\sum_{g=1,G} \alpha_g=1};  \eqn{\Omega(w_g)=\gamma_g}{\Omega(w_g)=\gamma_g} and \eqn{\sum\limits_{g=1}^G \gamma_g=1.}{\sum_{g=1,G} \gamma_g=1.} Where \code{G} is the number of groups.
 Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 threshold as in the dual sparse lasso methodology,
 that is each \eqn{w_g} will be collinear to a vector \eqn{z.\nu_g} built from the coordinate of \eqn{z}
-and constrained by the threshold \eqn{\nu_g}. Norm C applies the lasso norm for each group individually while constraining the overall norm. Moreover,
-the Euclidian norm of each \eqn{w_g} is computed while minimizing the root mean squares error of prediction.
+and constrained by the threshold \eqn{\nu_g}. Norm C is a particular case of the generalized norm A that assigns user to define weights for each group.
 }
 \seealso{
-\link{d.spls.GLA},\link{d.spls.GLB},\link{d.spls.GL}
+\link{d.spls.GLA},\link{d.spls.GLC},\link{d.spls.GL}
 }
 \author{
 Louna Alsouki François Wahl

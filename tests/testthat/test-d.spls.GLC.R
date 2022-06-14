@@ -1,54 +1,58 @@
 test_that("d.spls.GLC works", {
 
   #### two predictors matrix
-### parameters
-n <- 100
-p <- c(50,100)
-nondes <- c(20,30)
-sigmaondes <- c(0.05,0.02)
-data=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
+  ### parameters
+  n <- 100
+  p <- c(50,100)
+  nondes <- c(20,30)
+  sigmaondes <- c(0.05,0.02)
+  data=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
 
-X <- data$X
-X1 <- X[,(1:p[1])]
-X2 <- X[,(p[1]+1):p[2]]
-y <- data$y
+  X <- data$X
+  X1 <- X[,(1:p[1])]
+  X2 <- X[,(p[1]+1):p[2]]
+  y <- data$y
 
-indG <-c(rep(1,p[1]),rep(2,p[2]))
+  indG <-c(rep(1,p[1]),rep(2,p[2]))
 
-# fitting the model
-ncp <- 10
-ppnu <- c(0.99,0.9)
-mod.dspls <- d.spls.GLC(X=X,y=y,ncp=ncp,ppnu=ppnu,indG=indG,verbose=TRUE)
-n <- dim(X)[1]
-p <- dim(X)[2]
+  # fitting the model
+  ncp <- 10
+  ppnu <- c(0.99,0.9)
+  mod.dspls <- d.spls.GLC(X=X,y=y,ncp=ncp,ppnu=ppnu,indG=indG,gamma=c(0.5,0.5),verbose=TRUE)
+  n <- dim(X)[1]
+  p <- dim(X)[2]
 
-# dimension testing
-expect_equal(dim(mod.dspls$scores), c(n,ncp))
-expect_equal(length(mod.dspls$intercept), ncp)
-expect_equal(dim(mod.dspls$Bhat), c(p,ncp))
-expect_equal(dim(mod.dspls$loadings), c(p,ncp))
-expect_equal(dim(mod.dspls$fitted.values), c(n,ncp))
+  # dimension testing
+  expect_equal(dim(mod.dspls$scores), c(n,ncp))
+  expect_equal(length(mod.dspls$intercept), ncp)
+  expect_equal(dim(mod.dspls$Bhat), c(p,ncp))
+  expect_equal(dim(mod.dspls$loadings), c(p,ncp))
+  expect_equal(dim(mod.dspls$fitted.values), c(n,ncp))
 
-# residuals
-expect_setequal(mod.dspls$residuals, y-mod.dspls$fitted.values)
+  #residuals
+  expect_setequal(mod.dspls$residuals, y-mod.dspls$fitted.values)
 
-# mean of X
-expect_setequal(apply(X, 2, mean), mod.dspls$Xmean)
+  #Mean of X
+  expect_setequal(apply(X, 2, mean), mod.dspls$Xmean)
 
-# zerovar
-for (i in 2:ncp)
-{
-  expect_gt(mod.dspls$zerovar[1,i-1],mod.dspls$zerovar[1,i]-1)
-}
-expect_lt(mod.dspls$zerovar[1,1], ppnu[1]*p+1)
+  #zerovar
+  for (i in 2:ncp)
+  {
+    expect_gt(mod.dspls$zerovar[1,i-1],mod.dspls$zerovar[1,i]-1)
+  }
+  expect_lt(mod.dspls$zerovar[1,1], ppnu[1]*p+1)
 
-# zerovar
-for (i in 2:ncp)
-{
-  expect_gt(mod.dspls$zerovar[2,i-1],mod.dspls$zerovar[2,i]-1)
-}
-expect_lt(mod.dspls$zerovar[2,1], ppnu[2]*p+1)
+  #zerovar
+  for (i in 2:ncp)
+  {
+    expect_gt(mod.dspls$zerovar[2,i-1],mod.dspls$zerovar[2,i]-1)
+  }
+  expect_lt(mod.dspls$zerovar[2,1], ppnu[2]*p+1)
 
-# number of variables
-expect_equal(length(unique(indG)), dim(mod.dspls$zerovar)[1]) })
+  #number of variables
+  expect_equal(length(unique(indG)), dim(mod.dspls$zerovar)[1])
 
+  #Error
+  expect_error(length(d.spls.GLB(X=X,y=y,ncp=ncp,ppnu=ppnu,indG=indG,gamma=c(0.5,0.9),verbose=TRUE)))
+  expect_error(length(d.spls.GLB(X=X,y=y,ncp=ncp,ppnu=ppnu,indG=indG,gamma=0.5,verbose=TRUE)))
+})

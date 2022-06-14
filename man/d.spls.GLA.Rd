@@ -18,7 +18,7 @@ d.spls.GLA(X, y, ncp, ppnu, indG, verbose = FALSE)
 
 \item{indG}{a numeric vector of group index for each observation.}
 
-\item{verbose}{a Boolean value indicating whether or not to display the iterations steps. Default value is \code{FALSE}.}
+\item{verbose}{a Boolean value indicating whether or not to display the iterations steps.}
 }
 \value{
 A \code{list} of the following attributes
@@ -33,6 +33,7 @@ of the Dual-SPLS.}
 \item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
 to the difference between the responses and the fitted values.}
 \item{lambda}{the matrix of dimension \code{(G,ncp)} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group.}
+\item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group.}
 \item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrank to zero per component and per group.}
 \item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
 \item{ind_diff0}{the list of \code{ncp} elements representing the index of the none null regression coefficients elements.}
@@ -40,16 +41,18 @@ to the difference between the responses and the fitted values.}
 }
 \description{
 The function \code{d.spls.GLA} performs dimensional reduction as in PLS methodology combined to variable selection using the
-Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\|w\|_2+\sum\limits_\limits_{g=1}^G \lambda_g\|w_g\|_1}{\Omega(w)=||w||_2+\sum_{g=1,G} \lambda_g||w_g||_1} for combined data.
-Where \code{G} is the number of groups.
+Dual-SPLS algorithm with the norm \deqn{\Omega_g(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1}{\Omega_g(w)=||w_g||_2+ \lambda_g ||w_g||_1} for combined data where
+\eqn{\Omega(w)=\sum\limits_{g=1}{^G} \alpha_g \Omega_g(w)=1}{\Omega(w)=\sum_{g=1,G} \alpha_g \Omega_g(w)=1};
+\eqn{\sum\limits_{g=1}^G \alpha_g=1}{\sum_{g=1,G} \alpha_g=1} and \code{G} is the number of groups.
 Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 threshold as in the dual sparse lasso methodology,
 that is each \eqn{w_g} will be collinear to a vector \eqn{z.\nu_g} built from the coordinate of \eqn{z}
-and constrained by the threshold \eqn{\nu_g}. The Norm A is the genuine alternative, it gives the same result as the lasso norm for \eqn{G=1}.
+and constrained by the threshold \eqn{\nu_g}. Norm A i a generalized group lasso-like norm that applies the lasso norm for each group individually while constraining the overall norm. Moreover,
+the Euclidian norm of each \eqn{w_g} is computed while minimizing the root mean squares error of prediction.
 }
 \seealso{
-\link{d.spls.GLB}, \link{d.spls.GLC}, \link{d.spls.GL}
+\link{d.spls.GLA},\link{d.spls.GLB},\link{d.spls.GL}
 }
 \author{
 Louna Alsouki François Wahl

@@ -18,7 +18,7 @@ d.spls.GL(X,y,ncp,ppnu,indG,gamma=NULL,norm="A",verbose=FALSE)
 
 \item{indG}{a numeric vector of group index for each observation.}
 
-\item{gamma}{a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{norm="B"}.}
+\item{gamma}{a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{norm="C"}.}
 
 \item{norm}{a character specifying the norm chosen between A, B and C. Default value is \code{A}.}
 
@@ -48,12 +48,13 @@ The function performs dimensional reduction with the group lasso norms. Three no
 where \code{G} is the number of groups, the vectors \eqn{w_g} hold the coordinates of \eqn{w}
 for the observations belonging to the group \eqn{g} and \eqn{\alpha_g}, \eqn{\lambda_g} and \eqn{\gamma_g} are all positive scalars.
 \itemize{
-\item Norm A: \eqn{\Omega(w)=\|w\|_2+\sum\limits_{g=1}^G \lambda_g\|w_g\|_1.}{\Omega(w)=||w||_2+\sum_{g=1,G} \lambda_g||w_g||_1.}
-\item Norm B: \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1}{\Omega(w)=\sum_{g=1,G} \alpha_g ||w ||_2+\sum_{g=1,G} \lambda_g ||w_g ||_1} for
-\eqn{\sum\limits_{g=1}^G \alpha_g=1}{\sum_{g=1,G} \alpha_g=1};  \eqn{\Omega(w_g)=\gamma_g}{\Omega(w_g)=\gamma_g} and \eqn{\sum\limits_{g=1}^G \gamma_g=1.}{\sum_{g=1,G} \gamma_g=1.}
-\item Norm C: \eqn{\Omega_g(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1}{\Omega_g(w)=||w_g||_2+ \lambda_g ||w_g||_1} for
-\eqn{\Omega(w)=\sum\limits_{g=1}{^G} \alpha_g \Omega_g(w)=1}{\Omega(w)=\sum_{g=1,G} \alpha_g \Omega_g(w)=1};
-\eqn{\sum\limits_{g=1}^G \alpha_g=1}{\sum_{g=1,G} \alpha_g=1}
+\item Norm A \emph{(generalized norm)}: \eqn{\Omega_g(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} where
+\eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1 \textrm{ and } \sum\limits_{g=1}^G \alpha_g=1},
+\item Norm B \emph{(particular case)}: \eqn{\Omega(w)=\|w\|_2+\sum\limits_{g=1}^G \lambda_g\|w_g\|_1},
+
+\item Norm C \emph{(particular case)}: \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1}
+where
+\eqn{\sum\limits_{g=1}^G \alpha_g=\sum\limits_{g=1}^G \gamma_g=1} \cr and \eqn{\Omega(w_g)=\gamma_g}.
 }
 
 Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
@@ -63,12 +64,12 @@ that is each \eqn{w_g} will be collinear to a vector \eqn{z_{\nu_g}}{z.\nu_g} bu
 and constrained by the threshold \eqn{\nu_g}.
 
 Three variants are defined here depending on the groups combination in the global norm and the weights
-assigned to each group.
+assigned to each group. They all give the same result as the lasso norm for \eqn{G=1},
 \itemize{
-\item Norm A is the genuine alternative, it gives the same result as the lasso norm for \eqn{G=1},
-\item Norm B assigns user to define weights for each group,
-\item Norm C applies the lasso norm for each group individually while constraining the overall norm. Moreover,
-the Euclidian norm of each \eqn{w_g} is computed while minimizing the root mean squares error of prediction.
+\item Norm A is the generalized norm of the group lasso. applies the lasso norm for each group individually while constraining the overall norm. Moreover,
+the Euclidean norm of each \eqn{w_g} is computed while minimizing the root mean squares error of prediction,
+\item Norm B is a particular case and a genuine alternative similar to the lasso-like norm,
+\item Norm C is another particular case that assigns user to define weights for each group.
 }
 }
 \details{
@@ -129,7 +130,7 @@ points(inonz,mod.dsplsA$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 
 # norm B
-mod.dsplsB <- d.spls.GL(X=X,y=y,ncp=ncp,ppnu=ppnu,indG=indG,gamma=c(0.5,0.5),norm="B",verbose=TRUE)
+mod.dsplsB <- d.spls.GL(X=X,y=y,ncp=ncp,ppnu=ppnu,indG=indG,norm="B",verbose=TRUE)
 
 str(mod.dsplsB)
 
@@ -152,7 +153,7 @@ points(inonz,mod.dsplsB$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 
 # norm C
-mod.dsplsC <- d.spls.GL(X=X,y=y,ncp=ncp,ppnu=ppnu,indG=indG,norm="C",verbose=TRUE)
+mod.dsplsC <- d.spls.GL(X=X,y=y,ncp=ncp,ppnu=ppnu,indG=indG,gamma=c(0.5,0.5),norm="C",verbose=TRUE)
 n <- dim(X)[1]
 p <- dim(X)[2]
 
