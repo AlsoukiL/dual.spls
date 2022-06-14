@@ -2,20 +2,22 @@
 #' @keywords internal
 #' @description
 #' The function \code{d.spls.GLA} performs dimensional reduction as in PLS methodology combined to variable selection using the
-#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\|w\|_2+\sum\limits_\limits_{g=1}^G \lambda_g\|w_g\|_1}{\Omega(w)=||w||_2+\sum_{g=1,G} \lambda_g||w_g||_1} for combined data.
-#' Where \code{G} is the number of groups.
+#' Dual-SPLS algorithm with the norm \deqn{\Omega_g(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1}{\Omega_g(w)=||w_g||_2+ \lambda_g ||w_g||_1} for combined data where
+#' \eqn{\Omega(w)=\sum\limits_{g=1}{^G} \alpha_g \Omega_g(w)=1}{\Omega(w)=\sum_{g=1,G} \alpha_g \Omega_g(w)=1};
+#' \eqn{\sum\limits_{g=1}^G \alpha_g=1}{\sum_{g=1,G} \alpha_g=1} and \code{G} is the number of groups.
 #' Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 #' variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 #' threshold as in the dual sparse lasso methodology,
 #' that is each \eqn{w_g} will be collinear to a vector \eqn{z.\nu_g} built from the coordinate of \eqn{z}
-#' and constrained by the threshold \eqn{\nu_g}. The Norm A is the genuine alternative, it gives the same result as the lasso norm for \eqn{G=1}.
+#' and constrained by the threshold \eqn{\nu_g}. Norm A i a generalized group lasso-like norm that applies the lasso norm for each group individually while constraining the overall norm. Moreover,
+#' the Euclidian norm of each \eqn{w_g} is computed while minimizing the root mean squares error of prediction.
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
 #' @param ppnu a positive real value or a vector of length the number of groups, in \eqn{[0,1]}.
 #' \code{ppnu} is the desired proportion of variables to shrink to zero for each component and for each group.
 #' @param indG a numeric vector of group index for each observation.
-#' @param verbose a Boolean value indicating whether or not to display the iterations steps. Default value is \code{FALSE}.
+#' @param verbose a Boolean value indicating whether or not to display the iterations steps.
 #' @return A \code{list} of the following attributes
 #' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
 #' \item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations. The \code{scores} represents
@@ -28,12 +30,13 @@
 #' \item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
 #'  to the difference between the responses and the fitted values.}
 #' \item{lambda}{the matrix of dimension \code{(G,ncp)} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group.}
+#' \item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group.}
 #' \item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrank to zero per component and per group.}
 #' \item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
 #' \item{ind_diff0}{the list of \code{ncp} elements representing the index of the none null regression coefficients elements.}
 #' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{GLA}. }
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.GLB], [dual.spls::d.spls.GLC], [dual.spls::d.spls.GL]
+#' @seealso [dual.spls::d.spls.GLA],[dual.spls::d.spls.GLB],[dual.spls::d.spls.GL]
 #'
 d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 {
@@ -54,7 +57,7 @@ d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
   yc=y-ym # centering response vector
 
   ###################################
-  # initialization
+  # Initialisation
   ###################################
   nG=max(indG) # number of groups
   PP=sapply(1:nG, function(u) sum(indG==u) )
@@ -67,25 +70,23 @@ d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
   intercept=rep(0,ncp) # initializing intercept, the vector of intercepts
   zerovar=matrix(0,nG,ncp) # initializing zerovar, the matrix of final number of zeros coefficients for each component and for each group
   listelambda=matrix(0,nG,ncp) # initializing listelambda, the matrix of values of lambda for each group
+  listealpha=matrix(0,nG,ncp) # initializing listealpha, the matrix of values of alpha for each group
   ind.diff0=vector(mode = "list", length = ncp) # initializing ind0, the list of the index of the none zero coefficients
   names(ind.diff0)=paste0("in.diff0_", 1:ncp)
 
   nu=array(0,nG) # initializing nu for each group
-  lambda=array(0,nG) # initializing lambda for each group
   Znu=array(0,p) # initializing Znu for each group
   w=array(0,p) # initializing w for each group
   norm2Znu=array(0,nG) # initializing norm2 of Znu for each group
   norm1Znu=array(0,nG) # initializing norm1 of Znu for each group
 
   ###################################
-  # Dual-SPLS
+  # Dua-SPLS
   ###################################
-
   # each step ic in -for loop- determine the icth column or element of each element initialized
-  Xdef=Xc # initializing X for Deflation Step
+  Xdef=Xc # initialising X for Deflation Step
   for (ic in 1:ncp)
   {
-
     Z=t(Xdef)%*%yc
     Z=as.vector(Z)
 
@@ -110,35 +111,100 @@ d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
       norm1Znu[ig]=d.spls.norm1(Znu[ind])
       ##########Norm 2 of Znu(g)#############
       norm2Znu[ig]=d.spls.norm2(Znu[ind])
-
     }
     #######################
-    mu=d.spls.norm2(Znu)
-    mu2=mu^2
+    mu=sum(norm2Znu)
     #######################
 
-    for ( ig in 1:nG)
+    # finding alpha and lambda, given nu
+    alpha=norm2Znu/mu
+    lambda=nu/(mu*alpha)
+
+    # computing max of each norm2 of wg
+    max_norm2w=sapply(1:nG,function(u) 1/alpha[u]/(1+(nu[u]*norm1Znu[u]/(mu*alpha[u])^2)))
+
+    # sampling the possible values of wg
+    sample_wg=matrix(0,10,(nG-1))
+    for ( ig in 1:(nG-1))
     {
-      # finding mu, given nu
       ######################
-      lambda[ig]=nu[ig]/mu #
+      sample_wg[,ig]=seq(0,max_norm2w[ig],length.out = 10)
       ######################
-      # index of the group
-      ind=which(indG==ig)
+    }
+    # all the possible combinations
+    # due to a linear constraint, the last column is deducted from the others
+    temp=data.frame(sample_wg[,1:(nG-1)])
+    comb=expand.grid(temp)
+    comb=unique(comb)
+    comb=as.matrix(comb)
+    ncomb=dim(comb)[1]
+    comb=cbind(comb,rep(0,ncomb))
+    denom=alpha[(nG)]*(1+( nu[(nG)] * norm1Znu[(nG)]  /  (mu*alpha[(nG)])^2   ))
+    for (icomb in 1:ncomb)
+    {
+      numg=sapply(1:(nG-1), function(u){
+        alpha[u]*comb[icomb,u]*(1+( nu[u]*norm1Znu[u]/(mu*alpha[u])^2)) } )
+      num=1-sum(numg)
+      comb[icomb,nG]=num/denom
+    }
+    # suppress inadequate rows (for which comb[,nG] < 0)
+    comb=comb[comb[,nG]>=0,]
+    ncomb=dim(comb)[1]
 
-      # calculating w at the optimum
-      w[ind]=(mu/(mu2+ t(nu)%*%norm1Znu))%*%Znu[ind]
+    # initializing RMSE
+    RMSE=rep(0,ncomb)
+
+    # initializing RMSE
+    tempw=matrix(0,p,ncomb)
+
+    # computing w for each combination
+    for (icomb in 1:ncomb)
+    {
+
+      for ( ig in 1:nG )
+      {
+        #Index of the group
+        ind=which(indG==ig)
+        # calculating w,t at the optimum
+        w[ind]=(comb[icomb,ig]/(mu*alpha[ig]))*Znu[ind]
+      }
+
+      #Finding T
+      t=Xdef%*%w
+      t=t/d.spls.norm2(t)
+
+      WW[,ic]=w
+      TT[,ic]=t
+
+      #Coefficient vectors
+      R=t(TT[,1:ic,drop=FALSE])%*%Xc%*%WW[,1:ic,drop=FALSE]
+      R[row(R)>col(R)]<-0 # inserted for numerical stability
+
+      L=backsolve(R,diag(ic))
+      Bhat[,ic]=WW[,1:ic,drop=FALSE]%*%(L%*%(t(TT[,1:ic,drop=FALSE])%*%yc))
+
+      intercept[ic] = ym - Xm %*% Bhat[,ic]
+
+      #Predictions
+      YY[,ic]=X %*% Bhat[,ic] + intercept[ic]
+      RES[,ic]=y-YY[,ic]
+
+      tempw[,icomb]=w
+      RMSE[icomb]=sum(RES[,ic]^2)/n
+
     }
 
-    # finding WW
+    # choosing the optimal w
+    indwmax=which.min(RMSE)
+    w=tempw[,indwmax]
     WW[,ic]=w
 
-    # finding TT
+    # finding T
     t=Xdef%*%w
     t=t/d.spls.norm2(t)
     TT[,ic]=t
 
-    # deflation
+    #deflation
     Xdef=Xdef-t%*%t(t)%*%Xdef
 
     # coefficient vectors
@@ -150,6 +216,10 @@ d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 
     # lambda
     listelambda[,ic]=lambda
+
+    # alpha
+    listealpha[,ic]=alpha
+
     # intercept
     intercept[ic] = ym - Xm %*% Bhat[,ic]
 
@@ -178,5 +248,5 @@ d.spls.GLA<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 
   return(list(Xmean=Xm,scores=TT,loadings=WW,Bhat=Bhat,intercept=intercept,
               fitted.values=YY,residuals=RES,
-              lambda=listelambda,zerovar=zerovar,PP=PP,ind.diff0=ind.diff0,type="GLA"))
+              lambda=listelambda,alpha=listealpha,zerovar=zerovar,PP=PP,ind.diff0=ind.diff0,type="GLC"))
 }

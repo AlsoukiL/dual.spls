@@ -2,21 +2,20 @@
 #' @keywords internal
 #' @description
 #' The function \code{d.spls.GLB} performs dimensional reduction as in PLS methodology combined to variable selection using the
-#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1}{\Omega(w)=\sum_{g=1,G} \alpha_g ||w ||_2+\sum_{g=1,G} \lambda_g ||w_g ||_1} for
-#' \eqn{\sum\limits_{g=1}^G \alpha_g=1}{\sum_{g=1,G} \alpha_g=1};  \eqn{\Omega(w_g)=\gamma_g}{\Omega(w_g)=\gamma_g} and \eqn{\sum\limits_{g=1}^G \gamma_g=1.}{\sum_{g=1,G} \gamma_g=1.} Where \code{G} is the number of groups.
+#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\|w\|_2+\sum\limits_\limits_{g=1}^G \lambda_g\|w_g\|_1}{\Omega(w)=||w||_2+\sum_{g=1,G} \lambda_g||w_g||_1} for combined data.
+#' Where \code{G} is the number of groups.
 #' Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 #' variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 #' threshold as in the dual sparse lasso methodology,
 #' that is each \eqn{w_g} will be collinear to a vector \eqn{z.\nu_g} built from the coordinate of \eqn{z}
-#' and constrained by the threshold \eqn{\nu_g}. Norm B assigns user to define weights for each group.
+#' and constrained by the threshold \eqn{\nu_g}. The Norm B is the genuine alternative and a particular case of the generalized norm A.
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
 #' @param ppnu a positive real value or a vector of length the number of groups, in \eqn{[0,1]}.
 #' \code{ppnu} is the desired proportion of variables to shrink to zero for each component and for each group.
 #' @param indG a numeric vector of group index for each observation.
-#' @param gamma a numeric vector of the norm \eqn{\Omega} for each \eqn{w_g} verifying \eqn{\sum\sum\limits_{g=1}^G \gamma_g=1}.
-#' @param verbose a Boolean value indicating whether or not to display the iterations steps.
+#' @param verbose a Boolean value indicating whether or not to display the iterations steps. Default value is \code{FALSE}.
 #' @return A \code{list} of the following attributes
 #' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
 #' \item{scores}{the matrix of dimension \code{(n,ncp)} where \code{n} is the number of observations. The \code{scores} represents
@@ -29,27 +28,16 @@
 #' \item{residuals}{the matrix of dimension \code{(n,ncp)} that represents the residuals corresponding
 #'  to the difference between the responses and the fitted values.}
 #' \item{lambda}{the matrix of dimension \code{(G,ncp)} collecting the parameters of sparsity \eqn{\lambda_g} used to fit the model at each iteration and for each group.}
-#' \item{alpha}{the matrix of dimension \code{(G,ncp)} collecting the constraint parameters \eqn{\alpha_g}  used to fit the model at each iteration and for each group.}
 #' \item{zerovar}{the matrix of dimension \code{(G,ncp)} representing the number of variables shrank to zero per component and per group.}
 #' \item{PP}{the vector of length \code{G} specifying the number of variables in each group.}
 #' \item{ind_diff0}{the list of \code{ncp} elements representing the index of the none null regression coefficients elements.}
 #' \item{type}{a character specifying the Dual-SPLS norm used. In this case it is \code{GLB}. }
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.GLA],[dual.spls::d.spls.GLC],[dual.spls::d.spls.GL]
+#' @seealso [dual.spls::d.spls.GLA], [dual.spls::d.spls.GLC], [dual.spls::d.spls.GL]
 #'
-
-
-
-d.spls.GLB<- function(X,y,ncp,ppnu,indG,gamma,verbose=FALSE)
+d.spls.GLB<- function(X,y,ncp,ppnu,indG,verbose=FALSE)
 {
 
-  if (length(gamma) != length(unique(indG))){
-    stop("incorrect length of gamma")
-  }
-
-  if (sum(gamma) != 1){
-    stop("sum of gamma different than 1")
-  }
   ###################################
   # Dimensions
   ###################################
@@ -66,9 +54,9 @@ d.spls.GLB<- function(X,y,ncp,ppnu,indG,gamma,verbose=FALSE)
   yc=y-ym # centering response vector
 
   ###################################
-  # Initialisation
+  # initialization
   ###################################
-  nG=max(indG) #Number of groups
+  nG=max(indG) # number of groups
   PP=sapply(1:nG, function(u) sum(indG==u) )
 
   WW=matrix(0,p,ncp) # initializing WW, the matrix of loadings
@@ -79,13 +67,11 @@ d.spls.GLB<- function(X,y,ncp,ppnu,indG,gamma,verbose=FALSE)
   intercept=rep(0,ncp) # initializing intercept, the vector of intercepts
   zerovar=matrix(0,nG,ncp) # initializing zerovar, the matrix of final number of zeros coefficients for each component and for each group
   listelambda=matrix(0,nG,ncp) # initializing listelambda, the matrix of values of lambda for each group
-  listealpha=matrix(0,nG,ncp) # initializing listealpha, the matrix of values of alpha for each group
   ind.diff0=vector(mode = "list", length = ncp) # initializing ind0, the list of the index of the none zero coefficients
   names(ind.diff0)=paste0("in.diff0_", 1:ncp)
 
   nu=array(0,nG) # initializing nu for each group
   lambda=array(0,nG) # initializing lambda for each group
-  alpha=array(0,nG) # initialising alpha for each group
   Znu=array(0,p) # initializing Znu for each group
   w=array(0,p) # initializing w for each group
   norm2Znu=array(0,nG) # initializing norm2 of Znu for each group
@@ -127,22 +113,21 @@ d.spls.GLB<- function(X,y,ncp,ppnu,indG,gamma,verbose=FALSE)
 
     }
     #######################
-    mu=sum(norm2Znu)
+    mu=d.spls.norm2(Znu)
+    mu2=mu^2
     #######################
 
-    for ( igg in 1:nG)
+    for ( ig in 1:nG)
     {
+      # finding mu, given nu
+      ######################
+      lambda[ig]=nu[ig]/mu #
+      ######################
       # index of the group
-      ind=which(indG==igg)
-      # finding alpha and lambda, given nu
-      ######################
-      alpha[igg]=norm2Znu[igg]/mu
-      ######################
-      lambda[igg]=nu[igg]/mu #
-      ######################
+      ind=which(indG==ig)
 
-      # calculating w, at the optimum
-      w[ind]=(gamma[igg]*Znu[ind])/(alpha[igg]*norm2Znu[igg]+lambda[igg]*norm1Znu[igg])
+      # calculating w at the optimum
+      w[ind]=(mu/(mu2+ t(nu)%*%norm1Znu))%*%Znu[ind]
     }
 
     # finding WW
@@ -165,14 +150,10 @@ d.spls.GLB<- function(X,y,ncp,ppnu,indG,gamma,verbose=FALSE)
 
     # lambda
     listelambda[,ic]=lambda
-
-    # alpha
-    listealpha[,ic]=alpha
-
     # intercept
     intercept[ic] = ym - Xm %*% Bhat[,ic]
 
-    #zerovar
+    # zerovar
     zerovar[,ic]=sapply(1:nG, function(u) {
       indu=which(indG==u)
       sum(Bhat[indu,ic]==0)})
@@ -197,5 +178,5 @@ d.spls.GLB<- function(X,y,ncp,ppnu,indG,gamma,verbose=FALSE)
 
   return(list(Xmean=Xm,scores=TT,loadings=WW,Bhat=Bhat,intercept=intercept,
               fitted.values=YY,residuals=RES,
-              lambda=listelambda,alpha=listealpha,zerovar=zerovar,PP=PP,ind.diff0=ind.diff0,type="GLB"))
+              lambda=listelambda,zerovar=zerovar,PP=PP,ind.diff0=ind.diff0,type="GLA"))
 }
