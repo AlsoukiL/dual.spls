@@ -10,8 +10,10 @@ test_that("d.spls.LS works", {
   y <- data$y
 
   # fitting the model
-  ncp <- 7
+  ncp <- 4
   ppnu <- 0.9
+  expect_warning(d.spls.LS(X=X,y=y,ncp=ncp,ppnu=ppnu,verbose=TRUE),"deflated XtX is close to being singular on component number 4")
+  ncp=3
   mod.dspls <- d.spls.LS(X=X,y=y,ncp=ncp,ppnu=ppnu,verbose=TRUE)
   n <- dim(X)[1]
   p <- dim(X)[2]

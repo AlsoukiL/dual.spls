@@ -67,19 +67,19 @@ X <- data$X
 y <- data$y
 
 #fitting the model
-mod.dspls <- d.spls.LS(X=X,y=y,ncp=7,ppnu=0.9,verbose=TRUE)
+mod.dspls <- d.spls.LS(X=X,y=y,ncp=3,ppnu=0.9,verbose=TRUE)
 
 str(mod.dspls)
 
 ### plotting the observed values VS predicted values
-plot(y,mod.dspls$fitted.values[,6], xlab="Observed values", ylab="Predicted values",
-main="Observed VS Predicted for 6 components")
+plot(y,mod.dspls$fitted.values[,3], xlab="Observed values", ylab="Predicted values",
+main="Observed VS Predicted for 3 components")
 points(-1000:1000,-1000:1000,type='l')
 
 ### plotting the regression coefficients
 par(mfrow=c(3,1))
 
-i=6
+i=3
 nz=mod.dspls$zerovar[i]
 plot(1:dim(X)[2],mod.dspls$Bhat[,i],type='l',
     main=paste(" Dual-SPLS (LS), ncp =", i, " #0coef =", nz, "/", dim(X)[2]),
