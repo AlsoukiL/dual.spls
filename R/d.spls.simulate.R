@@ -153,8 +153,8 @@ d.spls.simulate<- function(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5,int.
 
   y0=rep(0,n) # initializing the response vector without noise y0
   # setting the interval limits for y0
-  pif=round(seq(10,100,length.out = length(int.coef))*p[1]/100)
-  pif=c(0,pif)
+  pif=round(seq(10,100,length.out = length(int.coef))*sum(p)/100)
+  pif=c(1,pif)
 
   # computing y0 as a sum of intervals of X
   sumX=matrix(0,n,length(int.coef))
@@ -165,21 +165,21 @@ d.spls.simulate<- function(n=200,p=100,nondes=50,sigmaondes=0.05,sigmay=0.5,int.
   y0=sumX%*%int.coef
 
 
-  if (length(p)>1)
-  {
-    for (k in 2:length(p))
-    {
-      pif=round(seq(10,100,length.out = 2*length(int.coef))*p[k]/100)
-
-      sumX=matrix(0,n,length(int.coef))
-      for (i in 1:length(int.coef))
-      {
-        sumX[,i]=apply(X[,(sum(p[1:(k-1)])+pif[i]):(sum(p[1:(k-1)])+pif[i+1])],1,function(u) sum(u))
-      }
-      y0=y0+sumX%*%int.coef
-
-    }
-  }
+  # if (length(p)>1)
+  # {
+  #   for (k in 2:length(p))
+  #   {
+  #     pif=round(seq(10,100,length.out = 2*length(int.coef))*p[k]/100)
+  #
+  #     sumX=matrix(0,n,length(int.coef))
+  #     for (i in 1:length(int.coef))
+  #     {
+  #       sumX[,i]=apply(X[,(sum(p[1:(k-1)])+pif[i]):(sum(p[1:(k-1)])+pif[i+1])],1,function(u) sum(u))
+  #     }
+  #     y0=y0+sumX%*%int.coef
+  #
+  #   }
+  # }
   #adding noise to y0
   y=y0+sigmay*rnorm(n)
   y=as.vector(y)
