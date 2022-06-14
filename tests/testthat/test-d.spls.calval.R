@@ -32,8 +32,7 @@ index.cal=calval$indcal
 test0=which(index.cal==0)
 
 # nb elts in calibration for each cell
-ycounts=sapply(1:ncells,function(u) sum(Datatype==u) )
-Listecal=ceiling(ycounts*pcal/100)
+Listecal=d.spls.listecal(Datatype,pcal)
 
 # number of calibration points
   expect_equal(length(index.cal), sum(Listecal))

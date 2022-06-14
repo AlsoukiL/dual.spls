@@ -4,7 +4,7 @@
 \alias{d.spls.split}
 \title{Splits data into calibration and validation sets according to wich group belongs each observation}
 \usage{
-d.spls.split(X, Xtype, Listecal)
+d.spls.split(X, Xtype, Listecal = NULL)
 }
 \arguments{
 \item{X}{a numeric matrix.}

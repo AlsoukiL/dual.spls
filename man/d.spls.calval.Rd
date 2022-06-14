@@ -2,10 +2,10 @@
 % Please edit documentation in R/d.spls.calval.R
 \name{d.spls.calval}
 \alias{d.spls.calval}
-\title{Splits data into calibration and validation sets using the splitting method that takes into account X and y}
+\title{Splits data into calibration and validation sets using the splitting method CalValXy that takes into account X and y}
 \usage{
 d.spls.calval(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL,
-center=TRUE,method="svd-euclidien",pc=0.9)
+center=TRUE,method="euclidean",pc=0.9)
 }
 \arguments{
 \item{X}{a numeric matrix of predictors values.}
@@ -31,9 +31,9 @@ to be in the calibration set. If \code{NULL}, parameter \code{pcal} should be sp
 
 \item{center}{logical value indicating wether the matrix \code{X} should be centered. Default set to TRUE.}
 
-\item{method}{the method and norm used for the distance computation. It is by default equal to "svd-euclidien"
-which means euclidien distance is used after a SVD transformation with \code{pc} components. "pca-euclidien" means
-euclidien distance on PCA scores with \code{pc} components. For "euclidien", original \code{X} is used with euclidien norm.}
+\item{method}{the method and norm used for the distance computation. It is by default equal to "euclidean" which means
+original \code{X} is used with euclidean norm. "svd-euclidean" means euclidean distance is used after a SVD transformation with \code{pc} components. "pca-euclidean" means
+euclidean distance on PCA scores with \code{pc} components. For}
 
 \item{pc}{a positive real value indicating the number of component to consider when applying the SVD transformation or the PCA.
 If \code{pc} \eqn{< 1}, the number of components kept corresponds to the number of components explaining at least
@@ -46,7 +46,7 @@ A \code{list} of the following attributes
 }
 \description{
 The function \code{d.spls.calval} divides the data \code{X} into a calibration and a validation.
-It uses a variation on the Kennard and Stone strategy by dividing observations into groups (see details for more explanations).
+It uses a variation on the Kennard and Stone strategy CalValXy by dividing observations into groups (see details for more explanations).
 }
 \details{
 The algorithm allows to select samples using the classical Kennard and Stone on
@@ -68,7 +68,8 @@ Once each of the vector \code{Listecal} elements are null; the procedure is done
 The algorithm for only one group corresponds to the classical Kennard and Stone algorithm.
 
 If \code{Datatype} is not specified, the function devides the observations into \code{ncells} groups. First, the observations
-are sorted according to the values of \eqn{y}. Second, the interval \eqn{[y_min,y_max]}{[ymin,ymax]} is devided into equal \code{ncells}.
+are sorted according to the values of \eqn{y}. Second, the observations is divided into equal \code{ncells} according to the
+cumulative empirical probabilities.
 Finally, each observation with a value of \eqn{y} belonging to a sub interval is assigned the number of the corresponding cell.
 }
 \examples{
@@ -122,7 +123,7 @@ cex = 0.8, col = c("red","green"), pch = c(19,19))
 Kennard, Ronald W, and Larry A Stone. 1969. “Computer Aided Design of Experiments.” Technometrics 11 (1): 137–48.
 }
 \seealso{
-\link{d.spls.split},\link{d.spls.type}
+\link{d.spls.split},\link{d.spls.type},\link{d.spls.listecal}
 }
 \author{
 Louna Alsouki François Wahl

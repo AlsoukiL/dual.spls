@@ -1,9 +1,9 @@
-#' Splits data into calibration and validation sets using the splitting method that takes into account X and y
+#' Splits data into calibration and validation sets using the splitting method CalValXy that takes into account X and y
 #' @description
 #' The function \code{d.spls.calval} divides the data \code{X} into a calibration and a validation.
-#' It uses a variation on the Kennard and Stone strategy by dividing observations into groups (see details for more explanations).
+#' It uses a variation on the Kennard and Stone strategy CalValXy by dividing observations into groups (see details for more explanations).
 #' @usage d.spls.calval(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NULL,
-#' center=TRUE,method="svd-euclidien",pc=0.9)
+#' center=TRUE,method="euclidean",pc=0.9)
 #' @param X a numeric matrix of predictors values.
 #' @param pcal a positive integer between 0 and 100. \code{pcal} is the percentage
 #' of calibration samples to be selected. Default value is NULL, meaning as long as \code{Listecal} is
@@ -21,8 +21,8 @@
 #' to be in the calibration set. If \code{NULL}, parameter \code{pcal} should be specified.
 #' @param center logical value indicating wether the matrix \code{X} should be centered. Default set to TRUE.
 #' @param method the method and norm used for the distance computation. It is by default equal to "euclidean" which means
-#'original \code{X} is used with euclidien norm. "svd-euclidien" means euclidien distance is used after a SVD transformation with \code{pc} components. "pca-euclidien" means
-#' euclidien distance on PCA scores with \code{pc} components. For
+#'original \code{X} is used with euclidean norm. "svd-euclidean" means euclidean distance is used after a SVD transformation with \code{pc} components. "pca-euclidean" means
+#' euclidean distance on PCA scores with \code{pc} components. For
 #' @param pc a positive real value indicating the number of component to consider when applying the SVD transformation or the PCA.
 #' If \code{pc} \eqn{< 1}, the number of components kept corresponds to the number of components explaining at least
 #' (\code{pc} \eqn{< 1}) percent of the total variance.
@@ -46,7 +46,8 @@
 #' The algorithm for only one group corresponds to the classical Kennard and Stone algorithm.
 #'
 #' If \code{Datatype} is not specified, the function devides the observations into \code{ncells} groups. First, the observations
-#' are sorted according to the values of \eqn{y}. Second, the interval \eqn{[y_min,y_max]}{[ymin,ymax]} is devided into equal \code{ncells}.
+#' are sorted according to the values of \eqn{y}. Second, the observations is divided into equal \code{ncells} according to the
+#' cumulative empirical probabilities.
 #' Finally, each observation with a value of \eqn{y} belonging to a sub interval is assigned the number of the corresponding cell.
 #' @return A \code{list} of the following attributes
 #' \item{indcal}{a numeric vector giving the row indices of the input data selected for calibration.}
@@ -54,7 +55,7 @@
 #' @references
 #' Kennard, Ronald W, and Larry A Stone. 1969. “Computer Aided Design of Experiments.” Technometrics 11 (1): 137–48.
 #' @author Louna Alsouki François Wahl
-#' @seealso [dual.spls::d.spls.split],[dual.spls::d.spls.type]
+#' @seealso [dual.spls::d.spls.split],[dual.spls::d.spls.type],[dual.spls::d.spls.listecal]
 #'
 #' @examples
 #' ### load dual.spls library
@@ -146,9 +147,9 @@ d.spls.calval<- function(X,pcal=NULL,Datatype=NULL,y=NULL,ncells=10,Listecal=NUL
     pc=which.max(cumsum<=pc)
 
   }
-  if (method=="pca-euclidien") X=pca$x[, 1:pc]
+  if (method=="pca-euclidean") X=pca$x[, 1:pc]
 
-  if (method=="svd-euclidien")
+  if (method=="svd-euclidean")
   {
     svdX=svd(X)
     X=svdX$u[,1:pc]
