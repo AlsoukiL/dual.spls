@@ -11,6 +11,9 @@ d.spls.plot(mod.dspls,ncomp)
 
 \item{ncomp}{a positive integer or a numeric vector of the number of Dual-SPLS components to consider.}
 }
+\value{
+no return value
+}
 \description{
 The function \code{dual.spls.plot} provides the regression coefficient curves of a Dual-SPLS model for a specified number of components
 and the mean of the original data plot.

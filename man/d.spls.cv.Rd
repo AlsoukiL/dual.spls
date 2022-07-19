@@ -31,7 +31,7 @@ calibration set at each CV iteration. Default value is 70.}
 \item{gamma}{a numeric vector of the norm \eqn{\Omega} of each \eqn{w_g} in case \code{GLB}.}
 }
 \value{
-The best number of latent components to be used in the Dual-SPLS regression based on the cross validation procedure.
+A \code{integer} representing the best number of latent components to be used in the Dual-SPLS regression based on the cross validation procedure.
 }
 \description{
 The function \code{d.spls.cv} uses the cross validation approach described in Boulesteix and Strimmer (2005) (see in references) in order to

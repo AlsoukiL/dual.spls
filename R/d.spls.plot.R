@@ -9,6 +9,7 @@
 #' The plots allow the visualization of the results by comparing the mean of the original data to the coefficients regression in the
 #' case of a Dual-SPLS regression. The plots provided correspond to the Dual-SPLS coefficients for each \code{ncomp} desired.
 #'
+#' @return no return value
 #' @author Louna Alsouki François Wahl
 #'
 #' @examples

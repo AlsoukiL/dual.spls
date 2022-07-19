@@ -11,6 +11,9 @@ d.spls.print(mod.dspls,ncomp)
 
 \item{ncomp}{a positive integer of the number of Dual-SPLS components.}
 }
+\value{
+no return value
+}
 \description{
 The function \code{d.spls.print} pisplays the values of a Dual-SPLS regression parameters of sparsity and the number of variables
 shrinked to zero for a specified number of components.

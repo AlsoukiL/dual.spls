@@ -5,6 +5,7 @@
 #' @usage d.spls.print(mod.dspls,ncomp)
 #' @param mod.dspls is a fitted Dual-SPLS object.
 #' @param ncomp a positive integer of the number of Dual-SPLS components.
+#' @return no return value
 #' @author Louna Alsouki François Wahl
 #'
 #' @examples

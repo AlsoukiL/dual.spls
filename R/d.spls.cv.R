@@ -21,7 +21,7 @@
 #' cross validation iteration and performing the Dual-SPLS regression. The rest of the observation are used as a validation and the
 #' errors are computed accordingly for each components. \code{nrepcv} iterations are done and the mean squared of each of the \code{nrepcv} errors for each
 #' component are computed. The latent component with the smallest mean value is selected as the best.
-#' @return The best number of latent components to be used in the Dual-SPLS regression based on the cross validation procedure.
+#' @return A \code{integer} representing the best number of latent components to be used in the Dual-SPLS regression based on the cross validation procedure.
 #' @references
 #' A. L. Boulesteix and K. Strimmer (2005). Predicting Transcription Factor Activities from Combined Analysis of Microarray and ChIP Data: A Partial Least Squares Approach. \cr
 #' \cr
