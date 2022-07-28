@@ -70,6 +70,7 @@
 #' @examples
 #' ### load dual.spls library
 #' library(dual.spls)
+#' oldpar <- par(no.readonly = TRUE)
 #'
 #' ####two predictors matrix
 #' ### parameters
@@ -103,7 +104,6 @@
 #' points(-1000:1000,-1000:1000,type='l')
 #'
 #' ### plotting the regression coefficients
-#' par(mfrow=c(3,1))
 #'
 #' i=6
 #' nz=mod.dsplsA$zerovar[,i]
@@ -126,7 +126,6 @@
 #' points(-1000:1000,-1000:1000,type='l')
 #'
 #' ### plotting the regression coefficients
-#' par(mfrow=c(3,1))
 #'
 #' i=6
 #' nz=mod.dsplsB$zerovar[,i]
@@ -136,6 +135,7 @@
 #'     ylab='',xlab='' )
 #' inonz=which(mod.dsplsB$Bhat[,i]!=0)
 #' points(inonz,mod.dsplsB$Bhat[inonz,i],col='red',pch=19,cex=0.5)
+#'
 #' legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 #'
 #' # norm C
@@ -151,7 +151,6 @@
 #' points(-1000:1000,-1000:1000,type='l')
 #'
 #' ### plotting the regression coefficients
-#' par(mfrow=c(3,1))
 #'
 #' i=6
 #' nz=mod.dsplsC$zerovar[,i]
@@ -163,7 +162,7 @@
 #' points(inonz,mod.dsplsC$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 #' legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 #'
-#'
+#' par(oldpar)
 #' @export
 
 

@@ -56,4 +56,5 @@ d.spls.plot<-function (mod.dspls,ncomp)
   points(inonz,mod.dspls$Bhat[inonz,ncomp[i]],col='red',pch=19,cex=0.5)
   legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
   }
+  return(NULL)
 }

@@ -38,7 +38,7 @@ d.spls.print<-function (mod.dspls,ncomp)
   p=length(Xmean)
   cat( "\nDual Sparse Partial Least Squares Regression for the ", type, " norm","\n" )
   cat( "--------------------------------------------\n\n")
-  if (type=="GLB" || type=="GLC") {
+  if (type=="GLA" || type=="GLC") {
     lambda=mod.dspls$lambda[,ncomp]
     zerovar=mod.dspls$zerovar[,ncomp]
     alpha=mod.dspls$alpha[,ncomp]
@@ -46,25 +46,24 @@ d.spls.print<-function (mod.dspls,ncomp)
     for(i in 1:length(PP)){
       cat( paste("For group ",i," : \n"))
       cat( paste("Parameters: lambda =",lambda[i],", alpha = ",alpha[i],", ncomp = ",ncomp,"\n") )
-      cat( paste("Dual-SPLS selected: ",zerovar[i]," variables among ",PP[i]," variables from group ",i," \n\n") )
+      cat( paste("Dual-SPLS selected: ",PP[i]-zerovar[i]," variables among ",PP[i]," variables from group ",i," \n\n") )
     }
   }
   else{
-    if (type=="GLA") {
+    if (type=="GLB") {
       lambda=mod.dspls$lambda[,ncomp]
       zerovar=mod.dspls$zerovar[,ncomp]
-      alpha=mod.dspls$alpha[,ncomp]
       PP=mod.dspls$PP
       for(i in 1:length(PP)){
         cat( paste("For group ",i," : \n"))
         cat( paste("Parameters: lambda =",lambda[i],", ncomp = ",ncomp,"\n") )
-        cat( paste("Dual-SPLS selected: ",zerovar[i]," variables among ",PP[i]," variables from group ",i," \n\n") )
+        cat( paste("Dual-SPLS selected: ",PP[i]-zerovar[i]," variables among ",PP[i]," variables from group ",i," \n\n") )
       }
     }
     else
     {
       cat( paste("Parameters: lambda = ",lambda,", ncomp = ",ncomp,"\n") )
-      cat( paste("Dual-SPLS selected: ",zerovar," variables among ",p," variables"," \n") )
+      cat( paste("Dual-SPLS selected: ",p-zerovar," variables among ",p," variables"," \n") )
 
     }
   }

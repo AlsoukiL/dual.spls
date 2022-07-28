@@ -42,6 +42,7 @@ The resulting solution for \eqn{w} and hence for the coefficients vector, in the
 ### load dual.spls library
 library(dual.spls)
 ### constructing the simulated example
+oldpar <- par(no.readonly = TRUE)
 n <- 100
 p <- 50
 nondes <- 20
@@ -68,6 +69,8 @@ i=6
 plot(1:dim(X)[2],mod.dspls$Bhat[,i],type='l',
     main=paste(" PLS , ncp =", i),
     ylab='',xlab='' )
+par(oldpar)
+
 }
 \references{
 H. Wold. Path Models with Latent Variables: The NIPALS Approach. In H.M. Blalock et al., editor, Quantitative Sociology: International Perspectives on Mathematical and Statistical Model Building, pages 307–357. Academic Press, 1975.

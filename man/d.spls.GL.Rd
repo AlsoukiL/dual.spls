@@ -84,6 +84,7 @@ that is the expression of \eqn{\nu_g}{\nu_g}. (see reference for detail)
 \examples{
 ### load dual.spls library
 library(dual.spls)
+oldpar <- par(no.readonly = TRUE)
 
 ####two predictors matrix
 ### parameters
@@ -117,7 +118,6 @@ plot(y,mod.dsplsA$fitted.values[,6], xlab="Observed values", ylab="Predicted val
 points(-1000:1000,-1000:1000,type='l')
 
 ### plotting the regression coefficients
-par(mfrow=c(3,1))
 
 i=6
 nz=mod.dsplsA$zerovar[,i]
@@ -140,7 +140,6 @@ main="Observed VS Predicted for 6 components")
 points(-1000:1000,-1000:1000,type='l')
 
 ### plotting the regression coefficients
-par(mfrow=c(3,1))
 
 i=6
 nz=mod.dsplsB$zerovar[,i]
@@ -150,6 +149,7 @@ plot(1:dim(X)[2],mod.dsplsB$Bhat[,i],type='l',
     ylab='',xlab='' )
 inonz=which(mod.dsplsB$Bhat[,i]!=0)
 points(inonz,mod.dsplsB$Bhat[inonz,i],col='red',pch=19,cex=0.5)
+
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 
 # norm C
@@ -165,7 +165,6 @@ main="Observed VS Predicted for 6 components")
 points(-1000:1000,-1000:1000,type='l')
 
 ### plotting the regression coefficients
-par(mfrow=c(3,1))
 
 i=6
 nz=mod.dsplsC$zerovar[,i]
@@ -177,7 +176,7 @@ inonz=which(mod.dsplsC$Bhat[,i]!=0)
 points(inonz,mod.dsplsC$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
 
-
+par(oldpar)
 }
 \seealso{
 \link{d.spls.GLA}, \link{d.spls.GLB}, \link{d.spls.GLC}

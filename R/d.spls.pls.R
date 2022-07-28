@@ -32,6 +32,7 @@
 #' ### load dual.spls library
 #' library(dual.spls)
 #' ### constructing the simulated example
+#' oldpar <- par(no.readonly = TRUE)
 #' n <- 100
 #' p <- 50
 #' nondes <- 20
@@ -58,6 +59,8 @@
 #' plot(1:dim(X)[2],mod.dspls$Bhat[,i],type='l',
 #'     main=paste(" PLS , ncp =", i),
 #'     ylab='',xlab='' )
+#' par(oldpar)
+#'
 #' @export
 #'
 d.spls.pls<- function(X,y,ncp,verbose=TRUE)

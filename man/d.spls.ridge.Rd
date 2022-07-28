@@ -55,6 +55,7 @@ can choose to use the Dual-SPLS for the least squares norm instead.
 ### load dual.spls library
 library(dual.spls)
 ### parameters
+oldpar <- par(no.readonly = TRUE)
 n <- 200
 p <- 100
 nondes <- 150
@@ -85,6 +86,7 @@ plot(1:dim(X)[2],mod.dspls$Bhat[,i],type='l',
 inonz=which(mod.dspls$Bhat[,i]!=0)
 points(inonz,mod.dspls$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
+par(oldpar)
 }
 \seealso{
 \link{d.spls.LS}

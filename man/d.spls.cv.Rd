@@ -47,6 +47,7 @@ component are computed. The latent component with the smallest mean value is sel
 ### load dual.spls library
 library(dual.spls)
 ### constructing the simulated example
+oldpar <- par(no.readonly = TRUE)
 n <- 100
 p <- 50
 nondes <- 20
@@ -99,6 +100,7 @@ plot(1:dim(X)[2],mod.dspls.lasso$Bhat[,i],type='l',
 inonz=which(mod.dspls.lasso$Bhat[,i]!=0)
 points(inonz,mod.dspls.lasso$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
+par(oldpar)
 }
 \references{
 A. L. Boulesteix and K. Strimmer (2005). Predicting Transcription Factor Activities from Combined Analysis of Microarray and ChIP Data: A Partial Least Squares Approach. \cr

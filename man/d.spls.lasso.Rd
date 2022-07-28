@@ -50,6 +50,7 @@ the absolute values of the coordinates of \eqn{z=X^Ty} are greater than \eqn{\nu
 ### load dual.spls library
 library(dual.spls)
 ### constructing the simulated example
+oldpar <- par(no.readonly = TRUE)
 n <- 100
 p <- 50
 nondes <- 20
@@ -80,6 +81,7 @@ plot(1:dim(X)[2],mod.dspls$Bhat[,i],type='l',
 inonz=which(mod.dspls$Bhat[,i]!=0)
 points(inonz,mod.dspls$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
+par(oldpar)
 }
 \author{
 Louna Alsouki François Wahl

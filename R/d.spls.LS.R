@@ -44,6 +44,7 @@
 #' ### load dual.spls library
 #' library(dual.spls)
 #' ### parameters
+#' oldpar <- par(no.readonly = TRUE)
 #' set.seed(14)
 #' n <- 1000
 #' p <- 40
@@ -75,6 +76,7 @@
 #' inonz=which(mod.dspls$Bhat[,i]!=0)
 #' points(inonz,mod.dspls$Bhat[inonz,i],col='red',pch=19,cex=0.5)
 #' legend("topright", legend ="non null values", bty = "n", cex = 0.8, col = "red",pch=19)
+#' par(oldpar)
 #' @export
 
 
