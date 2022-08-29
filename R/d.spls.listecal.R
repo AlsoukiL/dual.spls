@@ -15,15 +15,24 @@ d.spls.listecal<- function(Xtype,pcal)
 {
   ycounts=table(Xtype)
   ncells=length(ycounts)
-  n=length(Xtype)
-  igr=which(ycounts < n/ncells)
-  not.igr=1:ncells
-  if (sum(igr) > 0) not.igr=not.igr[-igr]
-  Listecal=rep(0,ncells)
-  Listecal[igr]=ycounts[igr]
-  n.igr=sum(Listecal[igr])
-  pcal2=100*(pcal/100*n-n.igr)/(n-n.igr)
-  Listecal[not.igr]=ceiling(ycounts[not.igr]*pcal2/100)
+  l=rep(0,ncells)
+  i=0
+  rep=floor(n*pcal/100)
+  while (i < rep)
+  {
+    for (j in 1:ncells)
+    {
+      if (ycounts[j]>0 && i<rep)
+      {
+        ycounts[j]=ycounts[j]-1
+        l[j]=l[j]+1
+        i=i+1
+      }
+    }
 
+  }
+
+  Listecal=l
   return(Listecal)
 }
+
