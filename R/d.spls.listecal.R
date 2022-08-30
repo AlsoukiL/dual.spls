@@ -15,6 +15,7 @@ d.spls.listecal<- function(Xtype,pcal)
 {
   ycounts=table(Xtype)
   ncells=length(ycounts)
+  n=length(Xtype)
   l=rep(0,ncells)
   i=0
   rep=floor(n*pcal/100)
