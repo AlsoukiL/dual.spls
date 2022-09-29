@@ -60,7 +60,7 @@ where
 Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 variables can be divided into distinct meaningful groups. Each group is constrained by an independent
 threshold as in the dual sparse lasso methodology,
-that is each \eqn{w_g} will be collinear to a vector \eqn{z_{\nu_g}}{z.\nu_g} built from the coordinate of \eqn{z}
+that is each \eqn{w_g} will be collinear to a vector \eqn{z_{\nu_g}} built from the coordinate of \eqn{z}
 and constrained by the threshold \eqn{\nu_g}.
 
 Three variants are defined here depending on the groups combination in the global norm and the weights
