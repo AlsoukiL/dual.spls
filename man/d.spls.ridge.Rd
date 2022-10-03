@@ -16,7 +16,7 @@ d.spls.ridge(X,y,ncp,ppnu,nu2,verbose=TRUE)
 \item{ppnu}{a positive real value, in \eqn{[0,1]}. \code{ppnu} is the desired
 proportion of variables to shrink to zero for each component (see Dual-SPLS methodology).}
 
-\item{nu2}{a positive real value. \code{nu2} is a regularization parameter on \eqn{X^TX}{XTX}.}
+\item{nu2}{a positive real value. \code{nu2} is a regularization parameter on \eqn{X^TX}.}
 
 \item{verbose}{a Boolean value indicating whether or not to display the iterations steps. Default value is \code{TRUE}.}
 }
@@ -39,16 +39,16 @@ to the difference between the responses and the fitted values.}
 }
 \description{
 The function \code{d.spls.lasso} performs dimensional reduction as in PLS methodology combined to variable selection via the
-Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda_1 \|w\|_1 +\lambda_2 \|Xw\|_2 + \|w\|_2.}{\Omega(w)=\lambda1 ||w||_1 +\lambda2 ||Xw||_2 + ||w||_2.}.
-In the algorithm, the parameters \eqn{\lambda}, \eqn{\lambda_1}{\lambda1} and \eqn{\lambda_2}{\lambda2} are transformed into more meaningful values, \code{ppnu} and \eqn{\nu_2}{\nu2}.
+Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda_1 \|w\|_1 +\lambda_2 \|Xw\|_2 + \|w\|_2.}
+In the algorithm, the parameters \eqn{\lambda}, \eqn{\lambda_1} and \eqn{\lambda_2}are transformed into more meaningful values, \code{ppnu} and \eqn{\nu_2}.
 }
 \details{
 The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.ridge}, has
-a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu_1}}{z.\nu1} of coordinates
-\deqn{z_{\nu_1,j}=\textrm{sign}(z_{X,\nu_2,j})(|z_{X,\nu_2,j}|-\nu_1)_+.}{z.\nu1_j=sign(z.X.\nu2_j)(|z.X.\nu2_j|-\nu1)_+.}
-Here \eqn{\nu_1}{\nu1} is the threshold for which \code{ppnu} of
-the absolute values of the coordinates of \eqn{z_{X,\nu_2}}{z.X.\nu2} are greater than \eqn{\nu_1}{\nu1} and \eqn{z_{X,\nu_2}=(\nu_2 X^TX + I_p)^{-1}X^Ty}{z.X.\nu2=inv(\nu2 X^TX + I) X^Ty}.
-Therefore, the ridge norm is beneficial to the situation where \eqn{X^TX}{XTX} is singular. If \eqn{X^TX}{XTX} is invertible, one
+a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu_1}} of coordinates
+\deqn{z_{\nu_1,j}=\textrm{sign}(z_{X,\nu_2,j})(|z_{X,\nu_2,j}|-\nu_1)_+.}
+Here \eqn{\nu_1} is the threshold for which \code{ppnu} of
+the absolute values of the coordinates of \eqn{z_{X,\nu_2}} are greater than \eqn{\nu_1} and \eqn{z_{X,\nu_2}=(\nu_2 X^TX + I_p)^{-1}X^Ty}.
+Therefore, the ridge norm is beneficial to the situation where \eqn{X^TX} is singular. If \eqn{X^TX} is invertible, one
 can choose to use the Dual-SPLS for the least squares norm instead.
 }
 \examples{

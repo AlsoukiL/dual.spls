@@ -1,7 +1,7 @@
 #' Dual Sparse Partial Least Squares (Dual-SPLS) regression for the lasso norm
 #' @description
 #' The function \code{d.spls.lasso} performs dimensional reduction as in the PLS1 methodology combined with variable selection via the
-#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2.}{\Omega(w)=\lambda ||w||_1 + ||w||_2.}
+#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda \|w\|_1 + \|w\|_2.}
 #' @usage d.spls.lasso(X,y,ncp,ppnu,verbose=TRUE)
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
@@ -11,8 +11,8 @@
 #' @param verbose a Boolean value indicating whether or not to display the iterations steps. Default value is \code{TRUE}.
 #' @details
 #' The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.lasso}, has
-#' a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu}}{z.{\nu}} of coordinates
-#' \deqn{z_{\nu_j}=\textrm{sign}({z_j})(|z_j|-\nu)_+.}{z.\nu_j=sign(z_j)(|z_j|-\nu)_+.}
+#' a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu}} of coordinates
+#' \deqn{z_{\nu_j}=\textrm{sign}({z_j})(|z_j|-\nu)_+.}
 #' Here \eqn{\nu} is the threshold for which \code{ppnu} of
 #' the absolute values of the coordinates of \eqn{z=X^Ty} are greater than \eqn{\nu}.
 #'

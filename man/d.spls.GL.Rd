@@ -49,12 +49,12 @@ where \code{G} is the number of groups, the vectors \eqn{w_g} hold the coordinat
 for the observations belonging to the group \eqn{g} and \eqn{\alpha_g}, \eqn{\lambda_g} and \eqn{\gamma_g} are all positive scalars.
 \itemize{
 \item Norm A \emph{(generalized norm)}: \eqn{\Omega_g(w)=\|w_g\|_2+ \lambda_g \|w_g\|_1} where
-\eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1 \textrm{ and } \sum\limits_{g=1}^G \alpha_g=1},
-\item Norm B \emph{(particular case)}: \eqn{\Omega(w)=\|w\|_2+\sum\limits_{g=1}^G \lambda_g\|w_g\|_1},
+\eqn{\Omega(w)=\sum_{g} \alpha_g \Omega_g(w)=1 \textrm{ and } \sum_{g=1}^G \alpha_g=1},
+\item Norm B \emph{(particular case)}: \eqn{\Omega(w)=\|w\|_2+\sum_{g=1}^G \lambda_g\|w_g\|_1},
 
-\item Norm C \emph{(particular case)}: \eqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1}
+\item Norm C \emph{(particular case)}: \eqn{\Omega(w)=\sum_{g=1}^G \alpha_g \|w \|_2+\sum_{g=1}^G \lambda_g \|w_g \|_1}
 where
-\eqn{\sum\limits_{g=1}^G \alpha_g=\sum\limits_{g=1}^G \gamma_g=1} \cr and \eqn{\Omega(w_g)=\gamma_g}.
+\eqn{\sum_{g=1}^G \alpha_g=\sum_{g=1}^G \gamma_g=1} \cr and \eqn{\Omega(w_g)=\gamma_g}.
 }
 
 Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
@@ -76,10 +76,10 @@ the Euclidean norm of each \eqn{w_g} is computed while minimizing the root mean 
 The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.GL}, has
 a simple closed form expression (ref) deriving from the fact that for each group \eqn{g}, \eqn{w_g}
 is collinear to a vector
-\deqn{z_{\nu,g}=\textrm{sign}({z_g})(|z_g|-\nu_g)_+.}{z.\nu_g=sign(z_g)(|z_g|-\nu_g)_+.}
+\deqn{z_{\nu,g}=\textrm{sign}({z_g})(|z_g|-\nu_g)_+.}
 Here, for each group \eqn{g}, \eqn{\nu_g} is the threshold for which \code{ppnu} of the group \eqn{g} of
 the absolute values of the coordinates of \eqn{z_j} are greater than \eqn{\nu_g}. The norms differ in the value of the threshold for each group,
-that is the expression of \eqn{\nu_g}{\nu_g}. (see reference for detail)
+that is the expression of \eqn{\nu_g}. (see reference for detail)
 }
 \examples{
 ### load dual.spls library

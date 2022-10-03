@@ -40,7 +40,7 @@ to the difference between the responses and the fitted values.}
 }
 \description{
 The function \code{d.spls.GLB} performs dimensional reduction as in PLS methodology combined to variable selection using the
-Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\|w\|_2+\sum\limits_\limits_{g=1}^G \lambda_g\|w_g\|_1}{\Omega(w)=||w||_2+\sum_{g=1,G} \lambda_g||w_g||_1} for combined data.
+Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\|w\|_2+\sum_{g=1}^G \lambda_g\|w_g\|_1} for combined data.
 Where \code{G} is the number of groups.
 Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 variables can be divided in distinct meaningful groups. Each group is constrained by an independent

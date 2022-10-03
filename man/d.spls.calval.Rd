@@ -53,15 +53,15 @@ The algorithm allows to select samples using the classical Kennard and Stone on
 each group of observations one by one. It starts by selecting the point that is the furthest away from the centroid.
 This point is assigned as the calibration set and is removed from the list of candidates. Then, it identifies to which
 group belongs this first observation and considers the group \eqn{g} that comes after.
-It computes the distance \eqn{\delta_{P_{i,g}}}{\delta(P_i.g)} between the remaining points
-\eqn{P_{i,g}}{P_i.g} belonging to the group the group \eqn{g} and the calibration point assigned. The point with the
-largest \eqn{\delta_{P_{i,g}}}{\delta(P_i.g)} is selected and removed from the set then the procedure moves on to the group that comes
+It computes the distance \eqn{\delta_{P_{i,g}}} between the remaining points
+\eqn{P_{i,g}} belonging to the group the group \eqn{g} and the calibration point assigned. The point with the
+largest \eqn{\delta_{P_{i,g}}} is selected and removed from the set then the procedure moves on to the group that comes
 after.
 
-When there is more than one calibration sample, the procedure computes the distance between each \eqn{P_{i,g}}{P_i.g} from
-the concerned group and each \eqn{P_{i,cal}}{P_i.cal} from the calibration set. The minimal distance for each \eqn{P_{i,g}}{P_i.g}
-is noted \eqn{distmin(P_{i,g})}{distmin(P_i.g)}. The selected final candidate verifies the following equation:
-\deqn{P_{selected}=\{ P_{i,g} | max(distmin(P_{i,g}))\} }{P_sel={P_i.g | max( distmin(P_i.g) )},}
+When there is more than one calibration sample, the procedure computes the distance between each \eqn{P_{i,g}} from
+the concerned group and each \eqn{P_{i,cal}} from the calibration set. The minimal distance for each \eqn{P_{i,g}}
+is noted \eqn{distmin(P_{i,g})}. The selected final candidate verifies the following equation:
+\deqn{P_{selected}=\{ P_{i,g} | max(distmin(P_{i,g}))\} }
 
 Once each of the vector \code{Listecal} elements are null; the procedure is done.
 

@@ -2,8 +2,8 @@
 #' @keywords internal
 #' @description
 #' The function \code{d.spls.GLC} performs dimensional reduction as in PLS methodology combined to variable selection using the
-#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\sum\limits_{g=1}^G \alpha_g \|w \|_2+\sum\limits_{g=1}^G \lambda_g \|w_g \|_1}{\Omega(w)=\sum_{g=1,G} \alpha_g ||w ||_2+\sum_{g=1,G} \lambda_g ||w_g ||_1} for
-#' \eqn{\sum\limits_{g=1}^G \alpha_g=1}{\sum_{g=1,G} \alpha_g=1};  \eqn{\Omega(w_g)=\gamma_g}{\Omega(w_g)=\gamma_g} and \eqn{\sum\limits_{g=1}^G \gamma_g=1.}{\sum_{g=1,G} \gamma_g=1.} Where \code{G} is the number of groups.
+#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\sum_{g=1}^G \alpha_g \|w \|_2+\sum_{g=1}^G \lambda_g \|w_g \|_1} for
+#' \eqn{\sum_{g=1}^G \alpha_g=1};  \eqn{\Omega(w_g)=\gamma_g} and \eqn{\sum_{g=1}^G \gamma_g=1.} Where \code{G} is the number of groups.
 #' Dual-SPLS for the group lasso norms has been designed to confront the situations where the predictors
 #' variables can be divided in distinct meaningful groups. Each group is constrained by an independent
 #' threshold as in the dual sparse lasso methodology,
@@ -15,7 +15,7 @@
 #' @param ppnu a positive real value or a vector of length the number of groups, in \eqn{[0,1]}.
 #' \code{ppnu} is the desired proportion of variables to shrink to zero for each component and for each group.
 #' @param indG a numeric vector of group index for each observation.
-#' @param gamma a numeric vector of the norm \eqn{\Omega} for each \eqn{w_g} verifying \eqn{\sum\sum\limits_{g=1}^G \gamma_g=1}.
+#' @param gamma a numeric vector of the norm \eqn{\Omega} for each \eqn{w_g} verifying \eqn{\sum_{g=1}^G \gamma_g=1}.
 #' @param verbose a Boolean value indicating whether or not to display the iterations steps.
 #' @return A \code{list} of the following attributes
 #' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}

@@ -1,7 +1,7 @@
 #' Dual Sparse Partial Least Squares (Dual-SPLS) regression for the least squares norm
 #' @description
 #' The function \code{d.spls.LS} performs dimensional reduction as in PLS1 methodology combined to variable selection via the
-#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda \|N_1w\|_1 + \|Xw\|_2.}{\Omega(w)=\lambda ||N1w||_1 + ||Xw||_2.}
+#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda \|N_1w\|_1 + \|Xw\|_2.}
 #' @usage d.spls.LS(X,y,ncp,ppnu,verbose=TRUE)
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
@@ -11,16 +11,16 @@
 #' @param verbose a Boolean value indicating whether or not to display the iterations steps. Default value is \code{TRUE}.
 #' @details
 #' The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.LS}, has
-#' a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu}}{z.\nu} of coordinates
-#' \deqn{z_{\nu_j}=\textrm{sign}(\hat{\beta}_{LS_j})(|\hat{\beta}_{LS_j}|-\nu)_+.}{z.\nu_j=sign(hat\beta.LS_j)(|hat\beta.LS_j|-\nu)_+.}
+#' a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu}} of coordinates
+#' \deqn{z_{\nu_j}=\textrm{sign}(\hat{\beta}_{LS_j})(|\hat{\beta}_{LS_j}|-\nu)_+.}
 #' Here \eqn{\nu} is the threshold for which \code{ppnu} of
-#' the absolute values of the coordinates of \eqn{\hat{\beta}_{LS}}{hat\beta.LS} are greater than \eqn{\nu} where \eqn{\hat{\beta}_{LS}=(X^TX)^{-1}X^Ty}{hat\beta.LS=inv(X^TX)X^Ty}.
+#' the absolute values of the coordinates of \eqn{\hat{\beta}_{LS}} are greater than \eqn{\nu} where \eqn{\hat{\beta}_{LS}=(X^TX)^{-1}X^Ty}.
 #' Therefore, the least squares norm is only adapted to the situation where XT X is invertible.
 #' At each step the singularity of XT X is tested by computing its condition number.
 #' A finite large ratio means that the matrix is close to being singular.
 #'
-#' \eqn{N_1}{N1} does not intervene in the resolution step. Whoever, \eqn{z_{\nu_j}}{z.\nu_j} is constructed according \eqn{N_1}{N1}.
-#' Therefore, proving that \eqn{N_1}{N1} exists is enough. (see references for more details.)
+#' \eqn{N_1} does not intervene in the resolution step. Whoever, \eqn{z_{\nu_j}} is constructed according \eqn{N_1}.
+#' Therefore, proving that \eqn{N_1} exists is enough. (see references for more details.)
 #' If the singularity condition is not verified, one might choose to apply the Dual-SPLS for the ridge norm.
 #'
 #' @return A \code{list} of the following attributes

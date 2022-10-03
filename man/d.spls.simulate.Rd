@@ -38,28 +38,28 @@ the values of \code{y} depend on the values of \code{X}.
 \details{
 The predictors matrix \code{X} is a concatenations of \code{G} predictors sub matrices. Each is computed using
 a mixture of Gaussian i.e. summing the following Gaussians:
-\deqn{A \exp{(-\frac{(\textrm{xech}-\mu)^2}{2 \sigma^2})}.}{A exp(-(xech-\mu)^2/(2\sigma^2)).}
+\deqn{A \exp{(-\frac{(\textrm{xech}-\mu)^2}{2 \sigma^2})}.}
 Where
 \itemize{
 \item \eqn{A} is a numeric vector of random values between 0 and 1,
 \item xech is an element from the sequence of \eqn{p(g)} equally spaced values from 0 to 1. \eqn{p(g)} is the number
-of variables of the sub matrix \eqn{g}, for \eqn{g \in \{1, \dots, G\}}{g in {1, \dots, G}},
+of variables of the sub matrix \eqn{g}, for \eqn{g \in \{1, \dots, G\}},
 \item \eqn{\mu} is a random value in \eqn{[0,1]} representing the mean of the Gaussians,
 \item \eqn{\sigma} is a positive real value specified by the user and representing the standard
 deviation of the Gaussians.
 }
 The response vector \code{y} is a linear combination of the predictors to which we add a noise of uncertainty \code{sigmay}. It is computed as follows:
 
-\deqn{y_i= \sigma_y \times V_i +\sum\limits_{g=1}^G \sum\limits_{k=1}^K \textrm{int.coeff}_k \times \textrm{sum}X^{g}_{ik}}{y_i= \sigma_y x V_i +\sum_{g=1,G} \sum_{k=1,K} int.coeff_k x sumX.g_ik}
+\deqn{y_i= \sigma_y \times V_i +\sum_{g=1}^G \sum_{k=1}^K \textrm{int.coeff}_k \times \textrm{sum}X^{g}_{ik}}
 Where
 \itemize{
 \item \eqn{G} is the number of predictor sub matrices,
 \item \eqn{i} is the index of the observation,
 \item \eqn{V} is a normally distributed vector of 0 mean and unitary standard deviation,
 \item \eqn{K} is the length of the vector \code{int.coeff},
-\item \eqn{\textrm{sum}X^{g}}{sumX.g} is a matrix of \eqn{n} rows and \eqn{K} columns.
-The values of the column \eqn{k} are the sum of selected parts of each row of the sub matrix \eqn{X^g}{X.g}. The columns of \eqn{X^g}{X.g} are
-separated equally and each part is used for the \eqn{K} columns of \eqn{\textrm{sum}X^{g}}{sumX.g}.
+\item \eqn{\textrm{sum}X^{g}} is a matrix of \eqn{n} rows and \eqn{K} columns.
+The values of the column \eqn{k} are the sum of selected parts of each row of the sub matrix \eqn{X^g}. The columns of \eqn{X^g} are
+separated equally and each part is used for the \eqn{K} columns of \eqn{\textrm{sum}X^{g}}.
 }
 }
 \examples{

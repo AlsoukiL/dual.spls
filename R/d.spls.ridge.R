@@ -1,23 +1,23 @@
 #' Dual Sparse Partial Least Squares (Dual-SPLS) regression for the ridge norm
 #' @description
 #' The function \code{d.spls.lasso} performs dimensional reduction as in PLS methodology combined to variable selection via the
-#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda_1 \|w\|_1 +\lambda_2 \|Xw\|_2 + \|w\|_2.}{\Omega(w)=\lambda1 ||w||_1 +\lambda2 ||Xw||_2 + ||w||_2.}.
-#' In the algorithm, the parameters \eqn{\lambda}, \eqn{\lambda_1}{\lambda1} and \eqn{\lambda_2}{\lambda2} are transformed into more meaningful values, \code{ppnu} and \eqn{\nu_2}{\nu2}.
+#' Dual-SPLS algorithm with the norm \deqn{\Omega(w)=\lambda_1 \|w\|_1 +\lambda_2 \|Xw\|_2 + \|w\|_2.}
+#' In the algorithm, the parameters \eqn{\lambda}, \eqn{\lambda_1} and \eqn{\lambda_2}are transformed into more meaningful values, \code{ppnu} and \eqn{\nu_2}.
 #' @usage d.spls.ridge(X,y,ncp,ppnu,nu2,verbose=TRUE)
 #' @param X a numeric matrix of predictors values of dimension \code{(n,p)}. Each row represents one observation and each column one predictor variable.
 #' @param y a numeric vector or a one column matrix of responses. It represents the response variable for each observation.
 #' @param ncp a positive integer. \code{ncp} is the number of Dual-SPLS components.
 #' @param ppnu a positive real value, in \eqn{[0,1]}. \code{ppnu} is the desired
 #' proportion of variables to shrink to zero for each component (see Dual-SPLS methodology).
-#' @param nu2 a positive real value. \code{nu2} is a regularization parameter on \eqn{X^TX}{XTX}.
+#' @param nu2 a positive real value. \code{nu2} is a regularization parameter on \eqn{X^TX}.
 #' @param verbose a Boolean value indicating whether or not to display the iterations steps. Default value is \code{TRUE}.
 #' @details
 #' The resulting solution for \eqn{w} and hence for the coefficients vector, in the case of \code{d.spls.ridge}, has
-#' a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu_1}}{z.\nu1} of coordinates
-#' \deqn{z_{\nu_1,j}=\textrm{sign}(z_{X,\nu_2,j})(|z_{X,\nu_2,j}|-\nu_1)_+.}{z.\nu1_j=sign(z.X.\nu2_j)(|z.X.\nu2_j|-\nu1)_+.}
-#' Here \eqn{\nu_1}{\nu1} is the threshold for which \code{ppnu} of
-#' the absolute values of the coordinates of \eqn{z_{X,\nu_2}}{z.X.\nu2} are greater than \eqn{\nu_1}{\nu1} and \eqn{z_{X,\nu_2}=(\nu_2 X^TX + I_p)^{-1}X^Ty}{z.X.\nu2=inv(\nu2 X^TX + I) X^Ty}.
-#' Therefore, the ridge norm is beneficial to the situation where \eqn{X^TX}{XTX} is singular. If \eqn{X^TX}{XTX} is invertible, one
+#' a simple closed form expression (ref) deriving from the fact that \eqn{w} is collinear to a vector \eqn{z_{\nu_1}} of coordinates
+#' \deqn{z_{\nu_1,j}=\textrm{sign}(z_{X,\nu_2,j})(|z_{X,\nu_2,j}|-\nu_1)_+.}
+#' Here \eqn{\nu_1} is the threshold for which \code{ppnu} of
+#' the absolute values of the coordinates of \eqn{z_{X,\nu_2}} are greater than \eqn{\nu_1} and \eqn{z_{X,\nu_2}=(\nu_2 X^TX + I_p)^{-1}X^Ty}.
+#' Therefore, the ridge norm is beneficial to the situation where \eqn{X^TX} is singular. If \eqn{X^TX} is invertible, one
 #' can choose to use the Dual-SPLS for the least squares norm instead.
 #' @return A \code{list} of the following attributes
 #' \item{Xmean}{the mean vector of the predictors matrix \code{X}.}
