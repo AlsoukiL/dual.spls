@@ -1,19 +1,17 @@
 test_that("d.spls.LS works", {
 
-  set.seed(14)
-  n <- 1000
-  p <- 40
-  nondes <- 100
-  sigmaondes <- 0.01
-  data=d.spls.simulate(n=n,p=p,nondes=nondes,sigmaondes=sigmaondes)
-  X <- data$X
-  y <- data$y
+  data=d.spls.NIR
+  X=data$NIR
+  X=as.matrix(X)
+  y=data$density
+  n <- length(y)
+  p <- dim(X)[2]
 
   # fitting the model
-  ncp <- 4
+  ncp <- 5
   ppnu <- 0.9
-  expect_warning(d.spls.LS(X=X,y=y,ncp=ncp,ppnu=ppnu,verbose=TRUE),"deflated XtX is close to being singular on component number 4")
-  ncp=3
+  expect_warning(d.spls.LS(X=X,y=y,ncp=ncp,ppnu=ppnu,verbose=TRUE),"deflated XtX is close to being singular on component number 5")
+  ncp=4
   mod.dspls <- d.spls.LS(X=X,y=y,ncp=ncp,ppnu=ppnu,verbose=TRUE)
   n <- dim(X)[1]
   p <- dim(X)[2]
@@ -29,7 +27,7 @@ test_that("d.spls.LS works", {
   expect_setequal(mod.dspls$residuals, y-mod.dspls$fitted.values)
 
   # mean of X
-  expect_setequal(apply(X, 2, mean), mod.dspls$Xmean)
+  expect_equal(apply(X, 2, mean), mod.dspls$Xmean)
 
   # zerovar
   for (i in 2:ncp)
