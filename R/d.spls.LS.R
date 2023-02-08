@@ -134,7 +134,7 @@ d.spls.LS<- function(X,y,ncp,ppnu,verbose=TRUE)
       warning('XtX is close to being singular')
     }
     else
-      if (ic>1 && min(Xsvd$d)/max(Xsvd$d[-((len-ic+2):len)])<1e-16)
+      if (ic>1 && min(Xsvd$d[-((len-ic+2):len)])/max(Xsvd$d)<1e-16)
       {
         warning('deflated XtX is close to being singular on component number ',ic )
         invD[((len-ic+2):len)]=0
