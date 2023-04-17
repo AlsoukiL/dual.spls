@@ -1,6 +1,6 @@
 Package: dual.spls
 Title: Dual Sparse Partial Least Squares Regression
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: 
     c(person(given = "Louna",
            family = "Alsouki",
