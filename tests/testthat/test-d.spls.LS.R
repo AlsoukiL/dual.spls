@@ -24,7 +24,7 @@ test_that("d.spls.LS works", {
   expect_equal(dim(mod.dspls$fitted.values), c(n,ncp))
 
   # residuals
-  expect_setequal(mod.dspls$residuals, y-mod.dspls$fitted.values)
+  expect_equal(mod.dspls$residuals, y-mod.dspls$fitted.values, tolerance = 1e-5)
 
   # mean of X
   expect_equal(apply(X, 2, mean), mod.dspls$Xmean)

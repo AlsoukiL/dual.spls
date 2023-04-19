@@ -25,13 +25,22 @@ test_that("d.spls.metric works", {
 
   i=sample(1:ncp,1)
   #RMSE
-  expect_setequal(predmetric$RMSE[i], sqrt(mean((y-mod.dspls$fitted.values[,i])^2)))
+  expect_equal(
+    predmetric$RMSE[i],
+    sqrt(mean((y-mod.dspls$fitted.values[,i])^2)),
+    tolerance = 1e-5)
 
   #MAE
-  expect_setequal(predmetric$MAE[i], mean(abs(y-mod.dspls$fitted.values[,i])))
+  expect_equal(
+    predmetric$MAE[i],
+    mean(abs(y-mod.dspls$fitted.values[,i])),
+    tolerance = 1e-5)
 
   #R2
-  expect_setequal(predmetric$Rsquared[i], 1-sum((mod.dspls$residuals[,i])^2)/sum((y-mean(y))^2))
+  expect_equal(
+    predmetric$Rsquared[i],
+    1-sum((mod.dspls$residuals[,i])^2)/sum((y-mean(y))^2),
+    tolerance = 1e-5)
   expect_lt(predmetric$Rsquared[i],1)
 
 })

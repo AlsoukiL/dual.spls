@@ -38,6 +38,10 @@ yvalhat=d.spls.predict(mod.dspls,Xval, liste_cp=liste_cp)
 expect_equal(dim(yvalhat), c(length(indval),length(liste_cp)))
 
 #Prediction testing
-expect_setequal(ycalhat, d.spls.predict(mod.dspls,Xcal, liste_cp=1:ncp))
-  })
+expect_equal(
+  ycalhat, d.spls.predict(mod.dspls,Xcal, liste_cp=1:ncp),
+  tolerance = 1e-5
+)
+
+})
 
